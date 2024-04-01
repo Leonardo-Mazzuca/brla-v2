@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,11 +13,36 @@
     "@types/node": "^16.18.82",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
+    "apexcharts": "^3.46.0",
+    "api": "^6.1.1",
+    "autoprefixer": "^10.4.17",
+    "axios": "^1.6.7",
+    "crypto-browserify": "^3.12.0",
+    "decimal.js": "^10.4.3",
+    "express": "^4.19.0",
+    "flowbite": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "postcss": "^8.4.35",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.50.1",
+    "react-number-format": "^5.3.3",
+    "react-router-dom": "^6.22.1",
     "react-scripts": "5.0.1",
+    "stream-browserify": "^3.0.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "util": "^0.12.5",
+    "walletconnect": "^1.7.8",
+    "web-vitals": "^2.1.4",
+    "web3": "^4.6.0",
+    "xlsx": "^0.18.5",
+    "zod": "^3.22.4"
+  },
+  "browser": {
+    "crypto": false
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,5 +67,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@hookform/resolvers": "^3.3.4"
   }
 }

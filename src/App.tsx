@@ -1,25 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+
+import { useEffect } from "react";
+import AppRoutes from "./client/routes";
+import { BalanceProvider } from "./components/context/BalanceContext";
+import { CurrencyProvider } from "./components/context/CurrencyContext";
+import { FormProvider } from "./components/context/FormContext";
+import { TransactionsProvider } from "./components/context/TransactionsContext";
+import { useWebSocket } from "./components/context/WebSocketContext";
+import { QuoteProvider } from "./components/context/QuoteContext";
+
+
+
 
 function App() {
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <section className="w-full h-screen">
+
+          <QuoteProvider>
+  
+            <BalanceProvider>
+
+              <TransactionsProvider>  
+
+                    <CurrencyProvider>
+
+                            <FormProvider>
+
+                                    <AppRoutes />
+                      
+                             </FormProvider>
+
+                     </CurrencyProvider>
+
+               </TransactionsProvider>
+
+            </BalanceProvider>
+
+          </QuoteProvider>
+      
+
+    </section>
+
   );
 }
 
