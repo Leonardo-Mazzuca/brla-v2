@@ -1,8 +1,8 @@
 
 
-export const is0Value = (inputValue: string, outputValue: string) => {
+export const is0Value = (inputValue: number, outputValue: number) => {
 
-    if(inputValue === '00,00' || outputValue === '00,00') {
+    if(!inputValue|| !outputValue) {
         return 'Insira um valor para continuar';
     } 
     return '';

@@ -6,7 +6,7 @@ import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
 import FormModel from "../Form/FormModel/FormModel";
 import { CurrencyActions, useCurrency } from "../../context/CurrencyContext";
-import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import TextModel from "../Text/Text";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +17,12 @@ import { isCnpj } from "../../service/TaxId/Cnpj/verifyCnpj";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { isBrl } from "../../service/Util/isBrl";
+import { getCurrencyCoinToFormat } from "../../service/CoinsService/getCurrencyCoinToFormat";
 
 
 const TransferStep2 = () => {
 
-    const {state, dispatch, getCoin} = useCurrency();
+    const {state, dispatch} = useCurrency();
     const [schema, setSchema] = useState<ZodSchema>(z.object({}));
     const [fields, setField] = useState<Field[]>([]);
     const [isPixkeyTaxId, controlPixkey] = useState(false);
@@ -202,7 +203,7 @@ const TransferStep2 = () => {
                       
                         <div className="flex justify-between mb-6">
                               <TextModel addons="text-gray-400" weight="font-light" content={"Valor a ser enviado"} />
-                              <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(parseFloat(state.receiveValue.replace(',','.')), getCoin(state.receiveCurrency))}`} />
+                              <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(state.receiveValue, getCurrencyCoinToFormat(state.receiveCurrency))}`} />
                         </div>
 
                     </div>  

@@ -1,61 +1,89 @@
+
 import { CurrencyActions, useCurrency } from "../../../context/CurrencyContext";
 import { useQuote } from "../../../context/QuoteContext";
-import { formatNumber } from "../../../service/Formatters/FormatNumber/formatNumber";
 import { ConvertOperation } from "../../../types/Operations/ConvertOperation";
 import ValueSelect from "../../ValueSelect/ValueSelect";
+import { useBalance } from "../../../context/BalanceContext";
+import { useEffect, useState } from "react";
+import { getAvaliableBalance } from "../../../service/BalanceService/getAvaliableBalance";
 
 
 
-const InputSelect = ({coin,state, value, dispatch, setInputValue, setOutputValue, isReadOnly, isToggleButton,
-     topIcon, topText, changeRules}: ConvertOperation) => {
-    
+const InputSelect = ({ coin, state, value, dispatch,
+     setInputValue, setOutputValue, isReadOnly, isToggleButton, topIcon, topText }: ConvertOperation) => {
+   
+    const { conversor } = useCurrency();
+    const { state: quoteState, createConversionTable } = useQuote();
+    const{state:balanceState} = useBalance();
+    const [availableValue, setAvaliableValue] = useState(0);
 
-    const {conversor} = useCurrency();
-    const {state:quoteState,createConversionTable} = useQuote();
-    
+
+    useEffect(()=> {
+
+
+        setAvaliableValue(getAvaliableBalance(coin,balanceState));
+
+
+    },[coin, availableValue]);
+
+    const handleMaxButtonClick = () => {
+
+        const maxValue = availableValue;
+
+        setInputValue(maxValue);
+
+        const converted = conversor(availableValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState))
+
+        setOutputValue(converted);
+
+    }
+
     const handleCurrency = (currency: string) => {
 
         dispatch({
             type: CurrencyActions.setSendCurrency,
             payload: { sendCurrency: currency }
         });
+
     };
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        const { formattedValue, sanitizedValue } = formatNumber(e);
-        setInputValue(formattedValue);
+        let inputValue = parseFloat(e.target.value);
 
-        const converted = sanitizedValue ? 
-        conversor(sanitizedValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState)) : "00,00";
-
+        setInputValue(inputValue);
+    
+        const converted = conversor(
+                inputValue,
+                  state.sendCurrency,
+                  state.receiveCurrency,
+                  createConversionTable(quoteState)
+              );
+        
         setOutputValue(converted);
-
+    
         dispatch({
             type: CurrencyActions.setSendValue,
-            payload: { sendValue: formattedValue }
+            payload: { sendValue: inputValue },
         });
-
+    
         dispatch({
-          type: CurrencyActions.setReceiveValue,
-          payload: { receiveValue: converted }
+            type: CurrencyActions.setReceiveValue,
+            payload: { receiveValue: converted },
         });
-      
-       dispatch({
-          type: CurrencyActions.setFixOutput,
-          payload: { fixOutput: false },
+    
+        dispatch({
+            type: CurrencyActions.setFixOutput,
+            payload: { fixOutput: false },
         });
 
-        if(changeRules) {
-            changeRules();
-        }
-
+        
     };
+    
 
     return (
 
         <ValueSelect
-
             coin={coin}
             inputValue={value}
             onChange={handleChange}
@@ -64,11 +92,10 @@ const InputSelect = ({coin,state, value, dispatch, setInputValue, setOutputValue
             topText={topText}
             topIcon={topIcon}
             toggleButtonPresent={isToggleButton}
-    
+            handleMaxButtonClick={handleMaxButtonClick}
         />
 
     );
-
 }
 
 export default InputSelect;

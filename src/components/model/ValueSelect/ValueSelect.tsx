@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import CurrencyDropdown from "../CurrencyDropdown/CurrencyDropdown";
 import TextModel from "../Text/Text";
 import ToggleButton from "../Button/ToggleButton";
-import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import { useBalance } from "../../context/BalanceContext";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useQuote } from "../../context/QuoteContext";
-import { useCurrency } from "../../context/CurrencyContext";
+import InputMoney from "../Input/InputMoney";
+
 
 
 type ValueSelectConfig = {
@@ -17,11 +17,12 @@ type ValueSelectConfig = {
     topText?: string;
     toggleButtonPresent?: boolean;
     readOnlyInput?: boolean;
-    inputValue: string;
+    inputValue: number;
     coin: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onCurrencyChange: (currency: string) => void;
     dataType?: string;
+    handleMaxButtonClick?: () => void
     
 
 };
@@ -31,23 +32,22 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
     topIcon,
     topText,
     toggleButtonPresent,
-    readOnlyInput,
     inputValue,
     onChange,
     onCurrencyChange,
     coin,
     dataType,
+    handleMaxButtonClick
 
 }) => {
     
     const [isReadOnly, setInputReadOnly] = useState(false);
     const {state} = useBalance();
-    const {state: currencyState, getCoin} = useCurrency();
 
     let availableValue: number;
 
     switch (coin) {
-        case 'BRL':
+        case 'BRLA':
             availableValue = state.brlBalance;
             break;
         case 'USDC':
@@ -61,11 +61,12 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
     }
 
-    const formattedAvailableValue = formatNumberToString(availableValue, 'USD');
+    const formattedAvailableValue = formatNumberToString(availableValue, coin);
 
     const handleInputReadOnly = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputReadOnly(e.target.checked);
     };
+
 
 
     return (
@@ -84,6 +85,7 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
             <div className="p-6 bg-gray-100 flex items-center justify-between rounded-xl flex-col md:flex-row">
 
                 <div className="flex gap-2 w-full md:w-auto flex-col">
+
                     <CurrencyDropdown coin={coin} onCurrencyChange={onCurrencyChange} />
 
                     <TextModel addons="text-gray-400 mt-2" content={`Disponível ${formattedAvailableValue}`} />
@@ -92,17 +94,25 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
                 <div className="flex justify-between md:flex-col items-center md:items-end">
                     
-                    <input
-                        value={inputValue}
-                        onChange={onChange}
+                    {/* <input
+
+                      
                         readOnly={readOnlyInput ? readOnlyInput : isReadOnly}
                         type="text"
                         className="bg-transparent px-0 pt-3 md:p-3 text-4xl font-bold border-transparent w-full md:w-2/4 text-start md:text-end"  
+
+                    /> */}
+
+                    <InputMoney 
+                      value={inputValue}
+                      onChange={onChange}
                     />
 
-                    <div className="py-1 mt-2 px-5 rounded-lg bg-gray-200">
-                        <TextModel content={"max"} />
-                    </div>
+                    <button onClick={handleMaxButtonClick} 
+                    className="border-transparent py-1 mt-2 px-5 rounded-lg bg-gray-200">
+                        max
+                    </button>
+
                 </div>
                 
             </div>

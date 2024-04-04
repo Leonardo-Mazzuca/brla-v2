@@ -1,9 +1,12 @@
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
-import { getOnChainData } from "../onChainController.ts/getOnChainData";
+import { getOnChainInData } from "../onChainController.ts/getOnChainInData";
+import { getOnChainOutData } from "../onChainController.ts/getOnChainOutData";
 import { getConversionData } from "./getConversionData";
 import { getPayInData } from "./getPayInData";
+import { getPayOutOfBRCodeData } from "./getPayOutOfBRCodeData";
 import { getPaymentData } from "./getPaymentData";
 import { getPayoutData } from "./getPayoutData";
+import { getPixToUsdData } from "./getPixToUsddata";
 
 
 export async function valuesListingController(): Promise<any[]> {
@@ -14,13 +17,18 @@ export async function valuesListingController(): Promise<any[]> {
         const payOutData = await getPayoutData();
         const convertData = await getConversionData(); 
         const paymentData = await getPaymentData();
-        const onChainData = await getOnChainData();
-
+        const onChainOutData = await getOnChainOutData();
+        const onChainInData = await getOnChainInData();
+        // const payOutUsingBrCodeData = await getPayOutOfBRCodeData();
+        // await getPixToUsdData();
         
         let data: any[] = [];
 
-        if (payInData && payOutData && convertData && paymentData && onChainData) {
-            data = [...payInData, ...payOutData, ...convertData, ...paymentData, ...onChainData];
+        if (payInData && payOutData && convertData && paymentData && onChainOutData && onChainInData) {
+
+            data = [...payInData, ...payOutData, ...convertData, 
+                ...paymentData, ...onChainOutData, ...onChainInData,];
+                
         }
         
         data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

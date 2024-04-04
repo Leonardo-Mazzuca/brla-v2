@@ -1,16 +1,34 @@
-import { number } from "zod";
+import { getCurrencyCoinToFormat } from "../../CoinsService/getCurrencyCoinToFormat";
 
 
-
-
-export const formatNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-    const sanitizedValue = e.target.value.replace(/[^\d,]/g, "");
-    const [beforeComma, afterComma] = sanitizedValue.split(",");
-    const formattedBeforeComma = beforeComma.padStart(2, "0");
-    const formattedAfterComma = afterComma ? afterComma.slice(0, 2) : "00";
-    const formattedValue = `${formattedBeforeComma},${formattedAfterComma}`;
+export const formatNumberToString = (number: number, currency?: string) => {
     
-    return {formattedValue,sanitizedValue};
+    if (number === 0) {
+
+        return '00,00';
+
+    } else if (currency) {
+
+         return new Intl.NumberFormat('en-US', { style: 'currency',
+         minimumFractionDigits: number < 0.01 ? 3 : 2,
+         currency: getCurrencyCoinToFormat(currency) }).format(number);
+
+    } else {
+
+        const options = {
+            
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            minimumIntegerDigits: 2,
+            
+            useGrouping: true,  
+        };
+
+        return number.toLocaleString('en-IN', options);
+        
+    }
 
 }
+
+
+

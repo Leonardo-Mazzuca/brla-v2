@@ -12,7 +12,7 @@ export const verifyIfIsValuable = (isValuable: boolean, setter: React.Dispatch<R
 }
 
 export const doValidations = (
-    coinBalance: number, inputValue: string, outputValue: string,
+    coinBalance: number, inputValue: number, outputValue: number,
     setIsValuable: React.Dispatch<React.SetStateAction<boolean>>, 
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>
     ) => {
@@ -20,7 +20,7 @@ export const doValidations = (
 
     const withoutValue = is0Value(inputValue, outputValue);
     const withoutBalance = isBalanceLessThanValue(
-      parseFloat(inputValue),
+      inputValue,
       coinBalance
     );
 
@@ -40,9 +40,9 @@ export const doValidations = (
 
 export const controllValueChange = (
     
-    converted: string, 
-    setOutputValue: React.Dispatch<React.SetStateAction<string>>,
-    dispatch: (action:any) => void, inputValue: string,
+    converted: number, 
+    setOutputValue: React.Dispatch<React.SetStateAction<number>>,
+    dispatch: (action:any) => void, inputValue: number,
     setVisibility: React.Dispatch<React.SetStateAction<string>>,
     state: QuoteState,
 
@@ -69,7 +69,7 @@ export const controllValueChange = (
               setVisibility("block");
           }
         
-          if (inputValue === "00,00") {
+          if (!inputValue) {
               setVisibility("hidden");
           }
 

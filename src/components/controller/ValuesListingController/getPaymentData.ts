@@ -1,5 +1,6 @@
-import { faArrowRightArrowLeft, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { http } from "../ConectAPI/conectApi"
+import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 
 
 
@@ -14,6 +15,7 @@ export async function getPaymentData () {
             withCredentials: true,
         });
 
+        
 
         const data = request.data.paymentLogs.map((item: any)=> ({
 
@@ -47,8 +49,7 @@ export async function getPaymentData () {
             }, {}))[0],
             
             status: item.status,
-            accountNumber: item.accNumber,
-
+            taxId: formatInTaxId(item.userTaxId),
             icon: faArrowUp,
             isPayment: true,
             usdToBrla: true,

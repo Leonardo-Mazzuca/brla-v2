@@ -3,14 +3,14 @@ import { CurrencyActions, useCurrency } from "../../context/CurrencyContext";
 import { useQuote } from "../../context/QuoteContext";
 
 
-export const useValueChange = (sendValue: string, receiveValue: string, setConvertedValue: React.Dispatch<React.SetStateAction<string>>) => {
+export const useValueChange = (sendValue: number, receiveValue: string, setConvertedValue: React.Dispatch<React.SetStateAction<number>>) => {
     const { state, dispatch, conversor } = useCurrency();
     const {state:quoteState,createConversionTable} =  useQuote();
 
 
     useEffect(() => {
 
-        if (sendValue !== "00,00" && receiveValue !== "00,00") {
+        if (!sendValue && !receiveValue) {
             
             if (state.sendCurrency !== state.receiveCurrency) {
               

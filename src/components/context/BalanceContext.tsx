@@ -6,7 +6,7 @@ import { useQuote } from "./QuoteContext";
 
 
 
-type BalanceState = {
+export type BalanceState = {
     brlBalance: number;
     usdcBalance: number;
     usdtBalance: number;
@@ -89,7 +89,7 @@ const getCoinToBalance = (coin: string, state: BalanceState) => {
 
 
     switch(coin) {
-        case 'BRL':
+        case 'BRLA':
             return state.brlBalance;
         case 'USDC':
             return state.usdcBalance;

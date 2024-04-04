@@ -3,7 +3,7 @@
 import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
 import {  useCurrency } from "../../context/CurrencyContext";
-import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import TextModel from "../Text/Text";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -128,6 +128,11 @@ const TransferStep3 = () => {
 
   useEffect(()=> {
 
+    console.log(state.sendCurrency);
+    
+    console.log(state.receiveCurrency);
+    
+
    
 
     if(isForWebSocket) {
@@ -143,7 +148,7 @@ const TransferStep3 = () => {
       
                       data: {
                           
-                          amount: parseFloat(state.sendValue) * 100,
+                          amount: (state.sendValue * 100),
                   
                           chain: 'Polygon',
       
@@ -153,7 +158,8 @@ const TransferStep3 = () => {
   
                           fixOutPut: state.fixOutput,
       
-                          operation: isBrl(state) ? 'swap' : 'pix-to-usd',
+                          operation: !isUsdToBrla(state.sendCurrency, state.receiveCurrency)
+                           ? 'swap' : 'pix-to-usd',
       
                           
                       }
@@ -186,7 +192,7 @@ const TransferStep3 = () => {
         to: state.walletAddress,
         inputCoin: state.sendCurrency,
         outputCoin: state.receiveCurrency,
-        value: parseFloat(state.receiveValue),
+        value: parseFloat(state.receiveValue.toFixed(2)) * 100,
         
       }
 
@@ -204,7 +210,7 @@ const TransferStep3 = () => {
 
       try {
 
-        const response = await transferController(state.pixkey, state.taxId, parseFloat(state.receiveValue) * 100);
+        const response = await transferController(state.pixkey, state.taxId, (state.receiveValue * 100));
 
         if(response) {
 
@@ -234,7 +240,7 @@ const TransferStep3 = () => {
       
     } 
           
-    if(usdToBrla && !isUsdcAndUsdt){
+    if(usdToBrla){
       
           webSocketState.webSocket?.send(JSON.stringify({
             messageId: "qualquer",
@@ -269,7 +275,7 @@ const TransferStep3 = () => {
                       {component}
                       
                       <TextModel content={`valor a ser enviado - 
-                      ${formatNumberToString(parseFloat(state.receiveValue.replace(',','.')), 
+                      ${formatNumberToString((state.receiveValue), 
                       getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
 
                     </div>

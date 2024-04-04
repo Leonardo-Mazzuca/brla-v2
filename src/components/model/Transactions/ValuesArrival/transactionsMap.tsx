@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextModel from "../../Text/Text";
-import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumber";
 import { getCurrencyCoinToFormat } from "../../../service/CoinsService/getCurrencyCoinToFormat";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { ExpectedConversionData } from "../../../controller/ValuesListingController/getConversionData";
@@ -8,6 +8,8 @@ import { ExpectedPayoutData } from "../../../controller/ValuesListingController/
 import { ExpectedPayInData } from "../../../controller/ValuesListingController/getPayInData";
 import { controlAmount, controlSwapPending, controlSwapTextComponent } from "../../../service/TransactionsMapService/swap/SwapComponentService";
 import { controlColor, controlTextComponent, controlTransferAmount } from "../../../service/TransactionsMapService/transfer/TransferComponentService";
+import { useCurrency } from "../../../context/CurrencyContext";
+import { isUsdToBrla } from "../../../service/Util/isUsdToBrla";
 
 
 export type TransactionData<T> = {
@@ -72,7 +74,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
       {`+ ${amount}`}
       </p>}
       footerText={`Valor recebido de`}
-      addressNumber={data.taxId}
+      addressNumber={data.walletAddress}
       operationName={data.operationName}
 
     />
@@ -83,35 +85,36 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
 
 const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
 
+
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState<ReactNode>();
-  const [accountNumber, setAccNumber] = useState("");
+  const [taxId, setTaxId] = useState("");
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState('text-green-700');
 
-  const numberAmount = data.amount;
+  const numberAmount = data.transfers?.amount ?? 0;
   const formattedAmount = formatNumberToString(numberAmount ,getCurrencyCoinToFormat(data.coin));
+
+  
+
+  useEffect(() => {
+
+    controlTextComponent(setTitle, setText, setTaxId, data);
+
+  }, [data]);
 
   useEffect(()=> {
 
-  
     controlTransferAmount(formattedAmount, setAmount, data)
 
   },[data, formattedAmount, setAmount])
   
 
-  
   useEffect(() => {
 
-    controlTextComponent(setTitle, setText, setAccNumber, data);
+    controlColor(setColor, data);
 
-  }, [data]);
-
-  useEffect(() => {
-
-    controlColor(setColor, amount, data)
-
-  },[color]);
+  },[color,data]);
 
  
 
@@ -128,7 +131,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
       }
 
       footerText={text}
-      addressNumber={accountNumber}
+      addressNumber={taxId}
       operationName={data.operationName}
 
     />
@@ -139,12 +142,13 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
 
 const Swap = ({ data }: TransactionData<any>) => {
 
+  const {state} = useCurrency();
   const [success, setSuccess] = useState<boolean | undefined>(data.feedback?.success);
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [isPaymentSwap, setIsPaymentSwap] = useState(false);
   const [amount, setAmount] = useState<ReactNode>();
-  const [isUsdToBrla, setIsUsdToBrla] = useState(false);
+  const [usdToBrla, setIsUsdToBrla] = useState(false);
 
   const textColor = pending
     ? "text-gray-500"
@@ -152,13 +156,11 @@ const Swap = ({ data }: TransactionData<any>) => {
     ? "text-green-700"
     : "text-red-500";
 
+  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'USD' : 'BRL'
 
-  const coinToFormat = getCurrencyCoinToFormat(data.coin);
-  const brlaAmount = formatNumberToString(parseFloat(data.brlaAmount), "BRL");
-  const usdAmount = formatNumberToString(
-    parseFloat(data.usdAmount),
-    coinToFormat
-  );
+  const brlaAmount = formatNumberToString(data.brlaAmount, data.inputCoin ?? choseCoin);
+  
+  const usdAmount = formatNumberToString(data.usdAmount, data.outputCoin);
 
   useEffect(() => {
     
@@ -166,7 +168,7 @@ const Swap = ({ data }: TransactionData<any>) => {
 
     controlSwapTextComponent(pending, success, isPaymentSwap, data, setMessage);
 
-    controlAmount(success, setAmount, isPaymentSwap, brlaAmount, usdAmount, isUsdToBrla);
+    controlAmount(success, setAmount, isPaymentSwap, brlaAmount, usdAmount, usdToBrla);
 
     if (data.isPayment) {
       setIsPaymentSwap(true);
@@ -176,10 +178,11 @@ const Swap = ({ data }: TransactionData<any>) => {
       setIsUsdToBrla(true);
     }
 
-  }, [success, message, isPaymentSwap, isUsdToBrla]);
+  }, [success, message, isPaymentSwap, usdToBrla]);
 
 
   return (
+
     <DefaultTemplate
       icon={data.icon}
       title={data?.title || ""}
@@ -190,6 +193,7 @@ const Swap = ({ data }: TransactionData<any>) => {
       coin=""
       operationName={data.operationName}
     />
+
   );
 };
 

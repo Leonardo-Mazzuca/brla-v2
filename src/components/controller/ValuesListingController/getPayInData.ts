@@ -2,6 +2,11 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { http } from "../ConectAPI/conectApi";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Feedback } from "../../types/Feedback/Feedback";
+import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
+import { isCpf } from "../../service/TaxId/Cpf/verifyCpf";
+import { formatValueInCpf } from "../../service/TaxId/Cpf/formatValueInCpf";
+import { formatValueInCnpj } from "../../service/TaxId/Cnpj/formatValueInCnpj";
+import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 
 export type PayinData = {
 
@@ -28,6 +33,7 @@ export type ExpectedPayInData = {
     id: string;
     icon: IconProp;
     feedback : Feedback;
+    walletAddress: string;
     
 }
 
@@ -36,13 +42,18 @@ export type ExpectedPayInData = {
 export async function getPayInData() {
 
     try {
+
         const request = await http.get('/pay-in/pix/history', {
             withCredentials: true
         });
 
+        console.log();
+        
+
+        
         const data = request.data.depositsLogs.map((item: any) => {
 
-            const { createdAt, payerName, taxId, chain } = item;
+            const { createdAt, payerName, chain } = item;
             const operationName = item.mintOps.reduce((acc: string, op: any) => {
                 op.smartContractOps.forEach((sm: any) => acc = sm.operationName);
                 return acc;
@@ -54,14 +65,14 @@ export async function getPayInData() {
             let { amount, id } = item.mintOps[0];
             amount /= 100;
             const feedback = smartContractOps[0].feedback;
-            
+
 
             return {
 
+                walletAddress: formatInTaxId(item.taxId),
                 createdAt,
                 title,
                 chain,
-                taxId,
                 operationName,
                 amount,
                 id,
@@ -71,6 +82,7 @@ export async function getPayInData() {
             };
             
         });
+        
 
         return data;
 

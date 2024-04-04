@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useBalance } from "../../../context/BalanceContext";
 import { useQuote } from "../../../context/QuoteContext";
-import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumber";
 import { getCurrencyIMG } from "../../../service/CurrencyService/getCurrencyIMG";
 import Heading from "../../Heading/Heading";
 import CardLoading from "../../Loading/CardLoading";

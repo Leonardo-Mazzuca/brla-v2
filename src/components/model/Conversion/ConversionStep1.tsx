@@ -18,15 +18,15 @@ import { is0Value, isBalanceLessThanValue, isTheSameCoin } from "../../service/O
 const ConversionStep1: React.FC = () => {
 
     const {state, dispatch, conversor } = useCurrency();
-    const [inputValue, setInputValue] = useState("00,00");
-    const [outputValue, setOutputValue] = useState("00,00");
+    const [inputValue, setInputValue] = useState(0);
+    const [outputValue, setOutputValue] = useState(0);
     const [isValuable, setIsValuable] = useState(false);
     const [buttonClassname, setButtonClassname] = useState(block);
     const [errorMessage, setErrorMessage] = useState('');
     const {state:balanceState, getCoinToBalance} = useBalance();
     const {state:quoteState, createConversionTable} = useQuote();
 
-
+    
     const converted = conversor(inputValue, state.sendCurrency, state.receiveCurrency,createConversionTable(quoteState));
 
     useEffect(() => {
@@ -37,7 +37,9 @@ const ConversionStep1: React.FC = () => {
 
       }
 
+
   }, [state.sendCurrency, state.receiveCurrency]);
+
 
     useEffect(() => {
 
@@ -45,7 +47,7 @@ const ConversionStep1: React.FC = () => {
 
         const withoutValue = is0Value(inputValue, outputValue);
         const sameCoin =  isTheSameCoin(state.sendCurrency, state.receiveCurrency);
-        const withoutBalance = isBalanceLessThanValue(parseFloat(inputValue),coinBalance)
+        const withoutBalance = isBalanceLessThanValue(inputValue,coinBalance)
 
         if (withoutValue || sameCoin || withoutBalance ) {
 

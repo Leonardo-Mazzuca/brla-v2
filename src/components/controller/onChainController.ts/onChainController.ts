@@ -7,17 +7,18 @@ export const onChainController = async (chain: string, to:
 
     try {
 
-        const body = {chain, to, inputCoin, outputCoin, value,}
+        const body = {chain, to, inputCoin, outputCoin, value}
 
         const request = await http.post('/on-chain/transfer', body, {
             withCredentials: true
         });
 
-        await request.data;
+        return request.data;
         
     } catch(e:any) {
 
-        throw new Error('Erro ao criar ordem de transferencia: ', e.message)
+        throw new Error('Erro ao criar ordem de transferencia: ', e.message || e.data?.message)
 
     }
+    
 }

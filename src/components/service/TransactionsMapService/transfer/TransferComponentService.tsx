@@ -7,27 +7,34 @@ import { margin } from "../swap/SwapComponentService";
 export const controlTextComponent = (
     setTitle:  Dispatch<SetStateAction<string>>,
     setText: Dispatch<SetStateAction<string>>,
-    setAccNumber: Dispatch<SetStateAction<string>>,
-    
-
+    setTaxId: Dispatch<SetStateAction<string>>,
     data: ExpectedPayoutData | any) => {
 
         const title = data.title;
-        const accNumber = data.accountNumber;
     
         if(data.feedback && !data.feedback.success) {
           
           setTitle(title);
           setText('Falha na transferência ');
-          setAccNumber('');
+          setTaxId('');
 
-        } else {
+        } 
+
+        if(data.transfers && !data.transfers.taxId && !data.feedback) {
+
+          setTitle(title);
+          setText('Pendente...');
+          setTaxId('');
+
+        }
+        
+        if(data.transfers && data.transfers.taxId) {
 
            
             setTitle(title);
-            setAccNumber(accNumber);
+            setTaxId(data.transfers.taxId);
           
-    
+          
         }
 
 
@@ -35,14 +42,14 @@ export const controlTextComponent = (
 }
 
  
-export const controlColor = (setColor: Dispatch<SetStateAction<string>>,amount: ReactNode, data: any) => {
+export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: ExpectedPayoutData | any) => {
 
   
   if(data.feedback && !data.feedback.success) {
     setColor('text-red-500');
   }
 
-  if(amount === "0") {
+  if(data.transfers && !data.transfers.taxId && !data.transfers.amount) {
       setColor('text-gray-500');
   }
 
@@ -52,9 +59,13 @@ export const controlColor = (setColor: Dispatch<SetStateAction<string>>,amount: 
 
 
 export const controlTransferAmount = (formattedAmount: string, 
-  setAmount: Dispatch<SetStateAction<ReactNode>>, data: any) => {
+  setAmount: Dispatch<SetStateAction<ReactNode>>, data: ExpectedPayoutData | any) => {
 
-  
+    if(data.transfers && !data.transfers.amount) {
+
+      setAmount("00,00");
+    }
+
     if(data.feedback && !data.feedback.success) {
 
       setAmount(<>

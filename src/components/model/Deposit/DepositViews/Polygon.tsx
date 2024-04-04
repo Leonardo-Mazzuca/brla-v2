@@ -2,21 +2,20 @@
 import { useEffect, useState } from "react";
 import DepositsContainer from "../../Container/DepositsContainer";
 import QRCode from "qrcode.react";
-import { brCodeController } from "../../../controller/BrCodeController/brCodeController";
-import TextModel from "../../Text/Text";
+import { getUserData } from "../../../controller/UserDataController/getUserData";
 
 
 const Polygon: React.FC = () => {
 
-    const [brCode, setBrcode] = useState('');
+    const [wallet, setWallet] = useState('');
 
     useEffect(()=> {
         
         async function fetchData () {
 
-            const response = await brCodeController();
+            const response = await getUserData();
             if(response) {
-                setBrcode(response);
+                setWallet(response.wallets.evm);
             }
 
         }
@@ -27,7 +26,7 @@ const Polygon: React.FC = () => {
 
     const qrCode =  <QRCode
     
-    value={brCode}
+    value={wallet}
     size={250}
     renderAs="svg"
     imageSettings={{
@@ -52,10 +51,10 @@ const Polygon: React.FC = () => {
         Endereço Polygon </div>}
 
         subHeading={<p className="text-3xl text-heading-blue">
-            Atenção, aceitamos somente <span className="font-bold">BRLA e USDT!</span> </p>}
+            Atenção, aceitamos somente <span className="font-bold">BRLA, USDC e USDT!</span> </p>}
 
         description="Este endereço de carteira está na rede Polygon, e não temos controle ou responsabilidade sobre um endereço igual em outra rede. Tokens enviados para este endereço em outras redes poderão ser perdidos."
-        copyItem={brCode}
+        copyItem={wallet}
         
         
         

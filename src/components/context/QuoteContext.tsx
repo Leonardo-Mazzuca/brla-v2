@@ -20,9 +20,9 @@ type Action = {
 
 export type ConversionTable = {
 
-    BRL : {USDC: number, USDT: number};
-    USDC:  {BRL: number, USDT: number};
-    USDT: {BRL: number, USDC: number};
+    BRLA : {USDC: number, USDT: number};
+    USDC:  {BRLA: number, USDT: number};
+    USDT: {BRLA: number, USDC: number};
     
 }
 
@@ -115,7 +115,7 @@ const createConversionTable = (state:QuoteState) => {
         
                 const conversionTable: ConversionTable = {
             
-                    BRL: {
+                    BRLA: {
             
                       USDC: parseFloat(state.brl?.toUsdc ?? '0'),
                       USDT: parseFloat(state.brl?.toUsdt ?? '0'),
@@ -125,14 +125,14 @@ const createConversionTable = (state:QuoteState) => {
                     
                     USDC: {
             
-                      BRL: parseFloat(state.usdc[0]?.toBrl ?? '0'),
+                      BRLA: parseFloat(state.usdc[0]?.toBrl ?? '0'),
                       USDT: parseFloat(state.usdc[0]?.toUsdt ?? '0'),
             
                     },
             
                     USDT: {
             
-                      BRL: parseFloat(state.usdt[0]?.toBrl ?? '0'), 
+                      BRLA: parseFloat(state.usdt[0]?.toBrl ?? '0'), 
                       USDC: parseFloat(state.usdt[0]?.toUsdc ?? '0'),
             
                     },

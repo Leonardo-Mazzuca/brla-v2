@@ -4,6 +4,7 @@ import { Field } from '../../types/Field/Field';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
 const InputModel: React.FC<Field> = ({ 
     placeholder, 
     type, 
@@ -19,6 +20,8 @@ const InputModel: React.FC<Field> = ({
     addClassName,
     onBlur
 }) => {
+
+
     
     return (
         <div className='relative flex-1'>

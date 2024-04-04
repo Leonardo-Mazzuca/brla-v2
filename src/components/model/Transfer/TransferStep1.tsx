@@ -17,8 +17,8 @@ const TransferStep1: React.FC = () => {
   const { state, dispatch, conversor } = useCurrency();
   const { state: balanceState, getCoinToBalance } = useBalance();
   const { state: quoteState, createConversionTable } = useQuote();
-  const [inputValue, setInputValue] = useState("00,00");
-  const [outputValue, setOutputValue] = useState("00,00");
+  const [inputValue, setInputValue] = useState(0);
+  const [outputValue, setOutputValue] = useState(0);
   const [buttonClassname, setButtonClassname] = useState(block);
   const [errorMessage, setErrorMessage] = useState("");
   const [isValuable, setIsValuable] = useState(false);

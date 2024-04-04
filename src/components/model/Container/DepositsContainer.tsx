@@ -8,6 +8,7 @@ import ContainerService from "./ContainerService";
 import MiniContainer from "./MiniContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -23,6 +24,9 @@ type DepositsConfig = {
 
 
 const DepositsContainer: React.FC<DepositsConfig> = ({heading,subHeading,description,copyItem,qrCode}) => {
+
+
+    const navigate = useNavigate();
 
     return (
 
@@ -66,7 +70,10 @@ const DepositsContainer: React.FC<DepositsConfig> = ({heading,subHeading,descrip
                         </div>
 
                         
-                    <Button text = {
+                    <Button 
+
+                        onClick={() => navigate('/home')}
+                        text = {
 
                         <>
                         Concluir

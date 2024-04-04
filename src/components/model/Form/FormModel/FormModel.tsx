@@ -1,4 +1,4 @@
-import {  useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Button from '../../Button/Button';
 import InputModel from '../../Input/InputModel';
 import { Field } from '../../../types/Field/Field';
@@ -17,6 +17,7 @@ type FormModelProps = {
     location?: string;
     schema: Schema;
     submitError?: string;
+    navigate? : (path: string) => void;
 };
 
 const FormModel: React.FC<FormModelProps> = ({
@@ -36,19 +37,24 @@ const FormModel: React.FC<FormModelProps> = ({
     });
 
 
-    const [error, setError] = useState('');
+    const [errorOnSubmit, setSubmitError] = useState('');
+    
 
     const navigate = useNavigate();
 
     useEffect(()=> {
-        setError(submitError || '');
+
+        setSubmitError(submitError || '');
+        
+
     }, [submitError]);
+
 
     const submitForm = (data: any) => {
         
         
-        if(!error) {
-            
+        if(!errorOnSubmit) {
+
             onSubmit(data);
             if(location) {
                 navigate(location);
@@ -61,20 +67,48 @@ const FormModel: React.FC<FormModelProps> = ({
 
     const handleInput = () => {
 
-        if(submitError) {
-            setError('');
-        }
-       
-    }
+        setSubmitError('');
+
+    };
 
 
+    useEffect(() => {
+        
+        const handleKeyDown = (event: KeyboardEvent) => {
+
+            if (event.key === 'Enter') {
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach((input: HTMLInputElement) => {
+                    input.blur();
+                });
+                event.preventDefault();
+                handleSubmit(submitForm)();
+            }
+        };
+
+    
+        document.addEventListener('keydown', handleKeyDown);
+    
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+
+        
+
+    }, []);
+    
     return (
-        <form className={classname ?? 'flex flex-col gap-5'} onSubmit={handleSubmit(submitForm)}>
+
+        <form 
+        className={classname ?? 'flex flex-col gap-5'} 
+        // onSubmit={handleSubmit(submitForm)} 
+         >
+            
             {fields &&
                 fields.map((field, index) => (
                     <div key={index}>
                         <InputModel
-
+                                
                             type={field.type}
                             placeholder={field.placeholder}
                             register={register}
@@ -88,6 +122,7 @@ const FormModel: React.FC<FormModelProps> = ({
                             icon={field.icon}
                             onInput={handleInput}
                             
+                            
                         />
 
                         {errors[field.name] && (
@@ -98,16 +133,17 @@ const FormModel: React.FC<FormModelProps> = ({
                 ))}
             
       
-            {error && (
+            {errorOnSubmit && (
                 <TextModel addons="mt-3" color="text-red-600" content={submitError} />
             )}
         
 
             {children}
 
-            {buttonText && <Button text={buttonText} />}
+            {buttonText && <Button onClick={handleSubmit(submitForm)} text={buttonText} />}
             
         </form>
+
     );
 };
 

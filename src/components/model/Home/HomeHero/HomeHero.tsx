@@ -1,6 +1,6 @@
 
 import { ReactNode, useEffect, useState } from "react";
-import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumberToString";
+import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumber";
 import Heading from "../../Heading/Heading";
 import TextModel from "../../Text/Text";
 import CardContainer from "./CardContainer";

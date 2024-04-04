@@ -17,9 +17,8 @@ type LoginData = {
 
 const FormLogin: React.FC = () => {
 
-    const [location, setLocation] = useState('');
     const [error, setError] = useState('');
-    const { state, dispatch } = useWebSocket();
+    const {dispatch } = useWebSocket();
     
     const fields: Field[] = [
         { type: "email", placeholder: "Digite seu email", name: "email", icon: faEnvelope},
@@ -27,24 +26,11 @@ const FormLogin: React.FC = () => {
     ];
 
     const navigate = useNavigate();
-
-    useEffect(()=> {
-
-        if(!error && state.webSocket) {
-
-            setLocation('/home');
-            navigate(location);
-
-        }
-
-    },[location, state.webSocket])
-
     
     async function handleSubmit(data: LoginData) {
 
         if(error) {
             setError('');
-            setLocation('/')
         }
 
         const { email, password } = data;
@@ -63,6 +49,8 @@ const FormLogin: React.FC = () => {
                         payload: { webSocket },
                     });
 
+                    navigate('/home');
+
                 } catch(e:any) {
 
                     setError('Falha ao conectar-se ao servidor');
@@ -71,6 +59,7 @@ const FormLogin: React.FC = () => {
             }  catch(e:any) {
 
                 setError('Dados inválidos!');
+              
 
             }
  
@@ -78,7 +67,7 @@ const FormLogin: React.FC = () => {
 
     const schema = z.object({
         email: z.string().email('Email inválido'),
-        password: z.string().min(8,'Senha é obrigatória'),
+        password: z.string().min(1, 'Senha é obrigatória'),
     });
 
     const formFooter = (
@@ -104,11 +93,11 @@ const FormLogin: React.FC = () => {
     );
 
     return (
+
         <>
             <FormModel 
 
                 schema={schema} 
-                location=''
                 buttonText='Login' 
                 fields={fields} 
                 onSubmit={handleSubmit}
@@ -119,6 +108,7 @@ const FormLogin: React.FC = () => {
             <hr className='my-5' />
             {formFooter}
         </>
+
     );
 }
  

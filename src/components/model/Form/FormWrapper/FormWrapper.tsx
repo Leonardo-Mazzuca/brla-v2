@@ -12,7 +12,6 @@ interface FormWrapperProps {
     linkText? : string;
     linkCenter?:boolean;
 
-
 }
 
 const FormWrapper: React.FC<FormWrapperProps> = 

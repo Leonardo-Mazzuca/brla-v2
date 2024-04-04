@@ -3,14 +3,14 @@ import { useContext, useReducer, createContext } from "react";
 import { ProviderProps } from "../types/Provider/Provider";
 
 
-export type CoinTypes = "BRL" | "USDC" | "USDT";
+export type CoinTypes = "BRLA" | "USDC" | "USDT";
 
 export type CurrencyState = {
 
     sendCurrency: CoinTypes;
     receiveCurrency: CoinTypes;
-    sendValue: string;
-    receiveValue: string;
+    sendValue: number;
+    receiveValue: number;
     fixOutput: boolean;
     pixkey: string;
     taxId : string;
@@ -39,16 +39,15 @@ type Action = {
 type ContextType = {
     state: CurrencyState;
     dispatch: (action: Action) => void;
-    getCoin: (currency: string) => string;
-    conversor : (value: string, fromCurrency: string, toCurrency: string, conversionTable:any) => string
+    conversor : (value: number, fromCurrency: string, toCurrency: string, conversionTable:any) => number
 }
 
 const initialData :CurrencyState = {
     
-    sendCurrency: 'BRL',
+    sendCurrency: 'BRLA',
     receiveCurrency: 'USDC',
-    sendValue: '',
-    receiveValue: '',
+    sendValue: 0,
+    receiveValue: 0,
     fixOutput: false,
     pixkey: '',
     taxId: '',
@@ -87,28 +86,12 @@ const currencyReducer = (state: CurrencyState, action: Action) => {
 
 }
 
-const getCoin = (currency: string) => {
-
-    switch(currency) {
-
-        case 'BRL':
-            return 'BRL'
-        case 'USDC': 
-        case 'USDT': 
-            return 'USD'
-
-        default: 
-            return 'USD';
-
-    }
-}
 
 
-
-const conversor = (value: string, fromCurrency: string, toCurrency: string, conversionTable:any) => {
+const conversor = (value: number, fromCurrency: string, toCurrency: string, conversionTable:any) => {
     
 
-    const amountInDefaultCurrency = parseFloat(value);
+    const amountInDefaultCurrency = value;
 
     let amountInSecondCurrency;
 
@@ -127,7 +110,7 @@ const conversor = (value: string, fromCurrency: string, toCurrency: string, conv
     }
     
 
-    return amountInSecondCurrency.toFixed(2).replace(".", ",");
+    return amountInSecondCurrency;
 
 
 }
@@ -139,7 +122,7 @@ export const CurrencyProvider = ({children}: ProviderProps) => {
 
     const [state, dispatch] = useReducer(currencyReducer,initialData);
 
-    const value = {state, dispatch, getCoin, conversor};
+    const value = {state, dispatch, conversor};
 
     return (
 

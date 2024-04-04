@@ -63,9 +63,12 @@ export async function getConversionData () {
         
         const userData = await getUserData();
         
-        const walletAddress=  userData?.wallets.evm;
+        
+        const walletAddress = userData?.wallets.evm;
+        
         
         const data = request.data.swapLogs.map((item: ConversionData) => ({
+
             createdAt: item.createdAt,
 
             ops: item.smartContractOps.map((op: SmartContractOps) => ({
@@ -83,7 +86,7 @@ export async function getConversionData () {
 
             usdAmount: parseFloat(item.usdAmount) / 100,
             brlaAmount: parseFloat(item.brlaAmount) / 100,
-            coin: item.coin,
+            outputCoin: item.coin,
             userDocument: item.userDocument,
             title: item.chain,
             operationName: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
