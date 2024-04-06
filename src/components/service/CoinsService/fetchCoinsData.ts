@@ -16,6 +16,7 @@ setChartData: React.Dispatch<React.SetStateAction<ChartData[]>>) => {
         const usdt = await getUSDTData();
         const brl = await getBRLData();
 
+
         if (usdc && usdt && brl) {
           dispatch({
             type: QuoteActions.setUSDCQuote,

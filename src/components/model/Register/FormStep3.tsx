@@ -4,13 +4,16 @@ import { usePasswordValidation } from "../../service/PasswordService/usePassword
 import FormModel from "../Form/FormModel/FormModel";
 import { z } from "zod";
 import { FormActions, useForm } from "../../context/FormContext";
+import { FLEX, FLEX_COL, GAP_4, GAP_DEFAULT, ITEMS_CENTER, MARGIN_Y_3, TEXT_GRAY_500, TEXT_RED_600, TEXT_SMALL } from "../../contants/classnames/classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 
 const FromStep3: React.FC = () => {
     const {errors, handlePasswordChange, handleConfirmPasswordChange } = usePasswordValidation();
     const [passwordChanged, setPasswordChanged] = useState(false);
     const [confirmPasswordChanged, setConfirmPasswordChanged] = useState(false);
-    const { dispatch, state } = useForm();
+    const { dispatch } = useForm();
 
     const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         handlePasswordChange(e);
@@ -40,25 +43,32 @@ const FromStep3: React.FC = () => {
     ];
 
     const schema = z.object({ 
-        password: z.string().min(8, "Password can't be empty!").refine( pass => errors.length === 0, {message: " "}), 
+        password: z.string().min(8,"Password can't be empty!").refine(pass => errors.length === 0, {message: " "}), 
         confirmPassword: z.string().min(8,"Confirm Password can't be empty!").refine(pass => errors.length === 0,{message: " "})
      });
 
-     type Step3Data = z.infer<typeof schema>;
+    type Step3Data = z.infer<typeof schema>;
 
     return (
+
         <FormModel schema={schema} location="/step4" buttonText="Next"
          fields={fields} onSubmit={handleSubmit}>
 
             {(passwordChanged || confirmPasswordChanged) && (
-                <div className="flex gap-2 flex-col gap-2">
+
+                <div className={`${FLEX} ${GAP_4} ${MARGIN_Y_3} ${FLEX_COL}`}>
+
                     {errors.map((error, index) => (
-                        <div key={index} className="flex items-center my-2 gap-2">
-                            <i className="fa-solid fa-x" style={{ color: "#e01010" }}></i>
-                            <p className="text-gray-500 text-2xl mb-1">{error}</p>
+
+                        <div key={index} className={`${FLEX} ${ITEMS_CENTER} ${GAP_DEFAULT}`}>
+                            <FontAwesomeIcon icon={faX} className={TEXT_RED_600} />
+                            <p className={`${TEXT_GRAY_500} ${TEXT_SMALL}`}>{error}</p>
                         </div>
+
                     ))}
+
                 </div>
+
             )}
 
         </FormModel>

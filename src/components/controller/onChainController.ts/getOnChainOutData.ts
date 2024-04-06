@@ -23,9 +23,6 @@ export const getOnChainOutData = async () => {
         
         const walletAddress=  userData?.wallets.evm;
         
-        console.log(onChainInData);
-        
-        
         const data = request.data.onchainLogs.map((item:any) => {
         
             const outputValue = onChainInData.reduce((acc: number | null, data: any) => {

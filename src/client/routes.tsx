@@ -14,11 +14,14 @@ import ConversionStep2View from "../components/view/ConversionView/ConversionSte
 import TransferStep1View from "../components/view/TransferView/TransferStep1View";
 import TransferStep3View from "../components/view/TransferView/TransferStep3VIew";
 import TransferStep2View from "../components/view/TransferView/TransferStep2View";
+import { NotFoundView } from "../components/view/NotFoundView/NotFoundView";
 
 
 
 const AppRoutes = () => {
+
     return (
+
         <BrowserRouter>
 
             <Routes>
@@ -43,9 +46,8 @@ const AppRoutes = () => {
 
                 <Route path="/convert/1" element = {<ConversionStep1View />}/>
                 <Route path="/convert/2" element = {<ConversionStep2View />}/>
-               X
 
-
+                <Route path="*" element= {<NotFoundView />} />
                 
             </Routes>
 

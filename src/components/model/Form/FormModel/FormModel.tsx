@@ -7,6 +7,7 @@ import { Schema } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextModel from '../../Text/Text';
 import { ReactNode, useEffect, useState } from 'react';
+import { BLOCK, HIDDEN, POINTS_ALL, POINTS_NONE, TEXT_RED_600, TEXT_SMALL } from '../../../contants/classnames/classnames';
 
 type FormModelProps = {
     children?: ReactNode;
@@ -18,64 +19,62 @@ type FormModelProps = {
     schema: Schema;
     submitError?: string;
     navigate? : (path: string) => void;
+    buttonClassname?: string
 };
 
-const FormModel: React.FC<FormModelProps> = ({
-    children,
-    buttonText,
-    fields,
-    classname,
-    onSubmit,
-    location,
-    schema,
-    submitError
-}) => {
+const FormModel: React.FC<FormModelProps> = (props) => {
+
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'all',
         criteriaMode: 'all',
-        resolver: zodResolver(schema),
+        resolver: zodResolver(props.schema),
     });
 
-
     const [errorOnSubmit, setSubmitError] = useState('');
-    
+    const [buttonDisabled, setButtonDisabled] = useState(POINTS_ALL);
+    const [showText, setShowText] = useState(HIDDEN);
 
     const navigate = useNavigate();
 
     useEffect(()=> {
+        setSubmitError(props.submitError || '');
 
-        setSubmitError(submitError || '');
-        
+  
+    }, [props.submitError]);
 
-    }, [submitError]);
+    useEffect(()=> {
 
 
-    const submitForm = (data: any) => {
-        
-        
-        if(!errorOnSubmit) {
-
-            onSubmit(data);
-            if(location) {
-                navigate(location);
-            }
-
+        if(errorOnSubmit) {
+            setButtonDisabled(POINTS_ALL)
+            setShowText(HIDDEN);
         }
 
-        
+    },[errorOnSubmit, errors, buttonDisabled])
+
+    const submitForm = (data: any) => {
+
+        setButtonDisabled(POINTS_NONE);
+        setShowText(BLOCK);
+
+        if(!errorOnSubmit) {
+
+            props.onSubmit(data);
+            if(props.location) {
+                navigate(props.location);
+            }
+
+        } 
+
     };
+
 
     const handleInput = () => {
-
         setSubmitError('');
-
     };
 
-
     useEffect(() => {
-        
         const handleKeyDown = (event: KeyboardEvent) => {
-
             if (event.key === 'Enter') {
                 const inputs = document.querySelectorAll('input');
                 inputs.forEach((input: HTMLInputElement) => {
@@ -86,29 +85,23 @@ const FormModel: React.FC<FormModelProps> = ({
             }
         };
 
-    
         document.addEventListener('keydown', handleKeyDown);
     
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-
-        
-
     }, []);
     
     return (
 
         <form 
-        className={classname ?? 'flex flex-col gap-5'} 
-        // onSubmit={handleSubmit(submitForm)} 
-         >
-            
-            {fields &&
-                fields.map((field, index) => (
+            className={props.classname} 
+            onSubmit={handleSubmit(submitForm)}
+        >
+            {props.fields &&
+                props.fields.map((field, index) => (
                     <div key={index}>
                         <InputModel
-                                
                             type={field.type}
                             placeholder={field.placeholder}
                             register={register}
@@ -121,30 +114,29 @@ const FormModel: React.FC<FormModelProps> = ({
                             value={field.value}
                             icon={field.icon}
                             onInput={handleInput}
-                            
-                            
                         />
-
                         {errors[field.name] && (
-                            <TextModel addons="mt-3" color="text-red-600" content={errors[field.name]?.message} />
+                            <TextModel addons={`${TEXT_SMALL}`} color={TEXT_RED_600} content={errors[field.name]?.message} />
                         )}
-
                     </div>
                 ))}
             
-      
             {errorOnSubmit && (
-                <TextModel addons="mt-3" color="text-red-600" content={submitError} />
+                <TextModel addons="mt-3" color={TEXT_RED_600} content={props.submitError} />
             )}
         
+            {props.children}
 
-            {children}
+     
 
-            {buttonText && <Button onClick={handleSubmit(submitForm)} text={buttonText} />}
-            
+            {props.buttonText && <Button classname={`${props.buttonClassname} ${buttonDisabled}` } 
+             text={props.buttonText} />}
+
+            <TextModel addons={showText} content={"Carregando..."} />
+
         </form>
-
     );
 };
 
 export default FormModel;
+

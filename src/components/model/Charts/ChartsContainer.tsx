@@ -1,6 +1,7 @@
 
 import Chart from './Chart';
 import { ChartData } from '../../types/Chart/ChartData';
+import Loading from '../Loading/Loading';
 
 type Data = {
 
@@ -13,7 +14,8 @@ const ChartsContainer = ({data}: Data) => {
 
   return (
 
-    <section className='flex justify-between w-full items-center gap-5 flex-wrap pb-10 mt-14'>
+    <section className='flex min-h-screen
+     md:justify-between flex-col md:flex-row w-full items-center gap-5 pb-10'>
 
       {data ? (
         
@@ -30,7 +32,7 @@ const ChartsContainer = ({data}: Data) => {
 
       ) : (
 
-        <div>Carregando</div>
+        <Loading text='Carregando...' />
 
       )}
 

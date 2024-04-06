@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Logo from "../../Logo/Logo";
 import ContainerForm from "../../Container/ContainerForm";
+import { FLEX, FLEX_COL, FONT_BOLD, FORM_PADDING, GAP_DEFAULT, HEADING_BLUE_800, ITEMS_CENTER, 
+    JUSTIFY_CENTER, MARGIN_X_AUTO, MARGIN_Y_3, ROUNDED_DEFAULT, SHADOW_XL, TEXT_CENTER, TEXT_GRAY_400, TEXT_GRAY_500, TEXT_SMALL, TEXT_XL } from "../../../contants/classnames/classnames";
 
 interface FormWrapperProps {
 
@@ -18,25 +20,30 @@ const FormWrapper: React.FC<FormWrapperProps> =
 ({ children, heading, withLink, link, headingCenter, linkText, linkCenter }) => {
 
     const backButton = withLink && link ? (
-        <Link to={link} className={`flex items-center ${linkCenter && 'justify-center'} 
-         my-3 text-2xl text-gray-500 gap-2 hover:text-gray-400`}>
+
+        <Link to={link} className={`${FLEX} ${ITEMS_CENTER} ${linkCenter && JUSTIFY_CENTER} 
+          ${TEXT_SMALL} ${TEXT_GRAY_500} ${GAP_DEFAULT} hover:${TEXT_GRAY_400}`}>
             <i className="fa-solid fa-arrow-left"></i>{linkText ? linkText : 'Voltar'}
         </Link>
+
     ) : null;
 
     return (
 
         <ContainerForm>
-            
-            <Logo />
 
-            <section className="flex flex-col mx-auto w-full xl:w-2/4
-             shadow-xl h-auto md:p-5 lg:p-14 px-3 rounded">
+           
+            <Logo />
+            
+        
+            <section className={`${FLEX} ${FLEX_COL} 
+             ${SHADOW_XL} ${JUSTIFY_CENTER} ${FORM_PADDING} ${GAP_DEFAULT} ${ROUNDED_DEFAULT}`}>
 
                 {backButton}
-                <h3 className={`text-heading-blue-800 text-3xl my-3 font-bold ${headingCenter && 'text-center'}`}>
+                <h3 className={`${HEADING_BLUE_800} ${TEXT_XL} ${FONT_BOLD} ${headingCenter && TEXT_CENTER}`}>
                     {heading}
                 </h3>
+
                 {children}
                 
             </section>

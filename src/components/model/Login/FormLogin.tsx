@@ -8,6 +8,7 @@ import { loginController } from '../../controller/LoginController/loginControlle
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import { connectWebSocket } from '../../controller/WebSocketController/connectWebSocket';
 import { WebSocketActions, useWebSocket } from '../../context/WebSocketContext';
+import { BUTTON_PADDING, DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLEX, ROUNDED_DEFAULT, TEXT_GRAY_600, TEXT_SMALL, WIDTH_FULL } from '../../contants/classnames/classnames';
 
 
 type LoginData = {
@@ -71,17 +72,21 @@ const FormLogin: React.FC = () => {
     });
 
     const formFooter = (
-        <div className="flex flex-col gap-7 my-5">
+
+        <div className={`${FLEX} flex-col gap-2`}>
             <a
-                className="w-full text-center p-5 font-medium border border-black 
-                rounded-xl hover:bg-black hover:text-white text-heading-blue-secondary text-2xl flex justify-center gap-2"
+                className={`${WIDTH_FULL} text-center ${BUTTON_PADDING} font-medium border border-black 
+                ${ROUNDED_DEFAULT} hover:bg-black hover:text-white text-heading-blue-secondary ${DEFAULT_TEXT_SIZE}
+                 ${FLEX} justify-center gap-2`}
+
                 href=""
             >
-                <img src="/Google.svg" className="w-7" alt="Google Icon" /> Continue with Google 
+                <img src="/Google.svg" className={DEFAULT_ICON_SIZE} alt="Google Icon" /> Continue with Google 
             </a>
             
             <TextModel 
-                color='gray-600'
+                color={TEXT_GRAY_600}
+                addons={TEXT_SMALL}
                 content={
                     <>
                         Não tem conta ainda?{' '}

@@ -26,17 +26,19 @@ const ValuesArrival: React.FC = () => {
             }
 
             if (state.searchDate && !isNaN(Date.parse(state.searchDate))) {
-                data = data.filter((item: any) => item.createdAt && item.createdAt.toLocaleString().substring(0, 10).includes(state.searchDate));
+
+                data = data.filter((item: any) => item.createdAt && item.createdAt
+                .toLocaleString().substring(0, 10).includes(state.searchDate));
           
             }
 
             if (location.pathname === '/home') {
+                
                 data = data.slice(0, 5);
              
             }
 
             setAllData(data);
-
    
     
         } catch (error: any) {

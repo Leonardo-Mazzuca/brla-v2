@@ -8,6 +8,7 @@ export type Feedback=  {
     errorMsg: string | null;
     createdAt: string;
     id: string;
+    updatedAt: string
     
     
 }

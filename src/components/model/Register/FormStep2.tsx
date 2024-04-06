@@ -5,6 +5,7 @@ import { z } from "zod";
 import { FormActions, useForm as useFormContext } from "../../context/FormContext";
 import { addressService } from "../../service/AddressService/addressService";
 import { useForm } from "react-hook-form";
+import { FLEX, FLEX_COL, GAP_DEFAULT, GRID, GRID_COLS_2 } from "../../contants/classnames/classnames";
 
 const FormStep2: React.FC = () => {
 
@@ -71,14 +72,16 @@ const FormStep2: React.FC = () => {
   };
 
   return (
+
     <FormModel
       schema={schema}
-      classname="md:grid md:grid-cols-2 gap-4 sm:flex sm:flex-col"
+      classname={`md:${GRID} md:${GRID_COLS_2} ${GAP_DEFAULT} sm:${FLEX} sm:${FLEX_COL}`}
       location="/step3"
       buttonText="próximo"
       fields={fields}
       onSubmit={handleSubmit}
     />
+
   );
 };
 

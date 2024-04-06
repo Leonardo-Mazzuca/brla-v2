@@ -13,11 +13,10 @@ export const getUSDTData = async () => {
         
         return usdtData.map((data:any, index:number) => {
 
-            const usdtClose = parseFloat(data[4]);
 
-            const usdcClose = parseFloat(usdcData[index].close);
+            const usdcClose = parseFloat(usdcData[index][4]);
 
-            const usdtToUsdc = usdtClose / usdcClose;
+            const usdtToUsdc =  usdcClose;
 
             return {
 

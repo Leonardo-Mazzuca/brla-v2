@@ -11,6 +11,7 @@ type SmartContractOps = {
     id: string;
     operationName: string;
     feedback: Feedback;
+    tx: string;
  
 
 }
@@ -29,6 +30,7 @@ export type ConversionData = {
     basePrice: string;
     icon: IconProp
     receiverAddress: string
+    tx: string;
    
 }
 
@@ -47,6 +49,7 @@ export type ExpectedConversionData = {
     feedback: Feedback
     operationName: string;
     isPayment: boolean;
+    tx: string;
 
 }
 
@@ -77,7 +80,13 @@ export async function getConversionData () {
                     ...op.feedback,
                     createdAt: item.createdAt 
                 }
+                
             })),
+
+            tx: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
+                acc = op.tx;
+                return acc;
+            },''),
 
             feedback: item.smartContractOps.reduce((acc: Feedback, op: SmartContractOps) => {
                 acc = op.feedback;
@@ -97,7 +106,8 @@ export async function getConversionData () {
             basePrice: item.basePrice,
             usdToBrla: item.usdToBrla,
             icon: faArrowRightArrowLeft,
-            isPayment: item.receiverAddress !== walletAddress
+            isPayment: item.receiverAddress !== walletAddress,
+           
 
             
         }));

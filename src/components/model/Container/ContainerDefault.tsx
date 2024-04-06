@@ -1,3 +1,4 @@
+import { FLEX, FLEX_COL, HEIGHT_AUTO, JUSTIFY_BETWEEN, LARGE_PADDING, LARGE_PADDING_X, MEDIUM_PADDING, WIDTH_FULL } from "../../contants/classnames/classnames";
 import ContainerModel from "../../types/ContainerModel/ContainerModel";
 
 
@@ -8,7 +9,9 @@ const ContainerStandart: React.FC<ContainerModel> = ({children, className}) => {
 
     return (
 
-        <section className={`w-full py-14 md:px-28 lg:px-48 p-3 flex flex-col justify-between h-auto ${className}`}>
+        <section className={`${WIDTH_FULL} 
+        ${FLEX} ${FLEX_COL} ${JUSTIFY_BETWEEN} ${MEDIUM_PADDING} 
+         md:${LARGE_PADDING_X} ${HEIGHT_AUTO} ${className}`}>
 
             {children}
 

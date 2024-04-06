@@ -1,4 +1,5 @@
 
+import { BUTTON_PADDING, DEFAULT_TEXT_SIZE, ROUNDED_DEFAULT, WIDTH_FULL } from "../../contants/classnames/classnames";
 import ButtonProps from "../../types/Button/ButtonProps";
 
 
@@ -16,10 +17,10 @@ const Button: React.FC<ButtonProps> = ({
         disabled = {disabled}
         className=
         {`${background} ${textColor ?? 'text-white'} 
-        p-6 rounded-xl w-full text-2xl 
+        ${BUTTON_PADDING} ${ROUNDED_DEFAULT} ${WIDTH_FULL} ${DEFAULT_TEXT_SIZE}
         ${hover ? `hover:${hover}` : 'hover:bg-gray-500'}
         ${classname ?? ''}
-        col-span-2 my-4`}
+        col-span-2 my-2`}
         >
 
             {text}

@@ -17,7 +17,11 @@ import { isCnpj } from "../../service/TaxId/Cnpj/verifyCnpj";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { isBrl } from "../../service/Util/isBrl";
-import { getCurrencyCoinToFormat } from "../../service/CoinsService/getCurrencyCoinToFormat";
+import { hidden, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
+import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNumber/formatValueInPhoneNumber";
+import { isPhoneNumber, validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
+import { isEmail } from "../../service/PixkeyService/verifyEmail";
+import { isRandomKey } from "../../service/PixkeyService/verifiyRandomkey";
 
 
 const TransferStep2 = () => {
@@ -27,7 +31,15 @@ const TransferStep2 = () => {
     const [fields, setField] = useState<Field[]>([]);
     const [isPixkeyTaxId, controlPixkey] = useState(false);
     const [taxIdValue , setTaxIdValue] = useState('');
+    const [classname, setTaxIdClassname] = useState('hidden');
+    const [buttonClassname, setButtonClassname] = useState(pointsNone);
+    const [pixkeyValue, setPixkeyValue] = useState('');
+
+    const [isPixkeyValid, setIsPixkeyValid] = useState(false);
+    const [isTaxIdValid, setIsTaxIdValid] = useState(false);
+
     const navigate = useNavigate();
+    
 
 
     useEffect(()=> {
@@ -42,52 +54,42 @@ const TransferStep2 = () => {
     const handleTaxIdValue = (e:React.ChangeEvent<HTMLInputElement>) => {
 
       const value = e.target.value;
-
-
-      if (isCpf(value)) {
-
-          setTaxIdValue(formatValueInCpf(value));
-
-      }
-
-      if(isCnpj(value)) {
-
-        setTaxIdValue(formatValueInCnpj(value));
-
-
-      }
-
     
-      
-      if(!isCnpj(value) && !isCpf(value)) {
+      setTaxIdValue(value);
 
-        setTaxIdValue(value);
-        
-        
-
-      }
 
 
     }
 
+    const handlePixkeyValue = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+      const value = e.target.value;
+
+      setPixkeyValue(value);
+
+    }
+
     useEffect(()=> {
+      
 
       if(isBrl(state)) {
 
         setSchema(z.object({
 
-            pixkey: z.string().min(3).refine(pixkey => handlePixkey(pixkey)),
-            taxId: z.string().max(14).refine(taxId => handleTaxId(taxId), 
-            {message: 'Insira um taxId válido'}).nullable(),
+            pixkey: z.string().refine(pixkey => validityPixkey(pixkey),{message: 'Chave pix inválida'}),
+            taxId: z.string().max(14).refine(taxId => validityTaxId(taxId), 
+            {message: isPixkeyTaxId ? 'Insira um taxId válido' : ''}).nullable(),
       
           })
         );
 
         setField([
 
-          { type: "text", placeholder: "Chave pix", name: "pixkey",  },
+          { type: "text", placeholder: "Chave pix", name: "pixkey", onChange: handlePixkeyValue, 
+          value: pixkeyValue},
+          
           { type: "text", placeholder: "taxId", name: "taxId" ,
-           maxLength: 18, addClassName: isPixkeyTaxId ? 'hidden' : 'block', onChange: handleTaxIdValue, 
+           maxLength: 18, addClassName: classname, onChange: handleTaxIdValue, 
            value: taxIdValue},
 
         ]);
@@ -104,31 +106,149 @@ const TransferStep2 = () => {
 
       }
 
-    },[taxIdValue, isPixkeyTaxId]);
+    },[taxIdValue, classname,pixkeyValue, isPixkeyTaxId]);
+
+
+    useEffect(() => {
 
 
 
-    const handleTaxId = (value:string) => {
+      if(!isBrl(state)) {
 
-      return isCpf(value) || isCnpj(value);
-
-    }
-
-    
-    const handlePixkey = (pixkey: string) => {
-
-      if(isCpf(pixkey) || isCnpj(pixkey)) {
-
-        controlPixkey(true);
-   
+        setButtonClassname(pointsAll);
 
       } else {
 
-        controlPixkey(false);
+        if(isPixkeyTaxId) {
+  
+          if (isPixkeyValid) {
+      
+            setButtonClassname(pointsAll);
+  
+          }
+  
+        } 
+  
+        if(!isPixkeyTaxId) {
+  
+          if (pixkeyValue === '' || taxIdValue === '') {
         
+            setButtonClassname(pointsNone);
+    
+          } else {
+  
+           if (isPixkeyValid && isTaxIdValid) {
+                setButtonClassname(pointsAll);
+      
+            } else {
+                setButtonClassname(pointsNone); 
+            }
+  
+          }
+  
+        }
+
+      }
+
+
+
+
+      
+
+
+  }, [isPixkeyValid, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname]);
+  
+
+
+    const validityTaxId = (value:string) => {
+
+      if(!isPixkeyTaxId) {
+
+        if (isCpf(value)) {
+  
+          setTaxIdValue(formatValueInCpf(value));
+  
+        }
+  
+        if(isCnpj(value)) {
+  
+          setTaxIdValue(formatValueInCnpj(value));
+  
+  
+        }
+  
+        const isValid = isCpf(value) || isCnpj(value);
+  
+        setIsTaxIdValid(isValid);
+        
+        return isValid;
       }
 
       return true;
+
+    }
+    
+    const validityPixkey = (pixkey: string) => {
+
+      if(pixkey === '') {
+        
+        setPixkeyValue(pixkey);
+        setTaxIdClassname(hidden);
+        setIsPixkeyValid(false);
+        controlPixkey(false)
+        return;
+
+      } else {
+
+   
+
+        if(isCpf(pixkey)) {
+
+          controlPixkey(true)
+          setPixkeyValue(formatValueInCpf(pixkey))
+    
+        }
+
+        if(isCnpj(pixkey)) {
+
+          controlPixkey(true)
+          setPixkeyValue(formatValueInCnpj(pixkey))
+  
+        }
+
+        if(validityRawPhoneNumber(pixkey) && !(isCpf(pixkey) || isCnpj(pixkey))) {
+
+    
+              setPixkeyValue(formatValueInPhoneNumber(pixkey))
+          
+          
+        }
+
+        if(isEmail(pixkey)) {
+          setPixkeyValue(pixkey);
+        }
+
+        if(isRandomKey(pixkey)) {
+          setPixkeyValue(pixkey)
+        }
+
+        if(isCpf(pixkey) || isCnpj(pixkey)) {
+          
+          setTaxIdClassname(hidden);
+          controlPixkey(true);
+          
+        } else {
+
+          setTaxIdClassname('block');
+          controlPixkey(false);
+
+        }
+
+        const isValid = isCpf(pixkey) || isCnpj(pixkey) || isPhoneNumber(pixkey) || isEmail(pixkey) || isRandomKey(pixkey);
+        setIsPixkeyValid(isValid);
+        return isValid;
+    
+      }
 
     }
 
@@ -152,25 +272,28 @@ const TransferStep2 = () => {
           dispatch({
   
             type: CurrencyActions.setPixkey,
-            payload: {pixkey},
+            payload: {pixkey: pixkey},
   
           });
   
-        } 
+        } else {
+
+          dispatch({
+    
+            type: CurrencyActions.setTaxId,
+            payload: {taxId},
+    
+          });
+    
+          dispatch({
+    
+            type: CurrencyActions.setPixkey,
+            payload: {pixkey},
+    
+          });
+
+        }
   
-        dispatch({
-  
-          type: CurrencyActions.setTaxId,
-          payload: {taxId},
-  
-        });
-  
-        dispatch({
-  
-          type: CurrencyActions.setPixkey,
-          payload: {pixkey},
-  
-        });
 
       } else {
         
@@ -196,14 +319,18 @@ const TransferStep2 = () => {
 
             <TransfersContainer isButtonPresent = {false} activeIndex={1}>
                 
-                  <FormModel location="/transfer/3" buttonText={<>Proximo <FontAwesomeIcon className="ms-2" icon={faArrowRight} /></>}
+                  <FormModel 
+
+                   buttonClassname={buttonClassname} 
+                   location="/transfer/3" 
+                   buttonText={<>Proximo <FontAwesomeIcon className="ms-2" icon={faArrowRight} /></>}
                    fields={fields} schema={schema} onSubmit={handleSubmit}>
 
                     <div className="mt-6">
                       
                         <div className="flex justify-between mb-6">
                               <TextModel addons="text-gray-400" weight="font-light" content={"Valor a ser enviado"} />
-                              <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(state.receiveValue, getCurrencyCoinToFormat(state.receiveCurrency))}`} />
+                              <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(state.receiveValue, state.receiveCurrency)}`} />
                         </div>
 
                     </div>  

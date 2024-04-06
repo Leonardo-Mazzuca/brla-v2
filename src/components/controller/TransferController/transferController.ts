@@ -12,6 +12,8 @@ export const transferController = async (pixkey: string, taxId: string, amount: 
             withCredentials: true
         });
 
+        console.log('Request no controller: ', request);
+        
         if(request.status === 200) {
             return request.data;
         }

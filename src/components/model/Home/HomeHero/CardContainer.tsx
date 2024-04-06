@@ -6,6 +6,7 @@ import { getCurrencyIMG } from "../../../service/CurrencyService/getCurrencyIMG"
 import Heading from "../../Heading/Heading";
 import CardLoading from "../../Loading/CardLoading";
 import TextModel from "../../Text/Text";
+import { FLAG_ICON_SIZE, FLEX, FLEX_1, FLEX_COL, FLEX_ROW, FONT_SEMIBOLD, GAP_DEFAULT, GRAY_GRADIENT, HEIGHT_AUTO, ITEMS_CENTER, JUSTIFY_CENTER, ROUNDED_DEFAULT, TEXT_3X, TEXT_GRAY_400, TEXT_GRAY_600, WIDTH_FULL } from "../../../contants/classnames/classnames";
 
 
 interface CardPattern {
@@ -58,19 +59,19 @@ const CardContainer = () => {
                     <div
     
                         key={index}
-                        className="
-                        bg-gradient-to-br from-white via-slate-50 to-slate-100 rounded-xl px-7 
-                        flex flex-col justify-center gap-6 flex-1 min-h-80 h-auto py-5"
+                        className={`
+                       ${GRAY_GRADIENT} ${ROUNDED_DEFAULT} px-7 
+                        ${FLEX} ${FLEX_COL} ${JUSTIFY_CENTER} gap-6 ${FLEX_1} min-h-80 ${HEIGHT_AUTO} py-5`}
                     >
-                        <div className="flex items-center gap-3 mb-4">
-                            <img src={item.flag} alt={item.alt} className="w-12" />
+                        <div className={`${FLEX} ${ITEMS_CENTER} ${GAP_DEFAULT} mb-4`}>
+                            <img src={item.flag} alt={item.alt} className={FLAG_ICON_SIZE} />
     
-                            <TextModel size="text-3xl" addons="font-semibold" content={item.coin} />
+                            <TextModel size={TEXT_3X} addons={FONT_SEMIBOLD} content={item.coin} />
     
                         </div>
                         
-                        <TextModel color="gray-400" content={item.text} addons="mb-2" />
-                        <Heading color="gray-600" content={item.balance} />
+                        <TextModel color={TEXT_GRAY_400} content={item.text} addons="mb-2" />
+                        <Heading size={TEXT_3X} color={TEXT_GRAY_600} content={item.balance} />
                     
                     </div>
                 ))
@@ -86,7 +87,7 @@ const CardContainer = () => {
 
     return (
 
-        <section className="flex lg:flex-row flex-col gap-5 w-full">
+        <section className={`${FLEX} lg:${FLEX_ROW} ${FLEX_COL} gap-5 ${WIDTH_FULL}`}>
 
             {component}
       

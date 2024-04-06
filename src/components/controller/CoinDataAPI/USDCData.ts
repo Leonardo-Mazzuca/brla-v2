@@ -11,6 +11,8 @@ export const getUSDCData = async () => {
         const requestUsdc = await axios.get(USDC_ENDPOINT);
         const usdcData = requestUsdc.data;
 
+        
+
         return usdcData.map((data:any, index:number) => {
 
             const usdtClose = parseFloat(usdtData[index][4]);
@@ -32,6 +34,8 @@ export const getUSDCData = async () => {
             };
             
         });
+
+        
 
     } catch (error:any) {
 

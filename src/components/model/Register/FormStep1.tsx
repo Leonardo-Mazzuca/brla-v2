@@ -7,6 +7,7 @@ import FormModel from "../Form/FormModel/FormModel";
 import { z } from "zod";
 import { FormActions, useForm } from "../../context/FormContext";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLEX, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, ITEMS_START, MARGIN_Y_3, ROUNDED_DEFAULT, TEXT_GRAY_400, TEXT_GRAY_800, TEXT_SMALL, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 const schema = z.object({
 
@@ -54,42 +55,37 @@ const FromStep1 = () => {
       <FormModel 
       schema={schema} 
       onSubmit={handleSubmit} 
-      classname="flex flex-col gap-5" 
       buttonText={'Proximo'} 
       fields={fields} 
-      location="/step2">
+      location="/step2"
+      >
 
         <div className="text-start">
 
-        
-
-          <div className="flex gap-2 mt-2 md:items-center items-start">
+          <div className={`${FLEX} ${GAP_DEFAULT} ${MARGIN_Y_3} md:${ITEMS_CENTER} ${ITEMS_START}`}>
             <input
               style={{ width: '1em', height: '1em' }}
 
-              className="checkbox:h-3/4 bg-gray-50 border border-gray-300 text-gray-900
-              text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full 
+              className={`checkbox:h-3/4 bg-gray-50 border border-gray-300 text-gray-900
+              ${TEXT_SMALL} ${ROUNDED_DEFAULT} focus:ring-blue-500 focus:border-blue-500 block ${WIDTH_FULL} 
               p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
               dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-              mt-1 md:mt-0
-              "
-
+              
+              `}
               type="checkbox"
-
               required
-          
               id="checkboxInput"
             />
 
             <label htmlFor="checkboxInput" 
-            className="flex md:items-center
-            flex-wrap text-gray-400 md:text-2xl text-xl gap-x-2">
+            className={`${FLEX} md:${ITEMS_CENTER}
+            ${FLEX_WRAP} ${GAP_DEFAULT} ${TEXT_GRAY_400} ${TEXT_SMALL} md:${DEFAULT_TEXT_SIZE}`}>
 
               I agree with
-              <a href="#" className="flex items-center text-gray-800 hover:underline">
+              <a href="#" className={`${FLEX} ${ITEMS_CENTER} ${TEXT_GRAY_800} hover:underline`}>
                 terms of service & privacy
               </a>
-              <img className="w-7" src="/external-link.svg" alt="Image of a link ancor" />
+              <img className={DEFAULT_ICON_SIZE} src="/external-link.svg" alt="Image of a link ancor" />
 
             </label>
 
@@ -99,18 +95,18 @@ const FromStep1 = () => {
 
       </FormModel>
 
-      <div className="my-3">
+      <div className="my-2">
 
         <TextModel
         color="gray-400"
-        size="md:text-2xl text-xl"
+        addons={`${TEXT_SMALL} md:${DEFAULT_TEXT_SIZE}`}
         content ={
         
 
-          <>
-            Already have an account? {" "}
-            <Link className="text-gray-800 hover:underline" to={'/'}>Login here</Link>
-          </>
+          <div className={`${FLEX} ${GAP_DEFAULT}`}>
+            <p className={TEXT_GRAY_400}>Already have an account?</p> 
+            <Link className={`${TEXT_GRAY_800} hover:underline`} to={'/'}>Login here</Link>
+          </div>
         }
         
         />

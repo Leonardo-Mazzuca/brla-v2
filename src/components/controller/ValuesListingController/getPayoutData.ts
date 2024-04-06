@@ -4,6 +4,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Feedback } from "../../types/Feedback/Feedback";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
+import formatDate from "../../service/Formatters/FormatDate/formatDate";
 
 type SmartContractOps = {
     operationName: string;
@@ -55,30 +56,39 @@ export type ExpectedPayoutData = {
 export async function getPayoutData() {
 
     try {
+        
         const request = await http.get('/pay-out/history', { withCredentials: true });
-
-        console.log('Default payout data: ', request.data.transfersLogs);
+        
         
         const data = request.data.transfersLogs.map((item: PayoutData) => {
-
         
-
-                // const feedback = item.transfers?.map((transfer: any) => {
-    
-                    
-                    
-                // }).flat();
-        
-                if(item.transfers !== null) {
-
-                    const feedback = item.transfers[0].feedbacks.map((feedback: Feedback)=> {
-            
-                        console.log(
-                            feedback);
+                const latestFeedback = item?.transfers?.flatMap((transfer: any) => transfer?.feedbacks)
+                    .reduce((latest: any, feedback: any) => {
                         
-                    });
 
-                }
+                        const date = new Date(feedback?.updatedAt);
+
+                        if (!latest.date || date > latest.date) {
+
+                            return { 
+                                date, 
+                                feedback
+                             };
+
+                        }
+
+                        return latest;
+
+                    }, { date: null, feedback: null }).feedback;
+
+            
+            
+                const feedback = {
+
+                    success: latestFeedback?.logType ?  latestFeedback.logType === 'success' : null,
+                    updatedAt: latestFeedback?.updatedAt ? latestFeedback.updatedAt : '...',
+
+                } ?? {};
 
             
             
@@ -93,11 +103,7 @@ export async function getPayoutData() {
                 return acc;
             }, ''),
 
-            // feedback : item.transfers.map((transfer: any) => {
-            //     return transfer.feedbacks.map((feedbackItem: any) => {
-            //         return feedbackItem.feedback;
-            //     });
-            // }).flat(),
+            feedback : feedback,
             
             icon: faArrowUp,
 
@@ -116,10 +122,12 @@ export async function getPayoutData() {
 
 
             accountNumber: formatWalletAddress(item.walletAddress),
+
+            outputCoin: 'BRLA',
       
 
         }});
-          
+        
         
         return data;
         

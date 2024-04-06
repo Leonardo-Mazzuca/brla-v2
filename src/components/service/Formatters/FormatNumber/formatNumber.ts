@@ -3,15 +3,18 @@ import { getCurrencyCoinToFormat } from "../../CoinsService/getCurrencyCoinToFor
 
 export const formatNumberToString = (number: number, currency?: string) => {
     
+ 
     if (number === 0) {
 
         return '00,00';
 
     } else if (currency) {
 
+         const coin = getCurrencyCoinToFormat(currency);
+
          return new Intl.NumberFormat('en-US', { style: 'currency',
          minimumFractionDigits: number < 0.01 ? 3 : 2,
-         currency: getCurrencyCoinToFormat(currency) }).format(number);
+         currency:  coin}).format(number);
 
     } else {
 

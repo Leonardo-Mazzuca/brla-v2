@@ -12,7 +12,7 @@ export const controlTextComponent = (
 
         const title = data.title;
     
-        if(data.feedback && !data.feedback.success) {
+        if(data.transfers !== null && data.feedback !== null && !data.feedback.success) {
           
           setTitle(title);
           setText('Falha na transferência ');
@@ -20,7 +20,7 @@ export const controlTextComponent = (
 
         } 
 
-        if(data.transfers && !data.transfers.taxId && !data.feedback) {
+        if(data.transfers && !data.transfers.amount) {
 
           setTitle(title);
           setText('Pendente...');
@@ -64,6 +64,7 @@ export const controlTransferAmount = (formattedAmount: string,
     if(data.transfers && !data.transfers.amount) {
 
       setAmount("00,00");
+
     }
 
     if(data.feedback && !data.feedback.success) {

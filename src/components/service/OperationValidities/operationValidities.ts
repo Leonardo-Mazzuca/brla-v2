@@ -1,3 +1,4 @@
+import { WebSocketState } from "../../context/WebSocketContext";
 
 
 export const is0Value = (inputValue: number, outputValue: number) => {
@@ -27,4 +28,8 @@ export const isBalanceLessThanValue = (inputValue: number, balance: number) => {
         return '';
     }
 
+}
+
+export const isWebSocketOff = (webSocketState: WebSocketState) => {
+    return webSocketState.webSocket === null;
 }

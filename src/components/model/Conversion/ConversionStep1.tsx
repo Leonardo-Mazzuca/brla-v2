@@ -12,7 +12,12 @@ import OutputSelect from "./InputSelect/OutputSelect";
 import { block, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import TextModel from "../Text/Text";
 import { useQuote } from "../../context/QuoteContext";
-import { is0Value, isBalanceLessThanValue, isTheSameCoin } from "../../service/OperationValidities/operationValidities";
+import { is0Value, isBalanceLessThanValue, isTheSameCoin, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
+import { useWebSocket } from "../../context/WebSocketContext";
+import { isUsdcToUsdt, isUsdtToUsdc } from "../../service/Util/onChain";
+import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
+import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
+import { sendMessageToSwap } from "../../service/WebSocketService/sendMessageToSwap";
 
 
 const ConversionStep1: React.FC = () => {
@@ -26,8 +31,18 @@ const ConversionStep1: React.FC = () => {
     const {state:balanceState, getCoinToBalance} = useBalance();
     const {state:quoteState, createConversionTable} = useQuote();
 
-    
     const converted = conversor(inputValue, state.sendCurrency, state.receiveCurrency,createConversionTable(quoteState));
+    const { state: webSocketState, dispatch:webSocketDispatch } = useWebSocket();
+
+    const isForWebSocket = (!isUsdcToUsdt(state) && !isUsdtToUsdc(state));
+
+    useEffect(()=> {
+
+        if(isForWebSocket) {
+            fetchWebSocket(webSocketState, webSocketDispatch);
+        }
+
+    },[webSocketState.webSocket]);
 
     useEffect(() => {
 
@@ -40,28 +55,39 @@ const ConversionStep1: React.FC = () => {
 
   }, [state.sendCurrency, state.receiveCurrency]);
 
+    useEffect(()=> {
+
+        if(isUsdcToUsdt(state) || isUsdcToUsdt(state) && webSocketState.webSocket) {
+            webSocketState.webSocket?.close();
+        }
+
+    },[webSocketState.webSocket]);
+
 
     useEffect(() => {
 
         const coinBalance = getCoinToBalance(state.sendCurrency, balanceState);
-
         const withoutValue = is0Value(inputValue, outputValue);
         const sameCoin =  isTheSameCoin(state.sendCurrency, state.receiveCurrency);
-        const withoutBalance = isBalanceLessThanValue(inputValue,coinBalance)
+        const withoutBalance = isBalanceLessThanValue(inputValue,coinBalance);
+        const webSocketNull = isWebSocketOff(webSocketState);
 
-        if (withoutValue || sameCoin || withoutBalance ) {
+
+        if (withoutValue || sameCoin || withoutBalance || webSocketNull) {
 
             setIsValuable(false);
             setErrorMessage(withoutValue || sameCoin || withoutBalance)
             
         } else {
 
-            setIsValuable(true);
-            setErrorMessage('');
+            setTimeout(()=> {
+                setIsValuable(true);
+                setErrorMessage('');
+            },1000);
 
         }
 
-    }, [inputValue, outputValue, state.sendCurrency, state.receiveCurrency]);
+    }, [inputValue,webSocketState.webSocket, outputValue, state.sendCurrency, state.receiveCurrency]);
 
     useEffect(() => {
 
@@ -73,12 +99,20 @@ const ConversionStep1: React.FC = () => {
 
     }, [isValuable, inputValue, balanceState, state.sendCurrency, getCoinToBalance]);
 
+    const handleSubmit = () => {
+
+        if (isForWebSocket && webSocketState.webSocket) {   
+                sendMessageToSwap(webSocketState.webSocket, state);
+        }
+
+    }
 
     return (
 
         <ContainerService path="/home" linkText="Dashboard">
 
             <ConversionContainer 
+                onSubmit={handleSubmit}
                 activeIndex={0}
                 location="/convert/2" 
                 buttonComponent={<span>Próximo <FontAwesomeIcon icon={faArrowRight} /></span>}

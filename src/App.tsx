@@ -17,7 +17,7 @@ function App() {
 
   return (
 
-    <section className="w-full h-screen">
+    <section className="mn-w-screen min-h-screen">
 
           <QuoteProvider>
   

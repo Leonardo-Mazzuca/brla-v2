@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextModel from "../../Text/Text";
 import { formatNumberToString } from "../../../service/Formatters/FormatNumber/formatNumber";
-import { getCurrencyCoinToFormat } from "../../../service/CoinsService/getCurrencyCoinToFormat";
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
-import { ExpectedConversionData } from "../../../controller/ValuesListingController/getConversionData";
+
+import { ReactNode, useEffect, useState } from "react";
 import { ExpectedPayoutData } from "../../../controller/ValuesListingController/getPayoutData";
 import { ExpectedPayInData } from "../../../controller/ValuesListingController/getPayInData";
 import { controlAmount, controlSwapPending, controlSwapTextComponent } from "../../../service/TransactionsMapService/swap/SwapComponentService";
 import { controlColor, controlTextComponent, controlTransferAmount } from "../../../service/TransactionsMapService/transfer/TransferComponentService";
 import { useCurrency } from "../../../context/CurrencyContext";
 import { isUsdToBrla } from "../../../service/Util/isUsdToBrla";
+import { FONT_BOLD, MARGIN_Y_3, TEXT_2X, TEXT_CENTER, TEXT_GRAY_400, TEXT_GRAY_500, TEXT_GRAY_700, TEXT_GREEN_700, TEXT_RED_600, TEXT_XL, WIDTH_AUTO } from "../../../contants/classnames/classnames";
 
 
 export type TransactionData<T> = {
@@ -33,20 +33,21 @@ const DefaultTemplate = ({
           <FontAwesomeIcon icon={icon} />
         </div>
         <div className="xl:text-start text-end">
-          <TextModel color="gray-700" content={title} />
-          <TextModel color="gray-400" content={date} />
+          <TextModel color={TEXT_GRAY_700} content={title} />
+          <TextModel color={TEXT_GRAY_400} content={date} />
         </div>
       </div>
       <div className="flex xl:items-end items-center xl:flex-col items-center justify-between flex-wrap">
 
         <TextModel
-          size="text-3xl"
-          weight="font-bold"
-          addons="w-auto my-3 ? text-green-700"
+          size={TEXT_XL}
+          weight={FONT_BOLD}
+          addons={`${WIDTH_AUTO} ${MARGIN_Y_3} ${TEXT_GREEN_700}`}
           content={amount}
         />
+
         <TextModel
-          addons={`text-center md:text-end`}
+          addons={`${TEXT_CENTER} md:text-end`}
           content={`${footerText} ${addressNumber}`}
         />
 
@@ -92,8 +93,8 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState('text-green-700');
 
-  const numberAmount = data.transfers?.amount ?? 0;
-  const formattedAmount = formatNumberToString(numberAmount ,getCurrencyCoinToFormat(data.coin));
+  const numberAmount = data.transfers?.amount ?? 'pendente...';
+  const formattedAmount = formatNumberToString(numberAmount , data.outputCoin);
 
   
 
@@ -151,10 +152,10 @@ const Swap = ({ data }: TransactionData<any>) => {
   const [usdToBrla, setIsUsdToBrla] = useState(false);
 
   const textColor = pending
-    ? "text-gray-500"
+    ? TEXT_GRAY_500
     : success
-    ? "text-green-700"
-    : "text-red-500";
+    ? TEXT_GREEN_700
+    : TEXT_RED_600;
 
   const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'USD' : 'BRL'
 

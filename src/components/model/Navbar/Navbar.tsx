@@ -4,6 +4,8 @@ import TextModel from "../Text/Text";
 import IconButton from "../Button/IconButton";
 import LinkModel from "../Link/Link";
 import { useQuote } from "../../context/QuoteContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear, faUser } from "@fortawesome/free-solid-svg-icons";
 
 
 interface NavbarProps {
@@ -19,8 +21,8 @@ interface ButtonItem {
 }
 
 const buttonItems: ButtonItem[] = [
-    { icon: <i className="fa-solid fa-gear text-lg md:text-2xl"></i>},
-    { icon: <i className="fa-solid fa-user-large text-lg md:text-2xl"></i>},
+    { icon: <FontAwesomeIcon icon={faGear} />},
+    { icon: <FontAwesomeIcon icon={faUser}/>},
 ];
 
 const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {

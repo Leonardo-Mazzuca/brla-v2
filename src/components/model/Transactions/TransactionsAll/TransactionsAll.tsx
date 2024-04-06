@@ -22,7 +22,7 @@ const Transactions: React.FC = () => {
 
                             <MiniMenu 
 
-                                linkPath={'/Home'} 
+                                linkPath={'/home'} 
                                 headingColReverse ={true} 
                                 linkIsEnable={true}
                                 children = {<TransactionsManagement />} 

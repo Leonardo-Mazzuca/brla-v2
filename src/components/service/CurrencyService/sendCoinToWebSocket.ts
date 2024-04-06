@@ -6,8 +6,8 @@ export const sendCoinToWebSocket = (currency: string) => {
 
     switch(currency) {
 
-        case 'BRL':
-            return 'BRLA';
+        case 'BRLA':
+            return 'USDC';
         default:
             return currency;
 

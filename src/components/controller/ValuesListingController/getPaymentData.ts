@@ -1,68 +1,63 @@
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { http } from "../ConectAPI/conectApi"
+import { http } from "../ConectAPI/conectApi";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 
 
-
-
-
-export async function getPaymentData () {
-
-
+export async function getPaymentData() {
     try {
-        
         const request = await http.get('/payment/history', {
             withCredentials: true,
         });
 
-        
+        const data = request.data.paymentLogs.map((item: any) => {
+            const latestFeedback = item.paymentOps
+                .flatMap((paymentOp: any) => paymentOp?.transfers ?? []) 
+                .flatMap((transfer: any) => transfer?.feedbacks ?? []) 
+                .reduce((latest: any, feedback: any) => {
+                    const date = new Date(feedback.updatedAt);
 
-        const data = request.data.paymentLogs.map((item: any)=> ({
+                    if (!latest.date || date > latest.date) {
+                        return { date, feedback };
+                    }
 
-            baseFee: item.baseFee,
-            brlaAmount: item.brlaAmount / 100,
-            title: item.chain,
-            usdAmount: item.usdAmount / 100,
-            createdAt: item.createdAt,
-            coin: item.coin,
-            
-            operationName: item.paymentOps.map((op: any) => {
-             
-                const latestDate = op.smartContractOps.reduce((latest: string, curr: any) => {
-                    
-                    const currentOpDate = new Date(curr.createdAt);
-                    const latestOpDate = new Date(latest);
-                    return currentOpDate > latestOpDate ? curr.createdAt : latest;
+                    return latest;
+                }, { date: null, feedback: null }).feedback;
 
-                }, op.smartContractOps[0].createdAt);
-            
+            const feedback = {
+                success: latestFeedback?.logType ? latestFeedback.logType === 'success' : null,
+                updatedAt: latestFeedback?.updatedAt ?? '...', 
+            };
 
-                const latestOp = op.smartContractOps.find((op: any) => op.createdAt === latestDate);
-                return latestOp?.operationName
-                
-            })[0],
+            return {
+                baseFee: item.baseFee,
+                brlaAmount: item.brlaAmount / 100,
+                title: item.chain,
+                usdAmount: item.usdAmount / 100,
+                createdAt: item.createdAt,
+                coin: item.coin,
+                operationName: item.paymentOps.map((op: any) => {
+                    const latestDate = op.smartContractOps.reduce((latest: string, curr: any) => {
+                        const currentOpDate = new Date(curr.createdAt);
+                        const latestOpDate = new Date(latest);
+                        return currentOpDate > latestOpDate ? curr.createdAt : latest;
+                    }, op.smartContractOps[0].createdAt);
 
-            feedback: item.paymentOps.map((op:any)=> 
-            op.smartContractOps.reduce((acc: string, op: any) => {
-                acc = op.feedback;
-                return acc;
-            }, {}))[0],
-            
-            status: item.status,
-            taxId: formatInTaxId(item.userTaxId),
-            icon: faArrowUp,
-            isPayment: true,
-            usdToBrla: true,
-            amount: item.brlaAmount / 100,
+                    const latestOp = op.smartContractOps.find((op: any) => op.createdAt === latestDate);
+                    return latestOp?.operationName;
+                })[0],
+                feedback: feedback,
+                status: item.status,
+                taxId: formatInTaxId(item.userTaxId),
+                icon: faArrowUp,
+                isPayment: true,
+                usdToBrla: true,
+                amount: item.brlaAmount / 100,
+            };
+        });
 
-
-        }));
-
-        
         return data;
         
-    } catch(e:any) {
-        throw new Error('Erro ao pegar dados de pix-to-usd: ', e.message)
+    } catch (e: any) {
+        throw new Error('Erro ao pegar dados de pix-to-usd: ' + (e.data?.message || e.message));
     }
-    
 }

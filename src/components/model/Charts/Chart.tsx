@@ -4,6 +4,7 @@ import ApexCharts from 'apexcharts';
 import ChartProps from '../../types/Chart/ChartProps';
 import { faDownLong, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FLEX_1, MARGIN_AUTO, ROUNDED_DEFAULT, WIDTH_FULL } from '../../contants/classnames/classnames';
 
 
 
@@ -71,7 +72,7 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
         },
 
         formatter: function(value: number) {
-          return value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+          return value.toFixed(2);
         }
 
       },
@@ -134,16 +135,15 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
         },
 
         yaxis: {
-
-          labels : {
-
-              style: {
-                fontSize: '13px', 
-              },
-
-            }
-
+          labels: {
+            style: {
+              fontSize: '13px',
+            },
+            formatter: function (value:number) {
+              return value.toFixed(2); 
+            },
           },
+        },
 
           xaxis: {
 
@@ -186,45 +186,50 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
       return (
 
      
-        <div className={`w-full mx-2 flex-1 ${background} h-full md:h-auto
-         rounded-lg shadow-md dark:bg-gray-800`}>
+        <div className={`${WIDTH_FULL} ${MARGIN_AUTO} ${FLEX_1} ${background} 
+         ${ROUNDED_DEFAULT} shadow-md h-auto `}>
 
 
-        <div className="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+          <div className="h-auto flex flex-wrap justify-between p-4 md:p-6 pb-0 md:pb-0">
 
-        <div>
+            <div>
 
-            <h2 className='flex gap-2 items-center'><img src={flag} className='w-5' 
-            alt='country flag'
-            />{heading}</h2>
+              <h2 className='flex gap-2 items-center'><img src={flag} className='w-5' 
+              alt='country flag'
+              />{heading}</h2>
 
-            <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-                
-            {subHeading.substring(0, 5)}
+              <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
+                  
+              {subHeading.substring(0, 5)}
 
-             <span className='text-gray-400'>{subHeading.substring(5)}</span>
-                
+              <span className='text-gray-400'>{subHeading.substring(5)}</span>
+                  
                 </h5>
 
-            <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
-        </div>
+              <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+          </div>
 
-        <div
+          <div
 
-            className=
-            {`flex items-center gap-2 px-2.5 py-0.5 text-3xl font-semibold
-            ${parseFloat(pctChange) < 0 ? 'text-red-500' : 'text-green-500'} text-center`}>
+              className=
+              {`flex items-center gap-2 px-2.5 py-0.5 text-3xl font-semibold
+              ${parseFloat(pctChange) < 0 ? 'text-red-500' : 'text-green-500'} text-center`}>
 
-            {pctChange}%
-            {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
-            icon={faDownLong} /> :
-             <FontAwesomeIcon icon={faUpLong} />}
+              {pctChange}%
+              {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
+              icon={faDownLong} /> :
+              <FontAwesomeIcon icon={faUpLong} />}
 
-        </div>
+          </div>
         
-    </div>
-  
-    <div id={id} className="h-auto px-0.5 md:px-2.5 py-4"></div>
+      </div>
+    
+      <div>
+
+        <div id={id} className="h-auto px-0.5 md:px-2.5 py-4"></div>  
+
+      </div>
+
     
   </div>
 
