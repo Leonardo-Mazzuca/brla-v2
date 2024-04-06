@@ -1,4 +1,4 @@
-import { faArrowUpFromBracket, faCalendar, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpFromBracket, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { TransactionsActions, useValuesFilter } from "../../../context/TransactionsContext";
 import exportData from "../../../service/ExportData/exportData";
 import formatDate from "../../../service/Formatters/FormatDate/formatDate";
@@ -11,17 +11,11 @@ const TransactionsManagement: React.FC = () => {
     
     const { state, dispatch } = useValuesFilter();
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let search = e.target.value;
-        dispatch({
-            type: TransactionsActions.setSearch,
-            payload: { search }
-        });
-    };
 
     const handleSearchDate = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         let searchDate = e.target.value;
+
         let date = new Date(searchDate);
 
         date.setDate(date.getDate() + 1); 

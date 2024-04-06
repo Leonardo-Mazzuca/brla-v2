@@ -18,7 +18,7 @@ type FormModelProps = {
     location?: string;
     schema: Schema;
     submitError?: string;
-    navigate? : (path: string) => void;
+    navigate?(path: string) : void;
     buttonClassname?: string
 };
 
@@ -37,29 +37,31 @@ const FormModel: React.FC<FormModelProps> = (props) => {
     const navigate = useNavigate();
 
     useEffect(()=> {
-        setSubmitError(props.submitError || '');
 
+    
+        setSubmitError(props.submitError || '');
   
     }, [props.submitError]);
 
     useEffect(()=> {
-
-
+        
         if(errorOnSubmit) {
+
             setButtonDisabled(POINTS_ALL)
             setShowText(HIDDEN);
+
         }
 
-    },[errorOnSubmit, errors, buttonDisabled])
+    },[errorOnSubmit, buttonDisabled])
 
-    const submitForm = (data: any) => {
+    const submitForm = async (data: any) => {
 
         setButtonDisabled(POINTS_NONE);
         setShowText(BLOCK);
 
         if(!errorOnSubmit) {
 
-            props.onSubmit(data);
+            await props.onSubmit(data);
             if(props.location) {
                 navigate(props.location);
             }

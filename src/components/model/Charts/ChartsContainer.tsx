@@ -2,6 +2,7 @@
 import Chart from './Chart';
 import { ChartData } from '../../types/Chart/ChartData';
 import Loading from '../Loading/Loading';
+import { FLEX, FLEX_COL, FLEX_ROW, ITEMS_CENTER, JUSTIFY_BETWEEN, WIDTH_FULL } from '../../contants/classnames/classnames';
 
 type Data = {
 
@@ -14,8 +15,8 @@ const ChartsContainer = ({data}: Data) => {
 
   return (
 
-    <section className='flex min-h-screen
-     md:justify-between flex-col md:flex-row w-full items-center gap-5 pb-10'>
+    <section className={`${FLEX}
+     md:${JUSTIFY_BETWEEN} ${FLEX_COL} md:${FLEX_ROW} ${WIDTH_FULL} ${ITEMS_CENTER} gap-5 pb-10`}>
 
       {data ? (
         

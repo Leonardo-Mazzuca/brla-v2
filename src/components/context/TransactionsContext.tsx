@@ -5,7 +5,6 @@ import { ProviderProps } from "../types/Provider/Provider";
 
 export type TransactionsState = {
 
-    search: string;
     searchDate: string;
     data: any[]
 
@@ -13,7 +12,6 @@ export type TransactionsState = {
 
 export enum TransactionsActions {
 
-    setSearch,
     setSearchDate,
     setData,
 
@@ -30,7 +28,7 @@ type ContextType = {
 }
 
 const initialData :TransactionsState = {
-    search: '',
+
     searchDate: '',
     data: [],
 }
@@ -43,8 +41,6 @@ const transactionsReducer = (state: TransactionsState, action: Action) => {
 
     switch(action.type) {
 
-        case TransactionsActions.setSearch:
-            return {...state, search: action.payload.search};
         case TransactionsActions.setSearchDate:
             return {...state, searchDate: action.payload.searchDate};
         case TransactionsActions.setData:
@@ -77,7 +73,7 @@ export const useValuesFilter = () => {
     const context = useContext(TransactionsContext);
 
     if(context===undefined) {
-        throw new Error('useSearch precisa ser usado dentro do values provider')
+        throw new Error('useValuesFilter precisa ser usado dentro do values provider')
     }
 
     return context;
