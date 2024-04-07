@@ -7,6 +7,7 @@ import { isCpf } from "../../service/TaxId/Cpf/verifyCpf";
 import { formatValueInCpf } from "../../service/TaxId/Cpf/formatValueInCpf";
 import { formatValueInCnpj } from "../../service/TaxId/Cnpj/formatValueInCnpj";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 export type PayinData = {
 
@@ -63,7 +64,7 @@ export async function getPayInData() {
             const icon = faPlus;
             const smartContractOps = item.mintOps[0].smartContractOps;
             let { amount, id } = item.mintOps[0];
-            amount /= 100;
+            amount /= TO_WEBSOCKET;
             const feedback = smartContractOps[0].feedback;
 
 

@@ -28,7 +28,7 @@ export const getUSDTData = async () => {
                 volume: data[5],
                 emmitedDate: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toLocaleDateString(),
                 toBrl: parseFloat(data[4]),
-                toUsdc: parseFloat(usdtToUsdc.toFixed(8)),
+                toUsdc: 1 / parseFloat(usdtToUsdc.toFixed(8)),
                 pctChange: (((parseFloat(data[4]) - parseFloat(data[1])) / parseFloat(data[1])) * 100).toFixed(2)
 
             };

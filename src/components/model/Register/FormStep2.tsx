@@ -1,81 +1,131 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field } from "../../types/Field/Field";
 import FormModel from "../Form/FormModel/FormModel";
 import { z } from "zod";
 import { FormActions, useForm as useFormContext } from "../../context/FormContext";
 import { addressService } from "../../service/AddressService/addressService";
-import { useForm } from "react-hook-form";
-import { FLEX, FLEX_COL, GAP_DEFAULT, GRID, GRID_COLS_2 } from "../../contants/classnames/classnames";
+import { FLEX, FLEX_COL, GAP_DEFAULT } from "../../contants/classnames/classnames";
+import { formatCep } from "../../service/Formatters/FormatCep/formatCep";
 
 const FormStep2: React.FC = () => {
 
   const [error, setError] = useState("");
-  const [address, setAddress] = useState({
-    city: "",
-    state: "",
-    street: "",
-  });
+  const [cep, setCep] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [street, setStreet] = useState('');
+  const [number, setNumber] = useState('');
 
   const { dispatch } = useFormContext();
 
+  async function handleCepValue(cep: string) {
 
-  async function handleInput(cep: string) {
-    
     const response = await addressService(cep.replace(/\D/g, ''));
+
     if (!response) {
+
       setError("Insira um cep válido!");
       return false;
+
     } else {
 
-      setAddress({
-        city: response.localidade,
-        state: response.uf,
-        street: response.logradouro,
-      });
+      
+      setCity(response.localidade);
+      setState(response.uf);
+      setStreet(response.logradouro);
+      console.log(city);
       return true;
 
     }
+    
   }
+
+  const handleCity = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value
+    setCity(value)
+
+  }
+
+  const handleState= (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value
+    setState(value)
+
+  }
+  const handleStreet = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value
+    setStreet(value)
+
+  }
+  const handleNumber = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value
+    setNumber(value)
+
+  }
+
+  const handleCep = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value
+    setCep(formatCep(value))
+
+  }
+  
 
   const schema = z.object({
     cep: z
       .string()
       .min(1, "Cep não pode ficar vazio!")
-      .refine((cep) => handleInput(cep), { message: error }),
+      .refine((cep) => handleCepValue(cep), { message: error }),
 
-      city: z.string().min(1, "Cidade não pode ficar vazia!"),
-      state: z.string().min(1, "Estado não pode ser vazio!"),
-      street: z.string().min(1, "Bairro não pode ficar vazio!"),
+      city: z.string().refine(() => city !== '' ,{message: 'Cidade é obrigatório'}),
+      state: z.string().refine(() => state !== '', {message: 'Estado é obrigatório'}),
+      street: z.string().refine(() => street !== '',{message: 'Bairro é obrigatório'}),
       complement: z.string().min(1, "Complemento não pode ser vazio!"),
-      number: z.string().optional(),
+      number: z.string().refine(()=> number!=='',{message: 'Número é obrigatório'}),
+
   });
 
   type Step2Data = z.infer<typeof schema>;
 
   const fields: Field[] = [
-    { type: "text", placeholder: "CEP", name: "cep" },
-    { type: "text", placeholder: "Cidade", name: "city", value: address.city },
-    { type: "text", placeholder: "Estado", name: "state", value: address.state },
-    { type: "text", placeholder: "Bairro", name: "street", value: address.street },
+    { type: "text", placeholder: "CEP", name: "cep", onChange: handleCep, value: cep },
+    { type: "text", placeholder: "Cidade", name: "city", onChange: handleCity, value: city },
+    { type: "text", placeholder: "Estado", name: "state", onChange: handleState, value: state },
+    { type: "text", placeholder: "Bairro", name: "street", onChange: handleStreet, value: street },
     { type: "text", placeholder: "Complemento", name: "complement" },
-    { type: "text", placeholder: "Número", name: "number" },
+    { type: "text", placeholder: "Número", name: "number", onChange: handleNumber, value: number },
   ];
 
-  const handleSubmit = (data: Step2Data) => {
-    const district = "District";
-    const { cep, city, state, street, number, complement } = data;
+  useEffect(()=> {
 
-    dispatch({
-      type: FormActions.setStep2,
-      payload: { cep, city, state, street, number, district, complement },
-    });
-  };
+    console.log(city, street, state);
+    
+
+  },[city, street, state])
+
+    const handleSubmit = async (data: Step2Data) => {
+
+
+
+
+        const district = "District";
+        const { cep, city, state, street, number, complement } = data;
+
+        dispatch({
+          type: FormActions.setStep2,
+          payload: { cep, city, state, street, number, district, complement },
+        });
+
+      };
 
   return (
 
     <FormModel
       schema={schema}
-      classname={`md:${GRID} md:${GRID_COLS_2} ${GAP_DEFAULT} sm:${FLEX} sm:${FLEX_COL}`}
+      classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:${FLEX} sm:${FLEX_COL}`}
       location="/step3"
       buttonText="próximo"
       fields={fields}

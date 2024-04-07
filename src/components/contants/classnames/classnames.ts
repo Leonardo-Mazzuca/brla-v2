@@ -101,10 +101,14 @@ export const TEXT_GRAY_500 = 'text-gray-500';
 export const TEXT_GRAY_600 = 'text-gray-600';
 export const TEXT_GRAY_700 = 'text-gray-700';
 export const TEXT_GRAY_800 = 'text-gray-800';
-export const TEXT_GREEN_700 = 'text-green-700';
+
+
 
 export const BG_GRAY_100 = 'bg-gray-100';
 export const BG_GRAY_200 = 'bg-gray-200';
+
+//green
+export const TEXT_GREEN_700 = 'text-green-700';
 
 
 //red

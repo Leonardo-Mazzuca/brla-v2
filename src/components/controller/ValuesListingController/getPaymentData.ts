@@ -1,6 +1,7 @@
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { http } from "../ConectAPI/conectApi";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 
 export async function getPaymentData() {
@@ -30,9 +31,9 @@ export async function getPaymentData() {
 
             return {
                 baseFee: item.baseFee,
-                brlaAmount: item.brlaAmount / 100,
+                brlaAmount: item.brlaAmount / TO_WEBSOCKET,
                 title: item.chain,
-                usdAmount: item.usdAmount / 100,
+                usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
                 coin: item.coin,
                 operationName: item.paymentOps.map((op: any) => {
@@ -51,7 +52,7 @@ export async function getPaymentData() {
                 icon: faArrowUp,
                 isPayment: true,
                 usdToBrla: true,
-                amount: item.brlaAmount / 100,
+                amount: item.brlaAmount / TO_WEBSOCKET,
             };
         });
 

@@ -8,32 +8,55 @@ import { z } from "zod";
 import { FormActions, useForm } from "../../context/FormContext";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLEX, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, ITEMS_START, MARGIN_Y_3, ROUNDED_DEFAULT, TEXT_GRAY_400, TEXT_GRAY_800, TEXT_SMALL, WIDTH_FULL } from "../../contants/classnames/classnames";
+import { useState } from "react";
+import { validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
+import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNumber/formatValueInPhoneNumber";
 
-const schema = z.object({
-
-  email: z.string().email("Email can't be empty!"),
-
-  phone: z.string().min(11, "Phone can't be empty!"),
-  
-  fullName: z.string().min(3, "Username can't be empty!"),
-
-});
-
-type Step1Data = z.infer<typeof schema>;
-
-const fields: Field[] = [
-
-  { type: "email", placeholder: "Digite seu email", name: "email", icon: faEnvelope },
-  { type: "tel", placeholder: "Celular (11 11111-1111)", name: "phone", icon: faPhone },
-  { type: "text", placeholder: "Nome ou apelido", name: "fullName",}
-
-];
 
 
 const FromStep1 = () => {
 
+  const [phone, setPhone] = useState<string>('');
 
   const {dispatch} = useForm();
+
+  const handlePhone = (phone:string) => {
+
+    if(validityRawPhoneNumber(phone)){
+
+      setPhone(formatValueInPhoneNumber(phone))
+
+      return true;
+    }
+    return false;
+
+  }
+
+  const schema = z.object({
+
+    email: z.string().email("Email can't be empty!"),
+  
+    phone: z.string().min(11, "Phone can't be empty!").refine(phone => handlePhone(phone),{message: 'Insira um telefone válido!'}),
+    
+    fullName: z.string().min(3, "Username can't be empty!"),
+  
+  });
+
+  const handlePhoneChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPhone(value);
+  }
+  
+  type Step1Data = z.infer<typeof schema>;
+  
+  const fields: Field[] = [
+  
+    { type: "email", placeholder: "Digite seu email", name: "email", icon: faEnvelope },
+    { type: "tel", placeholder: "Celular (11 11111-1111)", name: "phone", icon: faPhone, value: phone, onChange: handlePhoneChange },
+    { type: "text", placeholder: "Nome ou apelido", name: "fullName",}
+  
+  ];
+  
 
   const handleSubmit = (data: Step1Data) => {
 

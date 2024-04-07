@@ -1,4 +1,5 @@
 import { POINTS_NONE } from "../../../contants/classnames/classnames";
+import { TO_WEBSOCKET } from "../../../contants/divisionValues/divisionValues";
 import { CurrencyState } from "../../../context/CurrencyContext";
 import { onChainController } from "../../../controller/onChainController.ts/onChainController";
 
@@ -16,7 +17,7 @@ export async function placeChainOrder(state: CurrencyState,walletAddress:string,
         to: walletAddress,
         inputCoin: state.sendCurrency,
         outputCoin: state.receiveCurrency,
-        value: parseFloat(state.receiveValue.toFixed(2)) * 100,
+        value: parseFloat(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
         
       }
       

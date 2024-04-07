@@ -5,6 +5,7 @@ import { Feedback } from "../../types/Feedback/Feedback";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 type SmartContractOps = {
     operationName: string;
@@ -115,7 +116,7 @@ export async function getPayoutData() {
                 }, '...'),
 
                 amount: item.transfers?.reduce((acc: number, op: Transfers) => {
-                    return acc + (op.amount / 100); 
+                    return acc + (op.amount / TO_WEBSOCKET); 
                 }, 0) ?? 0,
 
             },

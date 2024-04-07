@@ -17,7 +17,7 @@ import Completed, { CompleteProps } from "../Completed/Completed";
 import Loading from "../Loading/Loading";
 import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 import { isBrlToBrl, isOnChain, neitherBrlAndUsd, usdToBrla } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
-import { FLEX, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { FLEX, FLEX_COL, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 
 const TransferStep3 = () => {
@@ -304,25 +304,29 @@ const TransferStep3 = () => {
                   <>
                     <Heading content={"Confirmar envio"} />
                     
-                    <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
+                    <div className="w-full text-3xl mt-3 mb-3">
 
                       {component}
                       
-                      <div className={`${FLEX} ${GAP_DEFAULT}`}>
+                      <div className={`${FLEX} ${FLEX_COL} ${GAP_DEFAULT}`}>
 
-                        <TextModel content={`valor enviado - 
-                        ${formatNumberToString((state.sendValue), 
-                        getCurrencyCoinToFormat(state.sendCurrency))}`}/>
+                        <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
+                          <TextModel content={`valor enviado - 
+                          ${formatNumberToString((state.sendValue), 
+                          getCurrencyCoinToFormat(state.sendCurrency))}`}/>
+                        </div>
 
-                        <TextModel content={`valor a receber - 
-                        ${formatNumberToString((state.receiveValue), 
-                        getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
+                        <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
+                          <TextModel content={`valor a receber - 
+                          ${formatNumberToString((state.receiveValue), 
+                          getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
+                        </div>
 
                       </div>
-
            
 
                     </div>
+
                   </>
                     
                 )}

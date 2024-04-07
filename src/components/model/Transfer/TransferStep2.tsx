@@ -208,7 +208,7 @@ const TransferStep2 = () => {
 
             setButtonClassname(POINTS_ALL);
 
-          },1200)
+          },2000)
 
 
         }

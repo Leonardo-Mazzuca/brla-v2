@@ -1,5 +1,6 @@
 
 
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { http } from "../ConectAPI/conectApi";
 
@@ -27,7 +28,7 @@ export const getPayOutOfBRCodeData = async () => {
             }, ''),
             transfers: {
 
-                amount: (item.amount - item.fee) / 100,
+                amount: (item.amount - item.fee) / TO_WEBSOCKET,
                 taxId: formatWalletAddress(item.walletAddress),
 
             }

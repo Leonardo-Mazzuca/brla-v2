@@ -3,6 +3,7 @@ import { http } from "../ConectAPI/conectApi";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { getUserData } from "../UserDataController/getUserData";
 import { getOnChainInData } from "./getOnChainInData";
+import { BRLA_ON_CHAIN, USDTC_ON_CHAIN } from "../../contants/divisionValues/divisionValues";
 
 
 
@@ -36,6 +37,7 @@ export const getOnChainOutData = async () => {
             
            
             const amountWithLatestDate = outputValue ? outputValue.amount : 0;
+         
             
          return {
 
@@ -46,10 +48,10 @@ export const getOnChainOutData = async () => {
             title: item.chain,
 
             brlaAmount: amountWithLatestDate,
-            usdAmount: (parseFloat(item.value) / CONVERT_DIVIDER),
+            usdAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
         
             transfers: {
-                amount: (parseFloat(item.value) / CONVERT_DIVIDER),
+                amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
                 taxId: formatWalletAddress(item.to),
             },
 
@@ -68,13 +70,26 @@ export const getOnChainOutData = async () => {
             icon: faArrowUp,
 
         }});
-
+        
         
         return data;
         
 
     } catch(e:any) {
         throw new Error('Erro ao pegar dados de onChain: ', e.message || e.data?.message);
+    }
+
+}
+
+function getOnChainOutValue (value:number,coin:string) {
+
+    switch(coin) {
+        case 'USDT':
+        case 'USDC':
+            return value / USDTC_ON_CHAIN;
+        default:
+            return value / BRLA_ON_CHAIN;
+
     }
 
 }
