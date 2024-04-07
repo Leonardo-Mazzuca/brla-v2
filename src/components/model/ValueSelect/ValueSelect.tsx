@@ -75,7 +75,7 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
                     <TextModel color={TEXT_GRAY_400} addons="mt-2" content={`Disponível ${formattedAvailableValue}`} />
                 </div>
 
-                <div className={`${FLEX} ${JUSTIFY_BETWEEN} md:${FLEX_COL} ${ITEMS_CENTER} md:${ITEMS_END}`}>
+                <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} md:${FLEX_COL} ${ITEMS_CENTER} md:${ITEMS_END}`}>
                     <InputMoney value={inputValue} onChange={onChange} />
                     <button onClick={handleMaxButtonClick} className={`${BORDER_NONE} py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
                 </div>
