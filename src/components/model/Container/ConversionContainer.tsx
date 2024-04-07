@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import MiniContainer from "./MiniContainer";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import { MARGIN_X_AUTO, RELATIVE, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 
 type ConversionConfig = {
@@ -59,27 +60,21 @@ const ConversionContainer:React.FC<ConversionConfig> = ({
 
     return (
         
-        <MiniContainer className="relative">    
+        <MiniContainer className={RELATIVE}>    
 
 
-            <div className="w-1/2 mx-auto">
+            <div className={`md:px-24 ${WIDTH_FULL} ${MARGIN_X_AUTO}`}>
                 <ProgressBar activeIndex={activeIndex} IsSecondVisible = {false} />
             </div>
 
-
-
-            <div>
-                {children}
-            </div>
-
-
+       
+            {children}
+         
 
             <Button 
-
                 onClick={handleSubmit}
                 text = {buttonComponent}
                 classname={buttonClassname} 
-                
             />
             
 

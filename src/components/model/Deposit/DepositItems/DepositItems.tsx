@@ -9,7 +9,7 @@ import DepositCard from "./DepositCard";
 const cardLinks = [
 
     {text: 'Envie o valor que desejar', image: '/qrcode.svg', title: 'PIX',  path : '/deposit/pix'},
-    {text: 'BRLA E USDT apenas.', image: '/polligon.svg', title: 'Endereço Polygon', path : '/deposit/polygon'},
+    {text: 'BRLA ,USDC e USDT apenas.', image: '/polligon.svg', title: 'Endereço Polygon', path : '/deposit/polygon'},
 
 ];
 

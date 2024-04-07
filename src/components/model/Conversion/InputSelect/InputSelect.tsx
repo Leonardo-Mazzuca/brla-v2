@@ -10,7 +10,7 @@ import { getAvaliableBalance } from "../../../service/BalanceService/getAvaliabl
 
 
 const InputSelect = ({ coin, state, value, dispatch,
-     setInputValue, setOutputValue, isReadOnly, isToggleButton, topIcon, topText }: ConvertOperation) => {
+     setInputValue, setOutputValue, isToggleButton, topIcon, topText }: ConvertOperation) => {
    
     const { conversor } = useCurrency();
     const { state: quoteState, createConversionTable } = useQuote();
@@ -79,16 +79,16 @@ const InputSelect = ({ coin, state, value, dispatch,
 
         
     };
-    
+
 
     return (
 
         <ValueSelect
+            index={1}
             coin={coin}
             inputValue={value}
             onChange={handleChange}
             onCurrencyChange={handleCurrency}
-            readOnlyInput={isReadOnly}
             topText={topText}
             topIcon={topIcon}
             toggleButtonPresent={isToggleButton}

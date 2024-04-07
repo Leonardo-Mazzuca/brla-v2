@@ -1,52 +1,46 @@
-
 import React, { useState } from "react";
 import CurrencyDropdown from "../CurrencyDropdown/CurrencyDropdown";
 import TextModel from "../Text/Text";
-import ToggleButton from "../Button/ToggleButton";
 import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import { useBalance } from "../../context/BalanceContext";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InputMoney from "../Input/InputMoney";
-
-
+import { BG_GRAY_100, BG_GRAY_200, BORDER_NONE, FLEX, FLEX_COL, FLEX_ROW, GAP_DEFAULT, ITEMS_CENTER, ITEMS_END, JUSTIFY_BETWEEN, ROUNDED_DEFAULT, TEXT_BLACK, TEXT_GRAY_400, TEXT_START, WIDTH_AUTO, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 type ValueSelectConfig = {
-    
     topIcon?: IconProp;
     topText?: string;
     toggleButtonPresent?: boolean;
-    readOnlyInput?: boolean;
     inputValue: number;
     coin: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onCurrencyChange: (currency: string) => void;
     dataType?: string;
-    handleMaxButtonClick?: () => void
-    
-
-};
-
+    index: number;
+    handleMaxButtonClick?: () => void;
+ 
+}; 
 const ValueSelect: React.FC<ValueSelectConfig> = ({
-
     topIcon,
     topText,
-    toggleButtonPresent,
     inputValue,
     onChange,
     onCurrencyChange,
     coin,
     dataType,
-    handleMaxButtonClick
+    index,
+    handleMaxButtonClick,
+
 
 }) => {
-    
-    const [isReadOnly, setInputReadOnly] = useState(false);
-    const {state} = useBalance();
+
+    const { state } = useBalance();
 
     let availableValue: number;
 
     switch (coin) {
+
         case 'BRLA':
             availableValue = state.brlBalance;
             break;
@@ -63,60 +57,31 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
     const formattedAvailableValue = formatNumberToString(availableValue, coin);
 
-    const handleInputReadOnly = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputReadOnly(e.target.checked);
-    };
-
-
 
     return (
 
-        <div className="text-start mt-3" data-type={dataType}>
-
-            <div className="flex justify-between w-full items-center mb-3 gap-3">
-                <div className="flex items-center gap-2">
+        <div className={`${TEXT_START} mt-3`} data-type={dataType}>
+            <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} ${ITEMS_CENTER} mb-3 ${GAP_DEFAULT}`}>
+                <div className={`${FLEX}${ITEMS_CENTER} ${GAP_DEFAULT}`}>
                     {topIcon && <FontAwesomeIcon icon={topIcon} />}
-                    <TextModel addons="text-black" content={topText} />
+                    <TextModel color={TEXT_BLACK} content={topText} />
                 </div>
-                {toggleButtonPresent && <ToggleButton onChange={handleInputReadOnly} />}
-
             </div>
 
-            <div className="p-6 bg-gray-100 flex items-center justify-between rounded-xl flex-col md:flex-row">
+            <div className={`p-3 ${BG_GRAY_100} ${FLEX} ${ITEMS_CENTER} ${JUSTIFY_BETWEEN} ${ROUNDED_DEFAULT} ${FLEX_COL} md:${FLEX_ROW}`}>
+                <div className={`${FLEX} ${GAP_DEFAULT} ${WIDTH_FULL} md:${WIDTH_AUTO} ${FLEX_COL}`}>
 
-                <div className="flex gap-2 w-full md:w-auto flex-col">
-
-                    <CurrencyDropdown coin={coin} onCurrencyChange={onCurrencyChange} />
-
-                    <TextModel addons="text-gray-400 mt-2" content={`Disponível ${formattedAvailableValue}`} />
-
+                    <CurrencyDropdown index={index} coin={coin} onCurrencyChange={onCurrencyChange} />
+                    <TextModel color={TEXT_GRAY_400} addons="mt-2" content={`Disponível ${formattedAvailableValue}`} />
                 </div>
 
-                <div className="flex justify-between md:flex-col items-center md:items-end">
-                    
-                    {/* <input
-
-                      
-                        readOnly={readOnlyInput ? readOnlyInput : isReadOnly}
-                        type="text"
-                        className="bg-transparent px-0 pt-3 md:p-3 text-4xl font-bold border-transparent w-full md:w-2/4 text-start md:text-end"  
-
-                    /> */}
-
-                    <InputMoney 
-                      value={inputValue}
-                      onChange={onChange}
-                    />
-
-                    <button onClick={handleMaxButtonClick} 
-                    className="border-transparent py-1 mt-2 px-5 rounded-lg bg-gray-200">
-                        max
-                    </button>
-
+                <div className={`${FLEX} ${JUSTIFY_BETWEEN} md:${FLEX_COL} ${ITEMS_CENTER} md:${ITEMS_END}`}>
+                    <InputMoney value={inputValue} onChange={onChange} />
+                    <button onClick={handleMaxButtonClick} className={`${BORDER_NONE} py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
                 </div>
-                
             </div>
         </div>
+
     );
 };
 

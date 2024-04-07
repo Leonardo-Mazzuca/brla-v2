@@ -10,14 +10,17 @@ import Completed, { CompleteProps } from "../Completed/Completed";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useWebSocket } from "../../context/WebSocketContext";
-import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
-import { hidden, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
+import { pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import { useQuote } from "../../context/QuoteContext";
 import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
-import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
-import { isUsdcToUsdt, isUsdtToUsdc } from "../../service/Util/onChain";
-import { onChainController } from "../../controller/onChainController.ts/onChainController";
-import { getUserData } from "../../controller/UserDataController/getUserData";
+import { POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { initConversion } from "../../service/ConversionService/ConversionStep2Service/initConversion";
+import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
+import { isUsdcOrUsdt } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
+import { onSwapError, onSwapSuccess } from "../../service/ConversionService/ConversionStep2Service/onSwapResponse";
+import { swapOperationControl } from "../../service/ConversionService/ConversionStep2Service/swapOperationControl";
+import { placeChainOrder } from "../../service/ConversionService/ConversionStep2Service/placeChainOrder";
+import { placeSwapOrder } from "../../service/ConversionService/ConversionStep2Service/placeSwapOrder";
 
 
 const ConversionStep2: React.FC = () => {
@@ -36,35 +39,25 @@ const ConversionStep2: React.FC = () => {
     const [inputValue, setInputValue] = useState(0);
     const [outputValue, setOutputValue] = useState(0);
 
+    const [errorMessage  ,setErrorMessage ] = useState<string>('');
+
     const [onSuccessMessage, setSuccessMessage] = useState<CompleteProps>({
-        buttonText: 'Concluir',
-        completeMessage: 'Conversão concluída',
-        text: 'Você pode monitar suas transações através do dashboard incial.',
-        path: '/home',
+        buttonText: '',
+        completeMessage: '',
+        text: '',
+        path: '',
+        image: '',
     });
 
-    const isForWebSocket = (!isUsdcToUsdt(state) && !isUsdtToUsdc(state))
+
    
     const { state: webSocketState } = useWebSocket();
 
     useEffect(() => {
 
-        const getWallet = async () => {
-
-            const data = await getUserData();
-            if(data?.wallets.evm) {
-                setWalletAddress(data.wallets.evm);
-            }
-        }
+        initConversion(state, setInputValue,setOutputValue,setWalletAddress,setButtonClassname);
         
-        if(!isForWebSocket) {
-            setButtonClassname(pointsAll);
-        }
-
-        getWallet();
-        
-    }, [webSocketState.webSocket, pointsAll]);
-    
+    }, [webSocketState.webSocket, pointsAll, inputValue, outputValue]);
 
     const socketMessageHandler = () => {
 
@@ -75,25 +68,9 @@ const ConversionStep2: React.FC = () => {
                 const message = JSON.parse(e.data);
                 
                 if(message.error) {
-
-                    setSuccessMessage({
-                        buttonText: 'Voltar',
-                        path: '/convert/1',
-                        completeMessage: 'Um erro ocorreu',
-                        text: 'Realize a operação novamente'
-
-                    });
-
+                    setErrorMessage(message.error)
                     onError(true);
-                    showCompleted(true);
-                    showLoading(false);
-                    setButtonClassname(hidden);
-
-
-                    
                 }
-
-                console.log(message);
                 
                 if(message.data) {
 
@@ -107,19 +84,17 @@ const ConversionStep2: React.FC = () => {
 
                 if(message.data && message.data.quoteId === quoteId && message.data.id) {
 
-                    showLoading(false);
-                    showCompleted(true);
-                    setButtonClassname(hidden);
                     onSuccess(true);
-                
                     
                 }
+
+                console.log(message);
                 
             }
 
 
             if(webSocketState.webSocket && quoteId) {
-                setButtonClassname(pointsAll);
+                setButtonClassname(POINTS_ALL);
             }
 
             
@@ -127,107 +102,46 @@ const ConversionStep2: React.FC = () => {
 
     }
 
+    useEffect(() => {
+
+        onSwapSuccess(success, showLoading,showCompleted,setButtonClassname,setSuccessMessage);
+        
+    }, [success]);
+
+
+    useEffect(() => {
+
+        onSwapError(error,errorMessage, showLoading,showCompleted,setButtonClassname,setSuccessMessage);
+
+    }, [error, errorMessage]);
+
     useEffect(()=> {
 
-        if(isForWebSocket) {
-            socketMessageHandler();
-        }
-
-        if(success || error) {
-            setButtonClassname(hidden);
-        }
-        
-        
+        swapOperationControl(isForWebSocketOnSwap, setButtonClassname, success,error, socketMessageHandler, state);
 
     },[socketMessageHandler, buttonClassname, success, error]);
 
 
+
     async function handleSubmit() {
 
-        const isUsdcOrUsdt = isUsdcToUsdt(state) || isUsdtToUsdc(state);
+        setButtonClassname(POINTS_NONE);
+        showLoading(true);  
+        
+        if(isUsdcOrUsdt(state) && !isForWebSocketOnSwap(state)){
 
-        if(isUsdcOrUsdt && !isForWebSocket){
-
-         
-          const data = {
-    
-            chain: 'Polygon',
-            to: walletAddress,
-            inputCoin: state.sendCurrency,
-            outputCoin: state.receiveCurrency,
-            value: parseFloat(state.receiveValue.toFixed(2)) * 100,
-            
-          }
-          
-
-          setButtonClassname(pointsNone);
-          showLoading(true);   
-  
-    
-          try {
-    
-            const response = await onChainController(data.chain, data.to,data.inputCoin, data.outputCoin, data.value);
-
-            if(response) {
-
-                showLoading(false);
-                showCompleted(true);
-                setButtonClassname(hidden);
-                onSuccess(true);
-
-            }
-    
-          } catch(e:any) {
-
-            setSuccessMessage({
-                buttonText: 'Voltar',
-                path: '/convert/1',
-                completeMessage: 'Um erro ocorreu',
-                text: 'Realize a operação novamente'
-
-            });
-
-            onError(true);
-            showCompleted(true);
-            showLoading(false);
-            setButtonClassname(hidden);
-    
-          }
+            placeChainOrder(state,walletAddress,setButtonClassname,showLoading,onSuccess,onError,setErrorMessage);
     
         } 
 
-        setButtonClassname(pointsNone);
-        showLoading(true);   
-            
-            if(webSocketState.webSocket && isForWebSocket) {
+        if(webSocketState.webSocket && isForWebSocketOnSwap(state)) {
     
-                     webSocketState.webSocket.send(JSON.stringify({
-    
-                   
-                        messageId: "qualquer",
-                        operation: "PlaceSwapOrder",
-        
-                        data: {
-        
-                            quoteId: quoteId,
-                            notifyEmail: true,
-                            // otp: message.data.code_1 + 
-                            // message.data.code_2 + 
-                            // message.data.code_3 + 
-                            // message.data.code_4 + 
-                            // message.data.code_5 + 
-                            // message.data.code_6  
-        
-                        }
-                            
-                    }));
-    
-                }
+            placeSwapOrder(webSocketState.webSocket, quoteId)
 
         
+        };
 
-
-    };
+    }   
 
     return (
 
@@ -265,11 +179,11 @@ const ConversionStep2: React.FC = () => {
                         <div className="mt-6">
                             <div className="flex justify-between mb-6">
                                 <TextModel addons="text-gray-400" weight="font-light" content={"Taxa de transação"} />
-                                <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(baseFee, 'BRL')}`} />
+                                <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(baseFee, state.receiveCurrency)}`} />
                             </div>
                             <div className="flex justify-between">
                                 <TextModel addons="text-gray-400" weight="font-light" content={"Taxa de câmbio"} />
-                                <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(markupFee, 'BRL')}`} />
+                                <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(markupFee, state.sendCurrency)}`} />
                             </div>
                         </div>
                     </>

@@ -17,7 +17,7 @@ export type CompleteProps = {
 }
 
 
-const Completed = ({buttonText, path ,completeMessage ,text} : CompleteProps) => {
+const Completed = ({buttonText, path ,completeMessage ,text, image} : CompleteProps) => {
 
     const navigate = useNavigate();
 
@@ -27,18 +27,14 @@ const Completed = ({buttonText, path ,completeMessage ,text} : CompleteProps) =>
                  
              <section className="text-center flex flex-col justify-center">
 
-                <img src="/completed-icon.svg" alt="Image of a dolar sign" className="mx-auto h-1/2
-                    max-w-full
-                     mb-3" />
+                <img src={image ?  image : "/completed-icon.svg"} alt="Image of a dolar sign" className="mx-auto h-1/2
+                    max-w-[150px] mb-3" />
                 <Heading size="text-3xl" content={completeMessage} />
 
                 <TextModel content={text} addons="my-6" />
                 <Button text = {buttonText} onClick={()=>navigate(path)} />
 
             </section>
-
-
-
 
 
     );

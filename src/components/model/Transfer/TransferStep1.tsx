@@ -96,7 +96,6 @@ const TransferStep1: React.FC = () => {
             value={outputValue}
             setInputValue={setInputValue}
             setOutputValue={setOutputValue}
-            isReadOnly={true}
             topText="Beneficiário Recebe"
             topIcon={faArrowDown}
             isToggleButton={true}

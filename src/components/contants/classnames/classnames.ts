@@ -23,12 +23,15 @@ export const TEXT_2X = 'text-2xl';
 export const TEXT_3X = 'text-3xl';
 
 //weight
+export const FONT_LIGHT = 'font-light';
 export const FONT_NORMAL = 'font-normal';
 export const FONT_BOLD = 'font-bold';
 export const FONT_SEMIBOLD = 'font-semibold';
 
 //align
 export const TEXT_CENTER = 'text-center';
+export const TEXT_START = 'text-start';
+export const TEXT_LEFT = 'text-left;';
 
 
 //border radius
@@ -58,6 +61,7 @@ export const GAP_4 = 'gap-4';
 //width
 export const WIDTH_FULL = 'w-full';
 export const WIDTH_AUTO = 'w-auto';
+export const HALF_WIDTH = 'w-1/2';
 
 //height
 
@@ -87,13 +91,20 @@ export const GRID_COLS_2 = 'grid-cols-2';
 
 //colors
 
+//black
+
+export const TEXT_BLACK = 'text-black';
+
 //gray
 export const TEXT_GRAY_400 = 'text-gray-400';
-export const TEXT_GRAY_500 = 'text-grat-500';
+export const TEXT_GRAY_500 = 'text-gray-500';
 export const TEXT_GRAY_600 = 'text-gray-600';
 export const TEXT_GRAY_700 = 'text-gray-700';
 export const TEXT_GRAY_800 = 'text-gray-800';
 export const TEXT_GREEN_700 = 'text-green-700';
+
+export const BG_GRAY_100 = 'bg-gray-100';
+export const BG_GRAY_200 = 'bg-gray-200';
 
 
 //red
@@ -116,7 +127,15 @@ export const POINTS_NONE = 'opacity-50 pointer-events-none';
 
 export const HIDDEN = 'hidden';
 export const BLOCK = 'block';
+export const INLINE_BLOCK = 'inline-block';
 
 //adjustment
 
 export const FLEX_1 = 'flex-1';
+
+//position
+export const RELATIVE = 'relative';
+
+//border
+
+export const BORDER_NONE = 'border-transparent';

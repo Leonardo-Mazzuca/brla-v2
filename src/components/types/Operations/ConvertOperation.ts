@@ -12,7 +12,6 @@ export type ConvertOperation = {
     state: CurrencyState;
     setInputValue: React.Dispatch<React.SetStateAction<number>>;
     setOutputValue: React.Dispatch<React.SetStateAction<number>>;
-    isReadOnly? : boolean;
     isToggleButton? : boolean;
     topIcon?: IconProp;
     topText?: string;

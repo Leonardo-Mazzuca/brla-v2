@@ -9,17 +9,16 @@ import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../../context/WebSocketContext";
 import Heading from "../Heading/Heading";
-import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
 import { isBrl } from "../../service/Util/isBrl";
 import { transferController } from "../../controller/TransferController/transferController";
 import { getCurrencyCoinToFormat } from "../../service/CoinsService/getCurrencyCoinToFormat";
 import { onChainController } from "../../controller/onChainController.ts/onChainController";
 import Completed, { CompleteProps } from "../Completed/Completed";
-import { hidden, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import Loading from "../Loading/Loading";
-import { isForWebSocket } from "../../service/WebSocketService/Transfer/isForWebSocket";
+import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 import { isBrlToBrl, isOnChain, neitherBrlAndUsd, usdToBrla } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
-import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
+import { FLEX, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 
 const TransferStep3 = () => {
 
@@ -35,19 +34,20 @@ const TransferStep3 = () => {
     const [error, onError] = useState(false);
 
 
-    const [errorMessage  ,setErrorMessage ] = useState('');
+    const [errorMessage  ,setErrorMessage ] = useState<string>('');
 
-    const [buttonClassname, setButtonClassname] = useState(pointsNone);
+    const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
 
     const [onSuccessMessage, setSuccessMessage] = useState<CompleteProps>({
         buttonText: '',
         completeMessage: '',
         text: '',
         path: '',
+        image: '',
     });
 
 
-    const {state:webSocketState, dispatch} = useWebSocket();
+    const {state:webSocketState} = useWebSocket();
 
     const navigate = useNavigate();
 
@@ -61,20 +61,14 @@ const TransferStep3 = () => {
     },[]);
 
 
-    useEffect(() => {
-      
+    useEffect(()=> {
 
-        if(isForWebSocket(state)) {
+          
+    if(!isForWebSocketOnTransfer(state)) {
+      setButtonClassname(POINTS_ALL);
+      }
 
-          fetchWebSocket(webSocketState, dispatch);
-
-        } else {
-
-          setButtonClassname(pointsAll);
-
-        }
-        
-    }, [webSocketState.webSocket]);
+    },[webSocketState.webSocket])
 
 
     const socketMessageHandler = () => {
@@ -87,78 +81,85 @@ const TransferStep3 = () => {
               
    
               if(message.error) {
-                  setErrorMessage(message.error);
-                  onError(true);
-                  setButtonClassname(hidden);
-              }
 
+                  setErrorMessage(message.error);
+                  onError(true);  
+                
+              }
               
               if(message.data) {
 
                 setQuoteId(message.data.quoteId);
+                setButtonClassname(POINTS_ALL);
 
               }   
 
-              if(message.data && message.success && message.data.quoteId === quoteId) {
-                setButtonClassname(hidden);
+              console.log(message);
+
+              if(message.data && message.success && message.data.quoteId === quoteId && 
+                message.data.id) {
+                
                 onSuccess(true);
              
               }
 
-              console.log(message);
                         
           }
 
-          
-          if(webSocketState.webSocket && quoteId && !error) {
-            setButtonClassname(pointsAll);
-          }
-          
-
-
       }
-  }
 
+    }
 
+      useEffect(() => {
 
-    useEffect(() => {
+        if(isForWebSocketOnTransfer(state)) {
 
-      if (isForWebSocket(state)) {
           socketMessageHandler();
+
+        }
+
+        if(success || error) {
+            setButtonClassname(HIDDEN);
+        }
+
+    }, [socketMessageHandler, buttonClassname, success, error]);
+  
+    useEffect(() => {
+
+      if (success) {
+
+          showCompleted(true);
+          showLoading(false);
+          setSuccessMessage({
+              buttonText: 'Concluir',
+              completeMessage: 'Transferência concluída',
+              text: 'Você pode monitorar suas transações através do dashboard inicial.',
+              path: '/home',
+          });
+          setButtonClassname(HIDDEN); 
+
       }
-
-  }, [isForWebSocket, socketMessageHandler]);
+ 
+  }, [success]);
   
-    useEffect(() => {
+  useEffect(() => {
 
-        if (success) {
+      if (error) {
+       
+          showCompleted(true);
+          showLoading(false);
+          setSuccessMessage({
+              buttonText: 'Voltar',
+              path: '/transfer/1',
+              completeMessage: errorMessage,
+              text: 'Realize a operação novamente',
+              image: '/X-error.png',
+          });
+          setButtonClassname(HIDDEN); 
+      }
+      
 
-            showLoading(false);
-            showCompleted(true);
-            setButtonClassname(hidden);
-            setSuccessMessage({
-                buttonText: 'Concluir',
-                completeMessage: 'Transferência concluída',
-                text: 'Você pode monitorar suas transações através do dashboard inicial.',
-                path: '/home',
-            });
-        }
-        
-    }, [success]);
-  
-    useEffect(() => {
-        if (error) {
-            showCompleted(true);
-            showLoading(false);
-            setButtonClassname(hidden);
-            setSuccessMessage({
-                buttonText: 'Voltar',
-                path: '/transfer/1',
-                completeMessage: errorMessage,
-                text: 'Realize a operação novamente'
-            });
-        }
-    }, [error, errorMessage]);
+  }, [error, errorMessage]);
   
 
     useEffect(()=> {
@@ -178,7 +179,7 @@ const TransferStep3 = () => {
         
           setComponent(
 
-            <TextModel content={`Wallet Address - ${state.walletAddress}`}/>
+            <TextModel content={`Wallet Address - ${formatWalletAddress(state.walletAddress)}`}/>
                      
           );
         
@@ -187,20 +188,11 @@ const TransferStep3 = () => {
     },[])
 
 
-  useEffect(()=> {
-   
-
-    if(isForWebSocket(state) && webSocketState.webSocket) {
-      
-              sendMessageToTransfers(state, webSocketState.webSocket);
-
-    } 
-    
-  },[webSocketState.webSocket]);
-
   const handleSubmit = async () => {
 
-      setButtonClassname(pointsNone);
+      
+      setButtonClassname(POINTS_NONE);
+      showLoading(true); 
 
       if(isOnChain(state)){
 
@@ -221,9 +213,7 @@ const TransferStep3 = () => {
           await onChainController(data.chain, data.to,data.inputCoin, data.outputCoin, data.value);
           
           onSuccess(true);
-          setButtonClassname(hidden);
-          showLoading(false);
-          showCompleted(true);
+          
 
           
         } catch(e:any) {
@@ -242,17 +232,10 @@ const TransferStep3 = () => {
 
           try {
 
-            const response = await transferController(state.pixkey, state.taxId, (state.receiveValue * 100));
-
-            console.log('Resposta de moeda para mesma moeda :', response);
-
-            if(response) {
-
-              onSuccess(true);
-              showLoading(false);
-              showCompleted(true);
-              
-            }
+           await transferController(state.pixkey, state.taxId, (state.receiveValue * 100));
+           onSuccess(true);
+ 
+            
 
           } catch(e:any) {
 
@@ -263,12 +246,12 @@ const TransferStep3 = () => {
           
         } 
       
-        if(isForWebSocket(state)) {
+        if(isForWebSocketOnTransfer(state)) {
+
+          setButtonClassname(POINTS_NONE);
+          showLoading(true); 
 
           if(neitherBrlAndUsd(state)) {
-    
-            setButtonClassname(pointsNone);
-            showLoading(true);   
                   
               webSocketState.webSocket?.send(JSON.stringify({
             
@@ -281,13 +264,12 @@ const TransferStep3 = () => {
                       receiverWallet: state.walletAddress,
                       // otp: data.code_1+data.code_2+data.code_3+data.code_4+data.code_5+data.code_6
                   }}));
+
+ 
             
           } 
               
           if(usdToBrla(state)){
-    
-            setButtonClassname(pointsNone);
-            showLoading(true);   
             
                 webSocketState.webSocket?.send(JSON.stringify({
                   messageId: "qualquer",
@@ -322,13 +304,23 @@ const TransferStep3 = () => {
                   <>
                     <Heading content={"Confirmar envio"} />
                     
-                    <div className="bg-slate-100 p-5 text-3xl mt-3">
+                    <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
 
                       {component}
                       
-                      <TextModel content={`valor a ser enviado - 
-                      ${formatNumberToString((state.receiveValue), 
-                      getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
+                      <div className={`${FLEX} ${GAP_DEFAULT}`}>
+
+                        <TextModel content={`valor enviado - 
+                        ${formatNumberToString((state.sendValue), 
+                        getCurrencyCoinToFormat(state.sendCurrency))}`}/>
+
+                        <TextModel content={`valor a receber - 
+                        ${formatNumberToString((state.receiveValue), 
+                        getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
+
+                      </div>
+
+           
 
                     </div>
                   </>

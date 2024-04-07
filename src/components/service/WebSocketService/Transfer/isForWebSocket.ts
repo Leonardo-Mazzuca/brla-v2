@@ -1,16 +1,17 @@
 import { CurrencyState } from "../../../context/CurrencyContext";
-import { isTheSameCoin } from "../../OperationValidities/operationValidities";
-import { isUsdcToUsdt, isUsdtToUsdc } from "../../Util/onChain";
+import { neitherBrlAndUsd, usdToBrla } from "../WebSocketConstraints/webSocketContrainst";
 
 
 
 
 
 
-export const isForWebSocket = (state: CurrencyState)=> {
+export const isForWebSocketOnTransfer = (state: CurrencyState)=> {
 
-    return !(isUsdcToUsdt(state) && isUsdtToUsdc(state) &&  
-    !(state.sendCurrency === state.receiveCurrency) && 
-    (!isTheSameCoin(state.sendCurrency, state.receiveCurrency)));
+    if(neitherBrlAndUsd(state) || usdToBrla(state)) {
+        return true
+    }
+    
+    return false;
 
 }

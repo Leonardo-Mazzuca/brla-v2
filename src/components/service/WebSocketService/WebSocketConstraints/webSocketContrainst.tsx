@@ -1,11 +1,8 @@
 import { CurrencyState } from "../../../context/CurrencyContext";
-import { isTheSameCoin } from "../../OperationValidities/operationValidities";
 import { isBrl } from "../../Util/isBrl";
 import { isUsdcToUsdc, isUsdtToUsdt } from "../../Util/isTheSameUSDCoin";
 import { isUsdToBrla } from "../../Util/isUsdToBrla";
 import { isUsdcToUsdt, isUsdtToUsdc } from "../../Util/onChain";
-
-
 
 
 

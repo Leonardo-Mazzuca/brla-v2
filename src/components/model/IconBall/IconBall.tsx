@@ -15,7 +15,7 @@ const IconBall = ({icon, absolute,rotation}:IconBallProps) => {
         <div className="relative flex items-center justify-center">
 
         <div className={`${absolute ? 
-        'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+        'absolute top-[12px] left-1/2 transform -translate-x-1/2 -translate-y-1/2'
          : 'mx-auto'}
          `}>
 

@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useCurrency } from "../../context/CurrencyContext";
+import { CurrencyActions, useCurrency } from "../../context/CurrencyContext";
 import ContainerService from "../Container/ContainerService";
 import ConversionContainer from "../Container/ConversionContainer";
 import IconBall from "../IconBall/IconBall";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useBalance } from "../../context/BalanceContext";
-
 import InputSelect from "./InputSelect/InputSelect";
 import OutputSelect from "./InputSelect/OutputSelect";
-import { block, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import TextModel from "../Text/Text";
 import { useQuote } from "../../context/QuoteContext";
 import { is0Value, isBalanceLessThanValue, isTheSameCoin, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
 import { useWebSocket } from "../../context/WebSocketContext";
-import { isUsdcToUsdt, isUsdtToUsdc } from "../../service/Util/onChain";
 import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
-import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
 import { sendMessageToSwap } from "../../service/WebSocketService/sendMessageToSwap";
+import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
+import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 
 
 const ConversionStep1: React.FC = () => {
@@ -26,7 +24,7 @@ const ConversionStep1: React.FC = () => {
     const [inputValue, setInputValue] = useState(0);
     const [outputValue, setOutputValue] = useState(0);
     const [isValuable, setIsValuable] = useState(false);
-    const [buttonClassname, setButtonClassname] = useState(block);
+    const [buttonClassname, setButtonClassname] = useState(BLOCK);
     const [errorMessage, setErrorMessage] = useState('');
     const {state:balanceState, getCoinToBalance} = useBalance();
     const {state:quoteState, createConversionTable} = useQuote();
@@ -34,17 +32,31 @@ const ConversionStep1: React.FC = () => {
     const converted = conversor(inputValue, state.sendCurrency, state.receiveCurrency,createConversionTable(quoteState));
     const { state: webSocketState, dispatch:webSocketDispatch } = useWebSocket();
 
-    const isForWebSocket = (!isUsdcToUsdt(state) && !isUsdtToUsdc(state));
+;
 
     useEffect(()=> {
 
-        if(isForWebSocket) {
+        if(isForWebSocketOnSwap(state)) {
             fetchWebSocket(webSocketState, webSocketDispatch);
         }
 
     },[webSocketState.webSocket]);
 
     useEffect(() => {
+
+      if(state.sendValue > 0 && state.receiveValue > 0) {
+
+        dispatch({
+            type: CurrencyActions.setSendValue,
+            payload: {sendValue: 0}
+        });
+
+        dispatch({
+            type: CurrencyActions.setReceiveValue,
+            payload: {receiveValue: 0}
+        });
+
+      }
 
       if(quoteState.brl && quoteState.usdc && quoteState.usdt) {
 
@@ -54,14 +66,6 @@ const ConversionStep1: React.FC = () => {
 
 
   }, [state.sendCurrency, state.receiveCurrency]);
-
-    useEffect(()=> {
-
-        if(isUsdcToUsdt(state) || isUsdcToUsdt(state) && webSocketState.webSocket) {
-            webSocketState.webSocket?.close();
-        }
-
-    },[webSocketState.webSocket]);
 
 
     useEffect(() => {
@@ -92,17 +96,17 @@ const ConversionStep1: React.FC = () => {
     useEffect(() => {
 
         if(isValuable) {
-            setButtonClassname(pointsAll)
+            setButtonClassname(POINTS_ALL)
         } else {
-            setButtonClassname(pointsNone)
+            setButtonClassname(POINTS_NONE)
         }
 
     }, [isValuable, inputValue, balanceState, state.sendCurrency, getCoinToBalance]);
 
     const handleSubmit = () => {
 
-        if (isForWebSocket && webSocketState.webSocket) {   
-                sendMessageToSwap(webSocketState.webSocket, state);
+        if (isForWebSocketOnSwap(state) && webSocketState.webSocket) {   
+            sendMessageToSwap(webSocketState.webSocket, state);
         }
 
     }

@@ -22,6 +22,11 @@ import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNu
 import { isPhoneNumber, validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
 import { isEmail } from "../../service/PixkeyService/verifyEmail";
 import { isRandomKey } from "../../service/PixkeyService/verifiyRandomkey";
+import { FLEX, FONT_LIGHT, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
+import { useWebSocket } from "../../context/WebSocketContext";
+import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
+import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
+import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
 
 
 const TransferStep2 = () => {
@@ -32,23 +37,25 @@ const TransferStep2 = () => {
     const [isPixkeyTaxId, controlPixkey] = useState(false);
     const [taxIdValue , setTaxIdValue] = useState('');
     const [classname, setTaxIdClassname] = useState('hidden');
-    const [buttonClassname, setButtonClassname] = useState(pointsNone);
+    const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
     const [pixkeyValue, setPixkeyValue] = useState('');
-
+    const [walleAddressValue, setWalletAddressValue] = useState('');
     const [isPixkeyValid, setIsPixkeyValid] = useState(false);
     const [isTaxIdValid, setIsTaxIdValid] = useState(false);
 
-    const navigate = useNavigate();
     
+    const {state:webSocketState, dispatch:webSocketDispatch} = useWebSocket();
 
+
+    const navigate = useNavigate();
 
     useEffect(()=> {
 
       if(!state.receiveValue) {
-        navigate('/home')
+        navigate('/home');
       }
 
-    },[]);
+    },[state.receiveValue]);
 
         
     const handleTaxIdValue = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -57,15 +64,23 @@ const TransferStep2 = () => {
     
       setTaxIdValue(value);
 
-
-
     }
 
     const handlePixkeyValue = (e:React.ChangeEvent<HTMLInputElement>) => {
 
       const value = e.target.value;
 
+      
+
       setPixkeyValue(value);
+
+    }
+
+    const handleWalletAddress = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+      const value = e.target.value;
+
+      setWalletAddressValue(value);
 
     }
 
@@ -101,12 +116,80 @@ const TransferStep2 = () => {
         }));
 
         setField([
-          { type: "text", placeholder: "Wallet Addrress", name: "walletAddress",  },
+          { type: "text", placeholder: "Wallet Addrress", name: "walletAddress",  onChange: handleWalletAddress,
+          value : walleAddressValue},
         ]);
 
       }
 
-    },[taxIdValue, classname,pixkeyValue, isPixkeyTaxId]);
+    },[taxIdValue, classname,pixkeyValue, isPixkeyTaxId, walleAddressValue]);
+
+      useEffect(() => {
+
+          if(isForWebSocketOnTransfer(state)) {
+
+              fetchWebSocket(webSocketState, webSocketDispatch);
+        
+          } 
+
+    }, [webSocketState.webSocket, state,buttonClassname]);
+
+
+    useEffect(()=> {
+      
+
+      if(isBrl(state)) {
+  
+        if(isPixkeyTaxId) {
+  
+          dispatch({
+  
+            type: CurrencyActions.setTaxId,
+            payload: {taxId: pixkeyValue},
+  
+          });
+  
+          dispatch({
+  
+            type: CurrencyActions.setPixkey,
+            payload: {pixkey: pixkeyValue},
+  
+          });
+  
+        } else {
+
+          dispatch({
+    
+            type: CurrencyActions.setTaxId,
+            payload: {taxId: taxIdValue},
+    
+          });
+    
+          dispatch({
+    
+            type: CurrencyActions.setPixkey,
+            payload: {pixkey: pixkeyValue},
+    
+          });
+
+        }
+  
+
+      } else {
+      
+
+        dispatch({
+  
+          type: CurrencyActions.setWalletAddress,
+          payload: {walletAddress: walleAddressValue},
+  
+        });
+
+
+      }
+      
+
+    },[dispatch, isPixkeyValid, pixkeyValue, walleAddressValue, isBrl, taxIdValue])
 
 
     useEffect(() => {
@@ -115,7 +198,21 @@ const TransferStep2 = () => {
 
       if(!isBrl(state)) {
 
-        setButtonClassname(pointsAll);
+        if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket) {
+
+          setButtonClassname(POINTS_NONE);
+  
+        } else {
+
+          setTimeout(()=> {
+
+            setButtonClassname(POINTS_ALL);
+
+          },1200)
+
+
+        }
+  
 
       } else {
 
@@ -123,7 +220,7 @@ const TransferStep2 = () => {
   
           if (isPixkeyValid) {
       
-            setButtonClassname(pointsAll);
+            setButtonClassname(POINTS_ALL);
   
           }
   
@@ -133,15 +230,15 @@ const TransferStep2 = () => {
   
           if (pixkeyValue === '' || taxIdValue === '') {
         
-            setButtonClassname(pointsNone);
+            setButtonClassname(POINTS_NONE);
     
           } else {
   
            if (isPixkeyValid && isTaxIdValid) {
-                setButtonClassname(pointsAll);
+                setButtonClassname(POINTS_ALL);
       
             } else {
-                setButtonClassname(pointsNone); 
+                setButtonClassname(POINTS_NONE); 
             }
   
           }
@@ -151,12 +248,8 @@ const TransferStep2 = () => {
       }
 
 
-
-
-      
-
-
-  }, [isPixkeyValid, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname]);
+  }, [isPixkeyValid, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname, 
+    webSocketState.webSocket, isForWebSocketOnTransfer]);
   
 
 
@@ -252,63 +345,13 @@ const TransferStep2 = () => {
 
     }
 
-    type Step2Data = z.infer<typeof schema>;
+    const handleSubmit = () => {
 
-    const handleSubmit = (data: Step2Data) => {
+      if(webSocketState.webSocket && webSocketState.webSocket.OPEN) {
 
-      if(isBrl(state)) {
-
-        const {pixkey, taxId} = data;
-  
-        if(isPixkeyTaxId) {
-  
-          dispatch({
-  
-            type: CurrencyActions.setTaxId,
-            payload: {taxId: pixkey},
-  
-          });
-  
-          dispatch({
-  
-            type: CurrencyActions.setPixkey,
-            payload: {pixkey: pixkey},
-  
-          });
-  
-        } else {
-
-          dispatch({
-    
-            type: CurrencyActions.setTaxId,
-            payload: {taxId},
-    
-          });
-    
-          dispatch({
-    
-            type: CurrencyActions.setPixkey,
-            payload: {pixkey},
-    
-          });
-
-        }
-  
-
-      } else {
-        
-        const { walletAddress } = data;
-
-        dispatch({
-  
-          type: CurrencyActions.setWalletAddress,
-          payload: {walletAddress},
-  
-        });
-
+          sendMessageToTransfers(state, webSocketState.webSocket);
 
       }
-      
       
     }
 
@@ -320,7 +363,6 @@ const TransferStep2 = () => {
             <TransfersContainer isButtonPresent = {false} activeIndex={1}>
                 
                   <FormModel 
-
                    buttonClassname={buttonClassname} 
                    location="/transfer/3" 
                    buttonText={<>Proximo <FontAwesomeIcon className="ms-2" icon={faArrowRight} /></>}
@@ -328,9 +370,14 @@ const TransferStep2 = () => {
 
                     <div className="mt-6">
                       
-                        <div className="flex justify-between mb-6">
-                              <TextModel addons="text-gray-400" weight="font-light" content={"Valor a ser enviado"} />
-                              <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(state.receiveValue, state.receiveCurrency)}`} />
+                        <div className={`${FLEX} ${JUSTIFY_BETWEEN} mb-6`}>
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={"Valor a ser enviado"} />
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(state.sendValue, state.sendCurrency)}`} />
+                        </div>
+
+                        <div className={`${FLEX} ${JUSTIFY_BETWEEN} my-6`}>
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={"Valor a receber"} />
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(state.receiveValue, state.receiveCurrency)}`} />
                         </div>
 
                     </div>  

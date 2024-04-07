@@ -9,7 +9,7 @@ import { controlAmount, controlSwapPending, controlSwapTextComponent } from "../
 import { controlColor, controlTextComponent, controlTransferAmount } from "../../../service/TransactionsMapService/transfer/TransferComponentService";
 import { useCurrency } from "../../../context/CurrencyContext";
 import { isUsdToBrla } from "../../../service/Util/isUsdToBrla";
-import { FONT_BOLD, MARGIN_Y_3, TEXT_2X, TEXT_CENTER, TEXT_GRAY_400, TEXT_GRAY_500, TEXT_GRAY_700, TEXT_GREEN_700, TEXT_RED_600, TEXT_XL, WIDTH_AUTO } from "../../../contants/classnames/classnames";
+import { FONT_BOLD, MARGIN_Y_3, TEXT_CENTER, TEXT_GRAY_400, TEXT_GRAY_500, TEXT_GRAY_700, TEXT_GREEN_700, TEXT_RED_600, TEXT_XL, WIDTH_AUTO } from "../../../contants/classnames/classnames";
 
 
 export type TransactionData<T> = {
@@ -26,6 +26,7 @@ const DefaultTemplate = ({
   addressNumber,
 
 }: any) => (
+  
   <div className="w-full flex flex-col">
     <article className="flex justify-between flex-col xl:flex-row">
       <div className="flex items-center justify-between gap-5">
@@ -91,9 +92,9 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [amount, setAmount] = useState<ReactNode>();
   const [taxId, setTaxId] = useState("");
   const [text, setText] = useState("Transferência feita para ");
-  const [color, setColor] = useState('text-green-700');
+  const [color, setColor] = useState(TEXT_GREEN_700);
 
-  const numberAmount = data.transfers?.amount ?? 'pendente...';
+  const numberAmount = data.transfers?.amount ?? 0;
   const formattedAmount = formatNumberToString(numberAmount , data.outputCoin);
 
   
@@ -150,12 +151,19 @@ const Swap = ({ data }: TransactionData<any>) => {
   const [isPaymentSwap, setIsPaymentSwap] = useState(false);
   const [amount, setAmount] = useState<ReactNode>();
   const [usdToBrla, setIsUsdToBrla] = useState(false);
+  const [textColor, setTextColor] = useState('');
 
-  const textColor = pending
-    ? TEXT_GRAY_500
-    : success
-    ? TEXT_GREEN_700
-    : TEXT_RED_600;
+  useEffect(()=> {
+
+    if(pending) {
+      setTextColor(TEXT_GRAY_500)
+    } else if (success) {
+      setTextColor(TEXT_GREEN_700)
+    } else {
+      setTextColor(TEXT_RED_600);
+    }
+
+  },[textColor, success, pending])
 
   const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'USD' : 'BRL'
 
