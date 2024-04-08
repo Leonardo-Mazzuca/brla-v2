@@ -17,9 +17,9 @@ export async function loginController(email: string, password: string) {
 
     } catch (error: any) {
       
-      
+        console.log(error.message || error.data?.message);
+        
         throw new Error('Erro ao fazer a requisição: ' + error.message);
-      
       
       
     }

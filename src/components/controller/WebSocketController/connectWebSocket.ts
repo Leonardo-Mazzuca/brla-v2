@@ -28,7 +28,6 @@ export async function connectWebSocket() {
           webSocket.onclose = event => {
             console.log('Conexão WebSocket fechada:', event);
             sessionStorage.removeItem("wsConnected");
-            // window.location.href = '/'
             
           };
     

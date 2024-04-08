@@ -206,7 +206,8 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
                   
                 </h5>
 
-              <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+              <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>´
+              
           </div>
 
           <div
