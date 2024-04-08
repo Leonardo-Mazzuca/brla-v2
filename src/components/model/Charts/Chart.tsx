@@ -15,8 +15,8 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
 
     chart: {
       
-      width: '500px',
-      height: '300px',
+      // width: '500px',
+      height: '350px',
 
       type: "area",
       fontFamily: "Rubik, sans-serif",
@@ -130,38 +130,12 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
       {
         breakpoint: 302,
         options: {
-          chart: {
-            height: '300px',
-            width: '100%',
-          },
-          yaxis: {
-            tickAmount: 5,
-            labels: {
-              style: {
-                fontSize: '12px',
-              },
-              formatter: function (value:number) {
-                return value.toFixed(2); 
-              },
-            },
-          },
-          xaxis: {
-            labels : {
-              style: {
-                fontSize: '12px', 
-              },
-            },
-          },
-        },
-      },
 
-      {
-        breakpoint: 762,
-        options: {
-          chart: {
-            height: '300px',
-            width: '100%',
-          },
+          // chart: {
+          //   height: '300px',
+          //   width: '100%',
+          // },
+
           yaxis: {
             tickAmount: 5,
             labels: {
@@ -184,13 +158,43 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
       },
       {
   
-        breakpoint: 1200, 
+        breakpoint: 1300, 
         options: {
 
-          chart: {
-            height: '300px',
-            width: '100%',
+          // chart: {
+          //   height: '300px',
+          //   width: '500px',
+          // },
+
+          yaxis: {
+            tickAmount: 5,
+            labels: {
+              style: {
+                fontSize: '16px',
+              },
+              formatter: function (value:number) {
+                return value.toFixed(2); 
+              },
+            },
           },
+          xaxis: {
+            labels : {
+              style: {
+                fontSize: '16px', 
+              },
+            },
+          },
+        },
+      },
+      {
+  
+        breakpoint: 1100, 
+        options: {
+
+          // chart: {
+          //   height: '300px',
+          //   width: '400px',
+          // },
 
           yaxis: {
             tickAmount: 5,
@@ -238,10 +242,10 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
       return (
 
      
-        <div className={`${ROUNDED_DEFAULT} w-auto shadow-md`}>
+        <div className={`${ROUNDED_DEFAULT} flex-1 shadow-md`}>
 
 
-          <div className="w-full p-3">
+          <div className="p-3">
 
             <div>
 
@@ -291,7 +295,7 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
     
       <div>
 
-        <div id={id} className="px-0.5 md:px-2.5 py-4"></div>  
+        <div id={id} className="w-full px-0.5 md:px-2.5 py-4"></div>  
 
       </div>
 
