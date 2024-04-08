@@ -4,7 +4,7 @@ import ApexCharts from 'apexcharts';
 import ChartProps from '../../types/Chart/ChartProps';
 import { faDownLong, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FLEX, GAP_DEFAULT, ITEMS_CENTER, MARGIN_X_AUTO, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
+import { FLEX, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, MARGIN_AUTO, MARGIN_X_AUTO, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
 
 
 
@@ -191,10 +191,10 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
       return (
 
      
-        <div className={`${background} ${MARGIN_X_AUTO} ${ROUNDED_DEFAULT} shadow-md`}>
+        <div className={`${ROUNDED_DEFAULT} shadow-md`}>
 
 
-          <div className="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+          <div className="w-full p-3">
 
             <div>
 
@@ -205,36 +205,40 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
                 </h2>
               </div>
 
-              <div>
-                <h5 className="leading-none text-xl md:text-2xl font-bold text-gray-900 dark:text-white pb-2">
-                    
-                {subHeading.substring(0, 5)}
+              <div className={`${FLEX} ${JUSTIFY_BETWEEN} w-full`}>
 
-                <span className='text-gray-400'>{subHeading.substring(5)}</span>
-                    
-                </h5>
+                <div >
+                    <h5 className="leading-none text-xl md:text-2xl font-bold text-gray-900 dark:text-white pb-2">
+                        
+                    {subHeading.substring(0, 5)}
 
-                <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+                    <span className='text-gray-400'>{subHeading.substring(5)}</span>
+                        
+                    </h5>
+
+                    <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+
+                </div>
+
+                <div className={`text-lg md:text-xl font-semibold
+
+                ${parseFloat(pctChange) < 0 ? TEXT_RED_600 : TEXT_GREEN_500} ${TEXT_CENTER}`}>
+
+                <div className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
+                  {pctChange}%
+                  {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
+                  icon={faDownLong} /> :
+                  <FontAwesomeIcon icon={faUpLong} />}
+                </div>
+
+                </div>
               </div>
 
            
 
           </div>
 
-          <div
 
-              className={`px-2.5 py-0.5 text-lg md:text-xl font-semibold
-
-              ${parseFloat(pctChange) < 0 ? TEXT_RED_600 : TEXT_GREEN_500} ${TEXT_CENTER}`}>
-              
-              <div className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
-                {pctChange}%
-                {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
-                icon={faDownLong} /> :
-                <FontAwesomeIcon icon={faUpLong} />}
-              </div>
-
-          </div>
         
       </div>
     

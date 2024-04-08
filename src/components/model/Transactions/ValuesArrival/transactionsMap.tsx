@@ -38,7 +38,7 @@ const DefaultTemplate = ({
           <TextModel color={TEXT_GRAY_400} content={date} />
         </div>
       </div>
-      <div className="flex xl:items-end items-center flex-col items-center justify-between flex-wrap">
+      <div className="flex items-end flex-col  justify-between flex-wrap">
 
         <TextModel
           size={TEXT_XL}

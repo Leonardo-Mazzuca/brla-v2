@@ -54,6 +54,7 @@ export const ITEMS_END = 'items-end';
 export const JUSTIFY_CENTER = 'justify-center';
 export const JUSTIFY_BETWEEN = 'justify-between';
 export const MD_JUSTIFY_BETWEEN = 'md:justify-between';
+export const LG_JUSTIFY_BETWEEN = 'lg:justify-between';
 
 //gap
 export const GAP_DEFAULT = 'gap-2';
