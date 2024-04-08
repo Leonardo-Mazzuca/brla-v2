@@ -10,6 +10,8 @@ export async function getPaymentData() {
             withCredentials: true,
         });
 
+        
+
         const data = request.data.paymentLogs.map((item: any) => {
             const latestFeedback = item.paymentOps
                 .flatMap((paymentOp: any) => paymentOp?.transfers ?? []) 
@@ -36,7 +38,7 @@ export async function getPaymentData() {
                 title: item.chain,
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
-                outputCoin: item.coin,
+                outputCoin: 'BRLA',
                 operationName: item.paymentOps.map((op: any) => {
                     const latestDate = op.smartContractOps.reduce((latest: string, curr: any) => {
                         const currentOpDate = new Date(curr.createdAt);
