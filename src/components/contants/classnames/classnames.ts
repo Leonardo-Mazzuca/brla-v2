@@ -6,7 +6,7 @@ export const BUTTON_PADDING = 'p-3';
 
 //form
 export const FORM_PADDING = 'p-8';
-export const FORM_WIDTH = 'w-1/2'
+export const FORM_WIDTH = 'md:w-1/2 lg:w-1/3'
 
 
 //containers
@@ -42,6 +42,7 @@ export const ROUNDED_DEFAULT = 'rounded-lg';
 export const FLEX = 'flex';
 export const FLEX_COL = 'flex-col';
 export const FLEX_ROW = 'flex-row';
+export const MD_FLEX_ROW = 'md:flex-row';
 export const FLEX_WRAP = 'flex-wrap';
 
 //align-items
@@ -52,6 +53,7 @@ export const ITEMS_END = 'items-end';
 //justify-content
 export const JUSTIFY_CENTER = 'justify-center';
 export const JUSTIFY_BETWEEN = 'justify-between';
+export const MD_JUSTIFY_BETWEEN = 'md:justify-between';
 
 //gap
 export const GAP_DEFAULT = 'gap-2';
@@ -109,6 +111,7 @@ export const BG_GRAY_200 = 'bg-gray-200';
 
 //green
 export const TEXT_GREEN_700 = 'text-green-700';
+export const TEXT_GREEN_500 = 'text-green-500';
 
 
 //red

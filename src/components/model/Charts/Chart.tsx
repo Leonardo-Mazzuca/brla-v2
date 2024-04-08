@@ -4,7 +4,7 @@ import ApexCharts from 'apexcharts';
 import ChartProps from '../../types/Chart/ChartProps';
 import { faDownLong, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FLEX_1, MARGIN_AUTO, ROUNDED_DEFAULT, WIDTH_FULL } from '../../contants/classnames/classnames';
+import { FLEX, GAP_DEFAULT, ITEMS_CENTER, MARGIN_X_AUTO, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
 
 
 
@@ -15,8 +15,8 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
 
     chart: {
       
-      width: '100%',
-      height: 'auto',
+      width: '500px',
+      height: '300px',
 
       type: "area",
       fontFamily: "Rubik, sans-serif",
@@ -132,17 +132,22 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
 
         chart: {
           height: '300px',
+          width: '500px',
         },
 
         yaxis: {
+
+          tickAmount: 5,
+          
           labels: {
             style: {
-              fontSize: '13px',
+              fontSize: '14px',
             },
             formatter: function (value:number) {
               return value.toFixed(2); 
             },
           },
+
         },
 
           xaxis: {
@@ -150,7 +155,7 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
             labels : {
 
                 style: {
-                  fontSize: '8px', 
+                  fontSize: '14px', 
                 },
 
               }
@@ -186,39 +191,48 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
       return (
 
      
-        <div className={`${WIDTH_FULL} ${MARGIN_AUTO} ${FLEX_1} ${background} 
-         ${ROUNDED_DEFAULT} shadow-md h-auto `}>
+        <div className={`${background} ${MARGIN_X_AUTO} ${ROUNDED_DEFAULT} shadow-md`}>
 
 
-          <div className="h-auto flex flex-wrap justify-between p-4 md:p-6 pb-0 md:pb-0">
+          <div className="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
 
             <div>
 
-              <h2 className='flex gap-2 items-center'><img src={flag} className='w-5' 
-              alt='country flag'
-              />{heading}</h2>
+              <div>
+                <h2 className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
+                  <img src={flag} className='w-5' alt='country flag'/>
+                  {heading}
+                </h2>
+              </div>
 
-              <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-                  
-              {subHeading.substring(0, 5)}
+              <div>
+                <h5 className="leading-none text-xl md:text-2xl font-bold text-gray-900 dark:text-white pb-2">
+                    
+                {subHeading.substring(0, 5)}
 
-              <span className='text-gray-400'>{subHeading.substring(5)}</span>
-                  
+                <span className='text-gray-400'>{subHeading.substring(5)}</span>
+                    
                 </h5>
 
-              <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+                <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>
+              </div>
+
+           
+
           </div>
 
           <div
 
-              className=
-              {`flex items-center gap-2 px-2.5 py-0.5 text-3xl font-semibold
-              ${parseFloat(pctChange) < 0 ? 'text-red-500' : 'text-green-500'} text-center`}>
+              className={`px-2.5 py-0.5 text-lg md:text-xl font-semibold
 
-              {pctChange}%
-              {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
-              icon={faDownLong} /> :
-              <FontAwesomeIcon icon={faUpLong} />}
+              ${parseFloat(pctChange) < 0 ? TEXT_RED_600 : TEXT_GREEN_500} ${TEXT_CENTER}`}>
+              
+              <div className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
+                {pctChange}%
+                {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
+                icon={faDownLong} /> :
+                <FontAwesomeIcon icon={faUpLong} />}
+              </div>
 
           </div>
         
@@ -226,7 +240,7 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
     
       <div>
 
-        <div id={id} className="h-auto px-0.5 md:px-2.5 py-4"></div>  
+        <div id={id} className="px-0.5 md:px-2.5 py-4"></div>  
 
       </div>
 
