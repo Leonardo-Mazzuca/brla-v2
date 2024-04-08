@@ -80,7 +80,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
       amount={<p
         className={"bg-green-400/50 rounded-xl p-2"}         
       >
-      {`+ BRLA${amount}`}
+      {`+ BRLA ${amount}`}
 
       </p>}
       footerText={`Valor recebido de`}
@@ -103,7 +103,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [color, setColor] = useState(TEXT_GREEN_700);
 
   const numberAmount = data.transfers?.amount ?? 0;
-  const formattedAmount = data.outputCoin + formatNumberToString(numberAmount);
+  const formattedAmount = formatNumberToString(numberAmount) + " " + data.outputCoin;
 
 
   useEffect(() => {
@@ -163,9 +163,9 @@ const Swap = ({ data }: TransactionData<any>) => {
   useEffect(()=> {
 
     if(pending) {
-      setTextColor(TEXT_GRAY_500)
+      setTextColor(TEXT_GRAY_500);
     } else if (success) {
-      setTextColor(TEXT_GREEN_700)
+      setTextColor(TEXT_GREEN_700);
     } else {
       setTextColor(TEXT_RED_600);
     }
@@ -174,9 +174,9 @@ const Swap = ({ data }: TransactionData<any>) => {
 
   const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? data.outputCoin : 'BRLA'
 
-  const brlaAmount = choseCoin + formatNumberToString(data.brlaAmount);
+  const brlaAmount = choseCoin + " " + formatNumberToString(data.brlaAmount);
   
-  const usdAmount = data.outputCoin + formatNumberToString(data.usdAmount);
+  const usdAmount = data.outputCoin + " " + formatNumberToString(data.usdAmount);
 
   useEffect(() => {
     
@@ -211,6 +211,7 @@ const Swap = ({ data }: TransactionData<any>) => {
     />
 
   );
+
 };
 
 export const TransactionMap: React.FC<TransactionData<any>> = ({ data }) => {
