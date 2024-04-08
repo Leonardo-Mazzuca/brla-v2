@@ -54,8 +54,8 @@ export async function getPaymentData() {
                 isPayment: true,
                 usdToBrla: true,
                 transfers: {
-                    
-                    mount: item.brlaAmount / TO_WEBSOCKET,
+
+                    amount: item.brlaAmount / TO_WEBSOCKET,
                     
                 },
                 amount: item.brlaAmount / TO_WEBSOCKET,
