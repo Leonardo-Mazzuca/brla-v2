@@ -30,12 +30,13 @@ export async function getPaymentData() {
             };
 
             return {
+
                 baseFee: item.baseFee,
                 brlaAmount: item.brlaAmount / TO_WEBSOCKET,
                 title: item.chain,
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
-                coin: item.coin,
+                outputCoin: item.coin,
                 operationName: item.paymentOps.map((op: any) => {
                     const latestDate = op.smartContractOps.reduce((latest: string, curr: any) => {
                         const currentOpDate = new Date(curr.createdAt);
@@ -53,6 +54,7 @@ export async function getPaymentData() {
                 isPayment: true,
                 usdToBrla: true,
                 amount: item.brlaAmount / TO_WEBSOCKET,
+
             };
         });
 
