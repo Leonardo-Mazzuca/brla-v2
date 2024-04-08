@@ -135,6 +135,9 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
         },
 
         yaxis: {
+
+          tickAmount: 5,
+          
           labels: {
             style: {
               fontSize: '13px',
@@ -143,6 +146,7 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
               return value.toFixed(2); 
             },
           },
+
         },
 
           xaxis: {
@@ -207,7 +211,7 @@ const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,sub
                 </h5>
 
               <p className="text-base font-normal text-gray-500 text-gray-400">{textHeading}</p>´
-              
+
           </div>
 
           <div
