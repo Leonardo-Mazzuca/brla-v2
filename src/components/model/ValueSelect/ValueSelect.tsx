@@ -60,22 +60,26 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
     return (
 
-        <div className={`${TEXT_START} mt-3`} data-type={dataType}>
-            <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} ${ITEMS_CENTER} mb-3 ${GAP_DEFAULT}`}>
-                <div className={`${FLEX}${ITEMS_CENTER} ${GAP_DEFAULT}`}>
+        <div className={`${TEXT_START}  mt-3`} data-type={dataType}>
+
+            <div className={`${FLEX} ${JUSTIFY_BETWEEN} w-full ${ITEMS_CENTER} mb-3 ${GAP_DEFAULT}`}>
+
+                <div className={`${FLEX} ${ITEMS_CENTER} ${GAP_DEFAULT}`}>
                     {topIcon && <FontAwesomeIcon icon={topIcon} />}
                     <TextModel color={TEXT_BLACK} content={topText} />
                 </div>
+
             </div>
 
-            <div className={`p-3 ${BG_GRAY_100} ${FLEX} ${ITEMS_CENTER} ${JUSTIFY_BETWEEN} ${ROUNDED_DEFAULT} ${FLEX_COL} md:${FLEX_ROW}`}>
-                <div className={`${FLEX} ${GAP_DEFAULT} ${WIDTH_FULL} md:${WIDTH_AUTO} ${FLEX_COL}`}>
+            <div className={`p-3 ${BG_GRAY_100} ${FLEX} ${ITEMS_CENTER} ${JUSTIFY_BETWEEN} ${ROUNDED_DEFAULT} ${FLEX_COL} md:flex-row`}>
+                <div className={`${FLEX} ${GAP_DEFAULT} ${WIDTH_FULL} ${FLEX_COL}`}>
 
                     <CurrencyDropdown index={index} coin={coin} onCurrencyChange={onCurrencyChange} />
                     <TextModel color={TEXT_GRAY_400} addons="mt-2" content={`Disponível ${formattedAvailableValue}`} />
+
                 </div>
 
-                <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} md:${FLEX_COL} ${ITEMS_CENTER} md:${ITEMS_END}`}>
+                <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} md:flex-col ${ITEMS_CENTER} md:items-end`}>
                     <InputMoney value={inputValue} onChange={onChange} />
                     <button onClick={handleMaxButtonClick} className={`${BORDER_NONE} py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
                 </div>

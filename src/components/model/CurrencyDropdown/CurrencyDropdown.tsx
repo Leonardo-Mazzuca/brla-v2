@@ -3,7 +3,7 @@ import CurrencyFlags from "./CurrencyFlags";
 import { getCurrencyIMG } from "../../service/CurrencyService/getCurrencyIMG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { INLINE_BLOCK, RELATIVE, TEXT_LEFT, WIDTH_FULL } from "../../contants/classnames/classnames";
+import { RELATIVE, TEXT_LEFT } from "../../contants/classnames/classnames";
 
 type CurrencyConfig = {
   coin: string;
@@ -51,9 +51,10 @@ const CurrencyDropdown: React.FC<CurrencyConfig> = ({ coin, onCurrencyChange, in
   }, [dropdownRef]);
 
   return (
-    <div ref={dropdownRef} className={`${RELATIVE} ${INLINE_BLOCK} ${WIDTH_FULL} ${TEXT_LEFT}`} data-index={index} data-dropdown={dropdownOpen ? 'open' : 'closed'}>
+    <div ref={dropdownRef} className={`${RELATIVE} w-full inline-block ${TEXT_LEFT}`} data-index={index} data-dropdown={dropdownOpen ? 'open' : 'closed'}>
+
       <button
-        className="flex justify-start rounded-md border-transparent shadow-sm px-4 py-4 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 w-full text-lg items-center"
+        className="flex w-auto justify-start rounded-md border-transparent shadow-sm px-4 py-4 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 text-lg items-center"
         id="dropdown-button"
         aria-expanded={dropdownOpen ? "true" : "false"}
         aria-haspopup="true"
@@ -65,7 +66,9 @@ const CurrencyDropdown: React.FC<CurrencyConfig> = ({ coin, onCurrencyChange, in
         {selectedCurrency}
         <FontAwesomeIcon icon={faChevronDown} className={`ml-2 h-5 w-5 transition-transform transform ${dropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
       </button>
+
       {dropdownOpen && <CurrencyFlags currencies={currencies} handleChange={handleChange} />}
+
     </div>
     
   );

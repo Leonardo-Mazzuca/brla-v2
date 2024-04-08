@@ -4,11 +4,11 @@ import ApexCharts from 'apexcharts';
 import ChartProps from '../../types/Chart/ChartProps';
 import { faDownLong, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FLEX, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, MARGIN_AUTO, MARGIN_X_AUTO, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
+import { FLEX, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
 
 
 
-const Chart: React.FC<ChartProps> = ({id,background,values,date,flag,heading,subHeading,textHeading,pctChange}) => {
+const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,textHeading,pctChange}) => {
 
   
   const options = {
