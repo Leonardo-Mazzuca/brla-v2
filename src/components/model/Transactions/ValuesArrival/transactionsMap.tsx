@@ -80,7 +80,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
       amount={<p
         className={"bg-green-400/50 rounded-xl p-2"}         
       >
-      {`+ BRLA ${amount}`}
+      {`+ ${amount} BRLA`}
 
       </p>}
       footerText={`Valor recebido de`}
@@ -174,9 +174,9 @@ const Swap = ({ data }: TransactionData<any>) => {
 
   const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? data.outputCoin : 'BRLA'
 
-  const brlaAmount = choseCoin + " " + formatNumberToString(data.brlaAmount);
+  const brlaAmount = formatNumberToString(data.brlaAmount) +  " " + choseCoin;
   
-  const usdAmount = data.outputCoin + " " + formatNumberToString(data.usdAmount);
+  const usdAmount =  formatNumberToString(data.usdAmount) + " " + data.outputCoin;
 
   useEffect(() => {
     
