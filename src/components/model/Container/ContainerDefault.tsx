@@ -9,7 +9,7 @@ const ContainerStandart: React.FC<ContainerModel> = ({children, className}) => {
 
     return (
 
-        <section className={`lg:px-44 lg:py-12 md:px-12 md:py-12 p-6 ${WIDTH_FULL}  ${HEIGHT_AUTO} ${className ?? ''}`}>
+        <section className={`xl:px-64 lg:py-12 md:px-24 md:py-12 p-6 ${WIDTH_FULL}  ${HEIGHT_AUTO} ${className ?? ''}`}>
 
             {children}
 

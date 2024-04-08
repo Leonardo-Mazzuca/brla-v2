@@ -125,48 +125,94 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
       show: false,
     },
 
-    responsive: [{
+    responsive: [
 
-      breakpoint: 762,
-      options: {
-
-        chart: {
-          height: '300px',
-          width: 'auto',
-        },
-
-        yaxis: {
-
-          tickAmount: 5,
-          
-          labels: {
-            style: {
-              fontSize: '14px',
-            },
-            formatter: function (value:number) {
-              return value.toFixed(2); 
+      {
+        breakpoint: 302,
+        options: {
+          chart: {
+            height: '300px',
+            width: '100%',
+          },
+          yaxis: {
+            tickAmount: 5,
+            labels: {
+              style: {
+                fontSize: '12px',
+              },
+              formatter: function (value:number) {
+                return value.toFixed(2); 
+              },
             },
           },
-
-        },
-
           xaxis: {
-
             labels : {
-
-                style: {
-                  fontSize: '14px', 
-                },
-
-              }
-
-            }
+              style: {
+                fontSize: '12px', 
+              },
+            },
+          },
         },
-        
+      },
 
+      {
+        breakpoint: 762,
+        options: {
+          chart: {
+            height: '300px',
+            width: '100%',
+          },
+          yaxis: {
+            tickAmount: 5,
+            labels: {
+              style: {
+                fontSize: '12px',
+              },
+              formatter: function (value:number) {
+                return value.toFixed(2); 
+              },
+            },
+          },
+          xaxis: {
+            labels : {
+              style: {
+                fontSize: '12px', 
+              },
+            },
+          },
+        },
+      },
+      {
+  
+        breakpoint: 1200, 
+        options: {
 
+          chart: {
+            height: '300px',
+            width: '100%',
+          },
 
-    }],
+          yaxis: {
+            tickAmount: 5,
+            labels: {
+              style: {
+                fontSize: '16px',
+              },
+              formatter: function (value:number) {
+                return value.toFixed(2); 
+              },
+            },
+          },
+          xaxis: {
+            labels : {
+              style: {
+                fontSize: '16px', 
+              },
+            },
+          },
+        },
+      },
+    ],
     
 
 
@@ -192,7 +238,7 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
       return (
 
      
-        <div className={`${ROUNDED_DEFAULT} shadow-md`}>
+        <div className={`${ROUNDED_DEFAULT} w-auto shadow-md`}>
 
 
           <div className="w-full p-3">

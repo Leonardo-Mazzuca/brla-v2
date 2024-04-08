@@ -43,7 +43,7 @@ const TransactionButtons: React.FC = () => {
     return (
         <section 
         className={`${FLEX} ${ITEMS_CENTER}
-        gap-12 ${FLEX_WRAP} lg:${WIDTH_AUTO} ${WIDTH_FULL} ${JUSTIFY_BETWEEN}`}>
+        gap-12 ${FLEX_WRAP} lg:w-auto ${WIDTH_FULL} ${JUSTIFY_BETWEEN}`}>
         
 
              {transactionItems.map((item,index)=> {
@@ -51,7 +51,7 @@ const TransactionButtons: React.FC = () => {
                 return (
                 <div className={`${FLEX} ${FLEX_COL} ${ITEMS_CENTER} ${GAP_DEFAULT}`} key={index}>
 
-                    <IconButton classname={`${WIDTH_FULL} md:${WIDTH_AUTO} ${item.classname}`} text = {item.icon}
+                    <IconButton classname={`${WIDTH_FULL} md:w-auto ${item.classname}`} text = {item.icon}
                      onClick={() => navigate(item.link)} />
 
                     <TextModel color={TEXT_GRAY_800} content = {item.content} />
