@@ -33,7 +33,6 @@ export async function getPaymentData() {
 
                 baseFee: item.baseFee,
                 brlaAmount: item.brlaAmount / TO_WEBSOCKET,
-                amount: item.brlaAmount / TO_WEBSOCKET,
                 title: item.chain,
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
@@ -54,9 +53,15 @@ export async function getPaymentData() {
                 icon: faArrowUp,
                 isPayment: true,
                 usdToBrla: true,
+                transfers: {
+                    
+                    mount: item.brlaAmount / TO_WEBSOCKET,
+                    
+                },
                 amount: item.brlaAmount / TO_WEBSOCKET,
 
             };
+
         });
 
         return data;
