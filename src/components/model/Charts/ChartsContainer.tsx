@@ -15,8 +15,8 @@ const ChartsContainer = ({data}: Data) => {
 
   return (
 
-    <section className={`${FLEX} ${JUSTIFY_CENTER}
-     ${LG_JUSTIFY_BETWEEN} flex-col lg:flex-row w-full ${ITEMS_CENTER} gap-5 pb-10`}>
+    <section className={`${FLEX}
+     ${LG_JUSTIFY_BETWEEN} flex-col lg:flex-row w-full gap-5 pb-10`}>
 
       {data ? (
         

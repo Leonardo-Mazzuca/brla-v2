@@ -293,11 +293,9 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
         
       </div>
     
-      <div>
 
-        <div id={id} className="w-full px-0.5 md:px-2.5 py-4"></div>  
+      <div id={id} className="px-0.5 md:px-2.5 py-4"></div>  
 
-      </div>
 
     
   </div>
