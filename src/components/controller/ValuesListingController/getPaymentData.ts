@@ -58,8 +58,10 @@ export async function getPaymentData() {
                 transfers: {
 
                     amount: item.brlaAmount / TO_WEBSOCKET,
+                    taxId: formatInTaxId(item.userTaxId),
                     
                 },
+
                 amount: item.brlaAmount / TO_WEBSOCKET,
 
             };

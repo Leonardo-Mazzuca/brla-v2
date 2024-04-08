@@ -11,10 +11,11 @@ export const controlTextComponent = (
     data: ExpectedPayoutData | any) => {
 
         const title = data.title;
+        setTitle(title);
     
         if(data.transfers !== null && data.feedback !== null && !data.feedback.success) {
           
-          setTitle(title);
+          
           setText('Falha na transferência ');
           setTaxId('');
 
@@ -22,19 +23,11 @@ export const controlTextComponent = (
 
         if(data.transfers && !data.transfers.amount) {
 
-          setTitle(title);
           setText('Pendente...');
           setTaxId('');
 
-        }
-        
-        if(data.transfers && data.transfers.taxId) {
-
-           
-            setTitle(title);
+        } else {
             setTaxId(data.transfers.taxId);
-          
-          
         }
 
 
