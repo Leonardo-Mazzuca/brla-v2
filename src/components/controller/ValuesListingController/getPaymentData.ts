@@ -33,6 +33,7 @@ export async function getPaymentData() {
 
                 baseFee: item.baseFee,
                 brlaAmount: item.brlaAmount / TO_WEBSOCKET,
+                amount: item.brlaAmount / TO_WEBSOCKET,
                 title: item.chain,
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
