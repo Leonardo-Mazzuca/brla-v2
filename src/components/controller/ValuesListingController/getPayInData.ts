@@ -47,14 +47,11 @@ export async function getPayInData() {
         const request = await http.get('/pay-in/pix/history', {
             withCredentials: true
         });
-
-        console.log();
         
-
         
         const data = request.data.depositsLogs.map((item: any) => {
 
-            const { createdAt, payerName, chain } = item;
+            const { createdAt, payerName,coin, chain } = item;
             const operationName = item.mintOps.reduce((acc: string, op: any) => {
                 op.smartContractOps.forEach((sm: any) => acc = sm.operationName);
                 return acc;
@@ -79,6 +76,7 @@ export async function getPayInData() {
                 id,
                 icon,
                 feedback,
+                coin
 
             };
             

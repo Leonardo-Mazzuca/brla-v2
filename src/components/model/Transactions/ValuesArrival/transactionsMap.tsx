@@ -28,17 +28,23 @@ const DefaultTemplate = ({
 }: any) => (
   
   <div className="w-full flex flex-col">
+
     <article className="flex justify-between flex-col xl:flex-row">
+
+
       <div className="flex items-center justify-between gap-5">
-        <div className="border border-black rounded-full text-2xl py-5 px-6">
+        <div style={{borderRadius: '100%'}} className="flex items-center justify-center border border-black text-md h-[40px] text-center w-[40px]">
           <FontAwesomeIcon icon={icon} />
         </div>
+
         <div className="xl:text-start text-end">
-          <TextModel color={TEXT_GRAY_700} content={title} />
+          <TextModel size="text-xl" color={TEXT_GRAY_700} content={title} />
           <TextModel color={TEXT_GRAY_400} content={date} />
         </div>
+
       </div>
-      <div className="flex items-end flex-col  justify-between flex-wrap">
+
+      <div className="flex items-end flex-col justify-between flex-wrap">
 
         <TextModel
           size={TEXT_XL}
@@ -53,6 +59,7 @@ const DefaultTemplate = ({
         />
 
       </div>
+
     </article>
 
     <hr className="mt-10" />
@@ -62,7 +69,7 @@ const DefaultTemplate = ({
 
 const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
   
-  const amount = formatNumberToString(data.amount ?? 0, "USD");
+  const amount = data.amount ?? 0;
 
   return (
 
@@ -73,7 +80,8 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
       amount={<p
         className={"bg-green-400/50 rounded-xl p-2"}         
       >
-      {`+ ${amount}`}
+      {`+ BRLA${amount}`}
+
       </p>}
       footerText={`Valor recebido de`}
       addressNumber={data.walletAddress}
@@ -95,9 +103,8 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [color, setColor] = useState(TEXT_GREEN_700);
 
   const numberAmount = data.transfers?.amount ?? 0;
-  const formattedAmount = formatNumberToString(numberAmount , data.outputCoin);
+  const formattedAmount = data.outputCoin + formatNumberToString(numberAmount);
 
-  
 
   useEffect(() => {
 
@@ -109,7 +116,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
 
     controlTransferAmount(formattedAmount, setAmount, data)
 
-  },[data, formattedAmount, setAmount])
+  },[data, numberAmount, setAmount])
   
 
   useEffect(() => {
@@ -165,11 +172,11 @@ const Swap = ({ data }: TransactionData<any>) => {
 
   },[textColor, success, pending])
 
-  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'USD' : 'BRL'
+  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? data.outputCoin : 'BRLA'
 
-  const brlaAmount = formatNumberToString(data.brlaAmount, data.inputCoin ?? choseCoin);
+  const brlaAmount = choseCoin + formatNumberToString(data.brlaAmount);
   
-  const usdAmount = formatNumberToString(data.usdAmount, data.outputCoin);
+  const usdAmount = data.outputCoin + formatNumberToString(data.usdAmount);
 
   useEffect(() => {
     

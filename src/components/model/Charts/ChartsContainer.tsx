@@ -2,7 +2,7 @@
 import Chart from './Chart';
 import { ChartData } from '../../types/Chart/ChartData';
 import Loading from '../Loading/Loading';
-import { FLEX, ITEMS_CENTER, JUSTIFY_CENTER, LG_JUSTIFY_BETWEEN, WIDTH_FULL } from '../../contants/classnames/classnames';
+import { FLEX, LG_JUSTIFY_BETWEEN } from '../../contants/classnames/classnames';
 
 type Data = {
 
