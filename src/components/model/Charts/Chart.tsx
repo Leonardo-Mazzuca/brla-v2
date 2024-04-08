@@ -15,7 +15,6 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
 
     chart: {
       
-      // width: '500px',
       height: '350px',
 
       type: "area",
@@ -131,16 +130,11 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
         breakpoint: 302,
         options: {
 
-          // chart: {
-          //   height: '300px',
-          //   width: '100%',
-          // },
-
           yaxis: {
             tickAmount: 5,
             labels: {
               style: {
-                fontSize: '12px',
+                fontSize: '8px',
               },
               formatter: function (value:number) {
                 return value.toFixed(2); 
@@ -150,7 +144,7 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
           xaxis: {
             labels : {
               style: {
-                fontSize: '12px', 
+                fontSize: '8px', 
               },
             },
           },
@@ -160,11 +154,6 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
   
         breakpoint: 1300, 
         options: {
-
-          // chart: {
-          //   height: '300px',
-          //   width: '500px',
-          // },
 
           yaxis: {
             tickAmount: 5,
@@ -190,11 +179,6 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
   
         breakpoint: 1100, 
         options: {
-
-          // chart: {
-          //   height: '300px',
-          //   width: '400px',
-          // },
 
           yaxis: {
             tickAmount: 5,
