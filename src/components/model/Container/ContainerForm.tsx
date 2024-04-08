@@ -15,7 +15,7 @@ const ContainerForm: React.FC<ContainerModel> = ({children}) => {
             className={`${FLEX} ${JUSTIFY_CENTER} ${ITEMS_CENTER}
              ${FLEX_COL} ${MIN_FORM_HEIGHT} ${MEDIUM_PADDING} md:${LARGE_PADDING}`}>
 
-                    <div className={`md:${FORM_WIDTH}`}>
+                    <div className={`${FORM_WIDTH}`}>
                         {children}
                     </div>
 
