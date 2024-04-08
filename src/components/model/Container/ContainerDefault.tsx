@@ -1,4 +1,4 @@
-import { HEIGHT_AUTO, LARGE_PADDING_X, MEDIUM_PADDING, WIDTH_FULL } from "../../contants/classnames/classnames";
+import { HEIGHT_AUTO, WIDTH_FULL } from "../../contants/classnames/classnames";
 import ContainerModel from "../../types/ContainerModel/ContainerModel";
 
 
@@ -9,8 +9,7 @@ const ContainerStandart: React.FC<ContainerModel> = ({children, className}) => {
 
     return (
 
-        <section className={`${WIDTH_FULL} ${MEDIUM_PADDING} 
-         md:${LARGE_PADDING_X} ${HEIGHT_AUTO} ${className ?? ''}`}>
+        <section className={`lg:px-44 lg:py-12 md:px-12 md:py-12 p-6 ${WIDTH_FULL}  ${HEIGHT_AUTO} ${className ?? ''}`}>
 
             {children}
 

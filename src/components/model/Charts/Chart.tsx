@@ -132,7 +132,7 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
 
         chart: {
           height: '300px',
-          width: '500px',
+          width: 'auto',
         },
 
         yaxis: {
@@ -162,6 +162,7 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
 
             }
         },
+        
 
 
 
