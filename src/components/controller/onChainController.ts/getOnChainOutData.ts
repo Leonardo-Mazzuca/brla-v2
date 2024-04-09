@@ -70,6 +70,9 @@ export const getOnChainOutData = async () => {
             icon: faArrowUp,
 
         }});
+
+        console.log(data);
+        
         
         
         return data;
