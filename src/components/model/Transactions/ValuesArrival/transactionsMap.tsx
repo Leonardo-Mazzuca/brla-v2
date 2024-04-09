@@ -102,7 +102,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState(TEXT_GREEN_700);
 
-  const numberAmount = (data.amount) ?? 0;
+  const numberAmount = data.amount;
   const formattedAmount = formatNumberToString(numberAmount) + " " + data.outputCoin;
 
 
@@ -175,8 +175,8 @@ const Swap = ({ data }: TransactionData<any>) => {
   const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'BRLA' : 
   data.inputCoin === undefined ? 'BRLA' : data.inputCoin
 
-  const brlaAmount = isUsdToBrla(state.sendCurrency, state.receiveCurrency) 
-  ? formatNumberToString(data.brlaAmount) : formatNumberToString(data.usdAmount) +  " " + choseCoin;
+  const brlaAmount = (isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 
+  formatNumberToString(data.usdAmount) :  formatNumberToString(data.brlaAmount))  +  " " + choseCoin;
   
   const usdAmount =  formatNumberToString(data.usdAmount) + " " + data.outputCoin;
 

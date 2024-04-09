@@ -49,7 +49,9 @@ export const getOnChainOutData = async () => {
 
             brlaAmount: amountWithLatestDate,
             usdAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
-        
+            
+            amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
+            
             transfers: {
                 amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
                 taxId: formatWalletAddress(item.to),
