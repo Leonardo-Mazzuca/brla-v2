@@ -115,14 +115,11 @@ export async function getPayoutData() {
                     return acc;
                 }, '...'),
 
-                amount: item.transfers?.reduce((acc: number, op: Transfers) => {
-                    return acc + (op.amount / TO_WEBSOCKET); 
-                }, 0) ?? 0,
+           
 
             },
 
             amount: item.amount / TO_WEBSOCKET,
-
 
             accountNumber: formatWalletAddress(item.walletAddress),
 

@@ -102,7 +102,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState(TEXT_GREEN_700);
 
-  const numberAmount = (data.transfers?.amount || data.amount) ?? 0;
+  const numberAmount = (data.amount) ?? 0;
   const formattedAmount = formatNumberToString(numberAmount) + " " + data.outputCoin;
 
 
