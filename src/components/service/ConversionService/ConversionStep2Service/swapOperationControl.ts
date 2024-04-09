@@ -1,4 +1,4 @@
-import { HIDDEN } from "../../../contants/classnames/classnames";
+import { HIDDEN, POINTS_ALL } from "../../../contants/classnames/classnames";
 import { CurrencyState } from "../../../context/CurrencyContext";
 
 
@@ -15,6 +15,10 @@ export function swapOperationControl (isForWebSocket: (state: CurrencyState) => 
 
         if(success || error) {
             setButtonClassname(HIDDEN);
+        }
+
+        if(!isForWebSocket(state)) {
+            setButtonClassname(POINTS_ALL);
         }
         
 

@@ -121,6 +121,8 @@ export async function getPayoutData() {
 
             },
 
+            amount: item.amount / TO_WEBSOCKET,
+
 
             accountNumber: formatWalletAddress(item.walletAddress),
 
