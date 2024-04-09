@@ -172,7 +172,7 @@ const Swap = ({ data }: TransactionData<any>) => {
 
   },[textColor, success, pending])
 
-  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? data.outputCoin : 'BRLA'
+  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'BRLA' : data.outputCoin;
 
   const brlaAmount = formatNumberToString(data.brlaAmount) +  " " + choseCoin;
   

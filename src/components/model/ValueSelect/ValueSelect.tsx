@@ -83,6 +83,7 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
                     <InputMoney value={inputValue} onChange={onChange} />
                     <button onClick={handleMaxButtonClick} className={`${BORDER_NONE} py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
                 </div>
+                
             </div>
         </div>
 
