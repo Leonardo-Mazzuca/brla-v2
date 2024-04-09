@@ -21,7 +21,7 @@ export const controlTextComponent = (
 
         } 
 
-        if(data.transfers && !data.transfers.amount) {
+        if(data.transfers && !data.transfers.taxId) {
 
           setText('Pendente...');
           setTaxId('');

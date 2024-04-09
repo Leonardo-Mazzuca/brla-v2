@@ -115,8 +115,6 @@ export async function getPayoutData() {
                     return acc;
                 }, '...'),
 
-           
-
             },
 
             amount: item.amount / TO_WEBSOCKET,
