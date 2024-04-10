@@ -8,9 +8,9 @@ const MiniContainer: React.FC<ContainerModel> = ({children}) => {
 
     return (
 
-        <section className={`${FLEX} ${ITEMS_CENTER} ${FLEX_COL}`}>
+        <section className={`${FLEX} gap-3 ${ITEMS_CENTER} ${FLEX_COL}`}>
 
-                <div className={`w-full lg:w-1/2`}>
+                <div className={`flex gap-3 flex-col w-full lg:w-[60%]`}>
                     {children}
                 </div>
       

@@ -30,7 +30,7 @@ const DepositsContainer: React.FC<DepositsConfig> = ({heading,subHeading,descrip
 
     return (
 
-        <ContainerService path="/Home" linkText="Dashboard">
+        <ContainerService path="/home" linkText="Dashboard">
 
                 <MiniContainer>
 

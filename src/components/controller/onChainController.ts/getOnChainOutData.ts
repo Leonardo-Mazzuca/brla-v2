@@ -1,9 +1,10 @@
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightArrowLeft, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { http } from "../ConectAPI/conectApi";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { getUserData } from "../UserDataController/getUserData";
 import { getOnChainInData } from "./getOnChainInData";
-import { BRLA_ON_CHAIN, USDTC_ON_CHAIN } from "../../contants/divisionValues/divisionValues";
+import {  USDTC_ON_CHAIN } from "../../contants/divisionValues/divisionValues";
+import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 
 
 
@@ -30,10 +31,10 @@ export const getOnChainOutData = async () => {
         const txs = item.smartContractOps.map((op: any) => op.Tx);
         const correspondingInData = onChainInData.filter((inItem: any) => txs.includes(inItem.tx));
         
-        const outputValue = correspondingInData
-        .filter((item: any) => item.amount !== undefined)
-        .map((item: any) => item.amount)[0];
 
+        const inputValue = correspondingInData
+        .filter((item: any) => item !== undefined)
+        .map((item: any) => item.amount)[0];
 
 
          return {
@@ -44,8 +45,12 @@ export const getOnChainOutData = async () => {
             from: item.from,
             title: item.chain,
 
+            usdAmount: inputValue ?? getOnChainOutValue(parseFloat(item.value), item.inputCoin),
             brlaAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
-            usdAmount: outputValue ?? 2,
+
+            inputValue: formatNumberToString(inputValue ?? getOnChainOutValue(parseFloat(item.value), item.inputCoin)) + ' ' + item.inputCoin,
+            outputValue:formatNumberToString(getOnChainOutValue(parseFloat(item.value), item.outputCoin)) + ' ' + item.outputCoin,
+          
             
             amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
             
@@ -66,10 +71,14 @@ export const getOnChainOutData = async () => {
             }, []),
 
             createdAt: item.createdAt,
-            icon: faArrowUp,
+            icon: walletAddress === item.to ? faArrowRightArrowLeft : faArrowUp,
+            isPaymentChain: item.inputCoin === item.outputCoin,
+            isOnChain: true,
 
         }});
 
+        console.log('On chain out: ', data);
+        
         
         return data;
         
@@ -87,9 +96,11 @@ function getOnChainOutValue (value:number,coin:string) {
         case 'USDC':
             return value / USDTC_ON_CHAIN;
         default:
-            return value / BRLA_ON_CHAIN;
+            return value;
 
     }
 
 }
+
+
 

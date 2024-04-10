@@ -116,7 +116,6 @@ export async function getConversionData () {
         }));
     
         
-        
         return data;
 
     } catch(e: any) {

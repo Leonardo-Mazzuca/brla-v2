@@ -23,11 +23,13 @@ export const controlTextComponent = (
         } 
           
           if(data.feedback && data.feedback.success === null) {
+
             setText('Pendente...');
             setTaxId('');
-        } else {
-              setTaxId(data.transfers.taxId);
-        }
+
+          } else {
+                setTaxId(data.transfers.taxId);
+          }
 
         
 
@@ -60,6 +62,7 @@ export const controlTransferAmount = (numberAmount: number,
   setAmount: Dispatch<SetStateAction<ReactNode>>, data: ExpectedPayoutData | any) => {
    
     const formattedAmount = (formatNumberToString(numberAmount) + " " + data.outputCoin);
+    const usdAmount = (formatNumberToString(data.usdAmount)) + " "
 
     
     if(!data.feedback) {
@@ -100,6 +103,9 @@ export const controlTransferAmount = (numberAmount: number,
 
 
     }
+
+
+
 
 }
 

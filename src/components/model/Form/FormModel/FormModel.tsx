@@ -76,6 +76,7 @@ const FormModel: React.FC<FormModelProps> = (props) => {
     };
 
     useEffect(() => {
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Enter') {
                 const inputs = document.querySelectorAll('input');
@@ -92,7 +93,8 @@ const FormModel: React.FC<FormModelProps> = (props) => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+
+    }, [errorOnSubmit]);
     
     return (
 

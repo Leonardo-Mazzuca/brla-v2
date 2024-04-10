@@ -1,6 +1,7 @@
-import { faArrowRight, faArrowRightArrowLeft, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faArrowRightArrowLeft, faMinus, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, ReactNode, SetStateAction } from "react";
+
 
 export const margin = "mx-2";
 
@@ -8,97 +9,96 @@ export function controlAmount
     (success: boolean | undefined, setAmount: Dispatch<SetStateAction<ReactNode>>,
      isPaymentSwap: boolean, brlaAmount: string, usdAmount: string, isUsdToBrla: boolean, data:any) {
 
+            if(data.isOnChain) {
 
-        if(data.outputCoin && data.inputCoin) {
-          
-                  if(data.inputCoin === 'USDC' && data.outputCoin === 'USDT') {
-            
+
+                    if(data.isPaymentChain) {
+
+                      setAmount(<>
+                    
+                         <FontAwesomeIcon icon={faMinus} />{data.outputValue} 
+                        
+                        
+                      </>);
+
+                    } 
+                    else {
+
                     setAmount(<>
                     
-                      {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
-                      {usdAmount} 
+                      {data.inputValue} <FontAwesomeIcon icon={faArrowRight} />
+                      {data.outputValue} 
                       
                       </>);
-            
-                  } 
-            
-                  if(data.inputCoin === 'USDT' && data.outputCoin === 'USDC') {
-            
-                    setAmount(<>
-                    
-                      {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
-                      {brlaAmount} 
-                      
-                      </>);
-                      
+
                     }
-             
-        }
-
-
   
-          
+              }
+
+                if(isPaymentSwap) {
+
+                  
         
-                // if(isPaymentSwap) {
-        
           
-                //     if(isUsdToBrla && success) {
+                    if(isUsdToBrla && success) {
           
-                //         setAmount(
-                //             <>
+                        setAmount(
+                            <>
                 
-                //               {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                //               {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                              {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
                     
-                //             </>
+                            </>
           
-                //           );
+                          );
         
-                //     } else if (isUsdToBrla && !success) {
+                    } else if (isUsdToBrla && !success) {
           
-                //       setAmount(
-                //         <>
+                      setAmount(
+                        <>
             
-                //           {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                //           <FontAwesomeIcon className={margin} icon={faX} />
-                //           {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                          <FontAwesomeIcon className={margin} icon={faX} />
+                          {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
                 
-                //         </>
+                        </>
           
-                //       );
+                      );
           
-                //     }
+                    }
           
            
-                //     if(!isUsdToBrla && success) {
+                    if(!isUsdToBrla && success) {
           
-                //       setAmount(
-                //         <>
+                      setAmount(
+                        <>
             
-                //           {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
-                //           {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                          {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
                 
-                //         </>
+                        </>
           
-                //       );
+                      );
           
-                //     } else if(!isUsdToBrla && !success) {
-                //       setAmount(
-                //         <>
+                    } else if(!isUsdToBrla && !success) {
+                      setAmount(
+                        <>
             
-                //           {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
-                //           <FontAwesomeIcon className={margin} icon={faX} />
-                //           {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                          {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
+                          <FontAwesomeIcon className={margin} icon={faX} />
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
                 
-                //         </>
+                        </>
           
-                //       );
-                //     }
+                      );
+                    }
           
-                // } 
+                } 
 
 
-                // if(!isPaymentSwap) {
+                if(!isPaymentSwap && !data.isOnChain) {
+
+
 
                   
                         if(isUsdToBrla && success) {
@@ -145,7 +145,7 @@ export function controlAmount
                           }
   
                 
-                // }
+                }
         
           
                     
@@ -188,9 +188,13 @@ export const controlSwapTextComponent =
 
       setMessage("Pendente...");
 
+    } else if (success && data.isPaymentChain){
+
+      setMessage(`Transferencia feita para ${data.transfers.taxId}`);
+      
     } else if (success && data.accNumber) {
 
-      setMessage(`Transferencia feita para ${data.accNumber}`);
+      setMessage(`Transferencia feita para ${data.transfers.taxId}`);
 
     } else if(success && isPaymentSwap) {
 
@@ -202,7 +206,7 @@ export const controlSwapTextComponent =
       
     }  else if (!success && isPaymentSwap) {
 
-      
+
       setMessage("Falha na transfêrencia");
 
     } else {
@@ -210,4 +214,8 @@ export const controlSwapTextComponent =
       setMessage("Erro ao realizar conversão");
     }
 
+  
+
 }
+
+

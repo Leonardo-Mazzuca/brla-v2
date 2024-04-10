@@ -60,7 +60,8 @@ export async function getPaymentData() {
         });
 
         console.log(data);
-
+        
+        
         return data;
         
     } catch (e: any) {

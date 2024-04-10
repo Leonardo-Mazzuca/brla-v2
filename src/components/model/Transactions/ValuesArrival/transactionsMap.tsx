@@ -261,5 +261,3 @@ export const TransactionMap: React.FC<TransactionData<any>> = ({ data }) => {
       return null;
   }
 };
-
-

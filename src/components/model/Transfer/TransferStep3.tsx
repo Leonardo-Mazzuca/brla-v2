@@ -204,7 +204,7 @@ const TransferStep3 = () => {
           to: state.walletAddress,
           inputCoin: state.sendCurrency,
           outputCoin: state.receiveCurrency,
-          value: parseFloat(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
+          value: parseInt(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
           
         }
 
@@ -215,7 +215,6 @@ const TransferStep3 = () => {
           onSuccess(true);
           
 
-          
         } catch(e:any) {
 
           

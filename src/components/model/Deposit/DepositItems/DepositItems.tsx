@@ -22,7 +22,7 @@ const DepositItems: React.FC = () => {
             <Heading size="text-4xl" content = "Saldo na sua conta em instântes!" />
             
             <TextModel content = "Selecione uma das opções e leia as instruções.  O seu saldo ficará disponível segundos após o envio" />
-
+            
             {cardLinks.map((item, index) => {
                 return (
                    <DepositCard {...item} key={index} />

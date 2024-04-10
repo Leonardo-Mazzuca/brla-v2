@@ -15,7 +15,7 @@ const IconButton: React.FC<ButtonProps> = ({text, onClick, classname}) => {
     text-xl
     focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600 
     transition-colors duration-300 ease-in-out dark:hover:bg-gray-400 
-    hover:from-slate-100 hover:via-slate-200 hover:to-slate-300 w-[50px] h-[50px] ${classname ?? ''}`;
+    hover:from-slate-100 hover:via-slate-200 hover:to-slate-300 py-4 px-6 ${classname ?? ''}`;
 
     return <button onClick={onClick} className={buttonClassname}>
 
