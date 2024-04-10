@@ -3,6 +3,7 @@ import { ExpectedPayoutData } from "../../../controller/ValuesListingController/
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faX } from "@fortawesome/free-solid-svg-icons";
 import { margin } from "../swap/SwapComponentService";
+import { formatNumberToString } from "../../Formatters/FormatNumber/formatNumber";
 
 export const controlTextComponent = (
     setTitle:  Dispatch<SetStateAction<string>>,
@@ -10,26 +11,30 @@ export const controlTextComponent = (
     setTaxId: Dispatch<SetStateAction<string>>,
     data: ExpectedPayoutData | any) => {
 
-        const title = data.title;
-        setTitle(title);
+        setTitle(data.title);
     
-        if(data.transfers !== null && data.feedback !== null && !data.feedback.success) {
-          
+        if(data.transfers && data.feedback && !data.feedback.success) {
           
           setText('Falha na transferência ');
           setTaxId('');
 
-        } 
+        } {
+          
+          if(data.transfers && !data.feedback  || !data.transfers.taxId) {
+  
+            setText('Pendente...');
+            setTaxId('');
+    
+          } else {
+              setTaxId(data.transfers.taxId);
+          }
 
-        if(data.transfers && !data.transfers.taxId) {
-
-          setText('Pendente...');
-          setTaxId('');
-
-        } else {
-            setTaxId(data.transfers.taxId);
         }
 
+
+        
+
+      
 
 
 }
@@ -42,7 +47,7 @@ export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: E
     setColor('text-red-500');
   }
 
-  if(data.transfers && !data.transfers.taxId && !data.transfers.amount) {
+  if(data.transfers && !data.transfers.taxId || !data.feedback) {
       setColor('text-gray-500');
   }
 
@@ -51,12 +56,21 @@ export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: E
 
 
 
-export const controlTransferAmount = (formattedAmount: string, 
+export const controlTransferAmount = (numberAmount: number, 
   setAmount: Dispatch<SetStateAction<ReactNode>>, data: ExpectedPayoutData | any) => {
+   
+    const formattedAmount = (formatNumberToString(numberAmount) + " " + data.outputCoin);
 
-    if(data.transfers && !data.transfers.amount) {
+    
+    if(!data.feedback) {
 
-      setAmount("00,00");
+      setAmount(<>
+
+        <FontAwesomeIcon icon={faMinus} /> 
+        <FontAwesomeIcon className={margin} icon={faX} /> 
+        {formattedAmount}
+
+      </>);
 
     }
 

@@ -1,11 +1,11 @@
+import { CurrencyState } from "../../context/CurrencyContext";
 
 
 
-export const isUsdToBrla = (inputCoin: string, outputCoin: string) => {
+export const isUsdToBrla = (state:CurrencyState) => {
 
-    const isUsdtToBrla = (inputCoin === 'USDT' && outputCoin === 'BRLA');
-    const isUsdcToBrla = (inputCoin === 'USDC' && outputCoin === 'BRLA');
+    return ((state.sendCurrency === 'USDC' || state.sendCurrency === "USDT")
+     && state.receiveCurrency === 'BRLA');
 
-    return isUsdtToBrla || isUsdcToBrla;
 
 }

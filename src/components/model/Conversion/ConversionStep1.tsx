@@ -16,6 +16,8 @@ import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
 import { sendMessageToSwap } from "../../service/WebSocketService/sendMessageToSwap";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
 import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { isBrlaToUsd } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
+import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 
 
 const ConversionStep1: React.FC = () => {
@@ -43,21 +45,7 @@ const ConversionStep1: React.FC = () => {
     },[webSocketState.webSocket]);
 
     useEffect(() => {
-
-      if(state.sendValue > 0 && state.receiveValue > 0) {
-
-        dispatch({
-            type: CurrencyActions.setSendValue,
-            payload: {sendValue: 0}
-        });
-
-        dispatch({
-            type: CurrencyActions.setReceiveValue,
-            payload: {receiveValue: 0}
-        });
-
-      }
-
+      
       if(quoteState.brl && quoteState.usdc && quoteState.usdt) {
 
         setOutputValue(converted);
@@ -65,7 +53,7 @@ const ConversionStep1: React.FC = () => {
       }
 
 
-  }, [state.sendCurrency, state.receiveCurrency]);
+  }, [state.sendCurrency, state.receiveCurrency,dispatch]);
 
 
     useEffect(() => {
@@ -103,11 +91,24 @@ const ConversionStep1: React.FC = () => {
 
     }, [isValuable, inputValue, balanceState, state.sendCurrency, getCoinToBalance]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
-        if (isForWebSocketOnSwap(state) && webSocketState.webSocket) {   
-            sendMessageToSwap(webSocketState.webSocket, state);
+        if ((isUsdToBrla(state)) || isBrlaToUsd(state)) {   
+
+            if(webSocketState.webSocket) {
+                sendMessageToSwap(webSocketState.webSocket, state);
+            }
         }
+
+        dispatch({
+            type: CurrencyActions.setSendValue,
+            payload: {sendValue: inputValue}
+        });
+
+        dispatch({
+            type: CurrencyActions.setReceiveValue,
+            payload: {receiveValue: outputValue}
+        });
 
     }
 

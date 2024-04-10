@@ -2,6 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { http } from "../ConectAPI/conectApi";
 import { ExpectedConversionData, getConversionData } from "../ValuesListingController/getConversionData";
+import formatDate from "../../service/Formatters/FormatDate/formatDate";
 
 
 type ExpectedOnChainInData = {
@@ -12,6 +13,7 @@ type ExpectedOnChainInData = {
     createdAt: string;
     chain: string;
     tx:string;
+    id: string
 
 }
 
@@ -22,9 +24,10 @@ export const getOnChainInData =  async () => {
         const request = await http.get('/on-chain/history/in', {
             withCredentials: true,
         });
-
-
+        
         const conversionData = await getConversionData();
+        
+
         
         
         const data = request.data.onchainLogs.map((item: ExpectedOnChainInData) => {
@@ -39,13 +42,16 @@ export const getOnChainInData =  async () => {
             operationName:  operationName,
             walletAddress: formatWalletAddress(item.fromAddress),
             amount: parseFloat(item.amount),
+            date: formatDate(item.createdAt),
             createdAt: createdAt,
             title: item.chain,
             icon: faPlus,
-            tx: item.tx
+            tx: item.tx,
+            id: item.id,
         
 
         }});
+        
 
         return data;
         

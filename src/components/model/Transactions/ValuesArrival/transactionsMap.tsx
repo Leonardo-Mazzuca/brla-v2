@@ -10,6 +10,7 @@ import { controlColor, controlTextComponent, controlTransferAmount } from "../..
 import { useCurrency } from "../../../context/CurrencyContext";
 import { isUsdToBrla } from "../../../service/Util/isUsdToBrla";
 import { FONT_BOLD, MARGIN_Y_3, TEXT_CENTER, TEXT_GRAY_400, TEXT_GRAY_500, TEXT_GRAY_700, TEXT_GREEN_700, TEXT_RED_600, TEXT_XL, WIDTH_AUTO } from "../../../contants/classnames/classnames";
+import { isOnChain } from "../../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 
 
 export type TransactionData<T> = {
@@ -102,21 +103,21 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState(TEXT_GREEN_700);
 
-  const numberAmount = data.amount;
-  const formattedAmount = formatNumberToString(numberAmount) + " " + data.outputCoin;
 
+  useEffect(()=> {
+
+    const numberAmount = (data.amount || data.trasfers?.amount);
+
+    controlTransferAmount(numberAmount, setAmount, data);
+  
+
+  },[data, setAmount])
 
   useEffect(() => {
 
     controlTextComponent(setTitle, setText, setTaxId, data);
 
   }, [data]);
-
-  useEffect(()=> {
-
-    controlTransferAmount(formattedAmount, setAmount, data)
-
-  },[data, numberAmount, setAmount])
   
 
   useEffect(() => {
@@ -126,8 +127,6 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   },[color,data]);
 
  
-
-
   return (
 
     <DefaultTemplate
@@ -149,7 +148,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
 
 };
 
-const Swap = ({ data }: TransactionData<any>) => {
+const Swap = ({ data }: any) => {
 
   const {state} = useCurrency();
   const [success, setSuccess] = useState<boolean | undefined>(data.feedback?.success);
@@ -172,32 +171,54 @@ const Swap = ({ data }: TransactionData<any>) => {
 
   },[textColor, success, pending])
 
-  const choseCoin = isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 'BRLA' : 
-  data.inputCoin === undefined ? 'BRLA' : data.inputCoin
 
-  const brlaAmount = (isUsdToBrla(state.sendCurrency, state.receiveCurrency) ? 
-  formatNumberToString(data.usdAmount) :  formatNumberToString(data.brlaAmount))  +  " " + choseCoin;
-  
-  const usdAmount =  formatNumberToString(data.usdAmount) + " " + data.outputCoin;
-
-  useEffect(() => {
-    
-    controlSwapPending(success, data, setPending, setSuccess);
-
-    controlSwapTextComponent(pending, success, isPaymentSwap, data, setMessage);
-
-    controlAmount(success, setAmount, isPaymentSwap, brlaAmount, usdAmount, usdToBrla);
+  useEffect(()=> {
 
     if (data.isPayment) {
+
       setIsPaymentSwap(true);
+
     }
 
     if(data.usdToBrla) {
+
       setIsUsdToBrla(true);
+
     }
 
-  }, [success, message, isPaymentSwap, usdToBrla]);
+  },[isPaymentSwap,usdToBrla,data])
 
+  const choseCoin = isUsdToBrla(state) ? 'BRLA' : 
+  data.inputCoin === undefined ? 'BRLA' : data.inputCoin
+
+
+  const brlaAmount = data.isSwap ? formatNumberToString(data.brlaAmount)  +  " " + choseCoin :
+  (isUsdToBrla(state) ? 
+  formatNumberToString(data.usdAmount) :  formatNumberToString(data.brlaAmount))  +  " " + choseCoin;
+  
+  const usdAmount =  formatNumberToString(data.usdAmount) + " " + data.outputCoin;
+  
+  console.log(brlaAmount);
+  
+  useEffect(() => {
+
+    controlSwapPending(data, setPending, setSuccess);
+
+
+  }, [data,setPending,setSuccess]);
+
+  useEffect(()=> {
+
+    controlSwapTextComponent(pending, success, isPaymentSwap, data, setMessage);
+
+  },[pending,success, isPaymentSwap,data,setMessage]);
+
+
+  useEffect(()=> {
+
+    controlAmount(success, setAmount, isPaymentSwap, brlaAmount, usdAmount, usdToBrla, data)
+
+  },[success,isPaymentSwap, brlaAmount,usdAmount,usdToBrla,data,setAmount]);
 
   return (
 

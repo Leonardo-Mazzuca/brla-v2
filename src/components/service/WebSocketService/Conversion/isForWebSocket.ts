@@ -1,8 +1,12 @@
 import { CurrencyState } from "../../../context/CurrencyContext";
-import { isUsdcToUsdt, isUsdtToUsdc } from "../../Util/onChain";
+import { isUsdToBrla } from "../../Util/isUsdToBrla";
+import { isBrlaToUsd } from "../WebSocketConstraints/webSocketContrainst";
 
 
 
 export const isForWebSocketOnSwap = (state: CurrencyState) => {
-    return (!isUsdcToUsdt(state) && !isUsdtToUsdc(state))
+
+    return (isUsdToBrla(state)) || isBrlaToUsd(state);
+     
+
 }

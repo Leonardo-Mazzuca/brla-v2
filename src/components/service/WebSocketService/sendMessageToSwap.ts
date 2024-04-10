@@ -20,7 +20,7 @@ export const sendMessageToSwap = (webSocket: WebSocket,state: CurrencyState) => 
 
             coin: sendCoinToWebSocket(state.receiveCurrency),
 
-            usdToBrla: isUsdToBrla(state.sendCurrency, state.receiveCurrency),
+            usdToBrla: isUsdToBrla(state),
 
             fixOutPut: state.fixOutput,
 

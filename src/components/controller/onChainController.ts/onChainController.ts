@@ -12,7 +12,7 @@ export const onChainController = async (chain: string, to:
         const request = await http.post('/on-chain/transfer', body, {
             withCredentials: true
         });
-
+        
         
         return request.data;
         

@@ -21,7 +21,7 @@ const OutputSelect:React.FC <ConvertOperation>
 
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
 
-    },[coin,availableValue]);
+    },[coin,availableValue,balanceState]);
 
 
     const handleMaxButtonClick = () => {
@@ -43,7 +43,7 @@ const OutputSelect:React.FC <ConvertOperation>
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+        
         
         let outputValue = parseFloat(e.target.value);
 

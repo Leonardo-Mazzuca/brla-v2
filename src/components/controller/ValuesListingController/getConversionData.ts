@@ -3,6 +3,7 @@ import { http } from "../ConectAPI/conectApi";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Feedback } from "../../types/Feedback/Feedback";
 import { getUserData } from "../UserDataController/getUserData";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 
 type SmartContractOps = {
@@ -50,6 +51,7 @@ export type ExpectedConversionData = {
     operationName: string;
     isPayment: boolean;
     tx: string;
+    isSwap: boolean,
 
 }
 
@@ -93,8 +95,8 @@ export async function getConversionData () {
                 return acc;
             }, {} as Feedback),
 
-            usdAmount: parseFloat(item.usdAmount) / 100,
-            brlaAmount: parseFloat(item.brlaAmount) / 100,
+            usdAmount: parseFloat(item.usdAmount) / TO_WEBSOCKET,
+            brlaAmount: parseFloat(item.brlaAmount) / TO_WEBSOCKET,
             outputCoin: item.coin,
             userDocument: item.userDocument,
             title: item.chain,
@@ -107,10 +109,13 @@ export async function getConversionData () {
             usdToBrla: item.usdToBrla,
             icon: faArrowRightArrowLeft,
             isPayment: item.receiverAddress !== walletAddress,
+            isSwap: true,
            
 
             
         }));
+        
+        console.log(data);
         
         
         return data;

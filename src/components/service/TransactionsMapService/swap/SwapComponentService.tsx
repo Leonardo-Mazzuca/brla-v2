@@ -5,123 +5,162 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 export const margin = "mx-2";
 
 export function controlAmount
-(success: boolean | undefined, setAmount: Dispatch<SetStateAction<ReactNode>>,
-     isPaymentSwap: boolean, brlaAmount: string, usdAmount: string, isUsdToBrla: boolean) {
+    (success: boolean | undefined, setAmount: Dispatch<SetStateAction<ReactNode>>,
+     isPaymentSwap: boolean, brlaAmount: string, usdAmount: string, isUsdToBrla: boolean, data:any) {
 
-    
-        if(isPaymentSwap) {
 
-            if(isUsdToBrla && success) {
-
-                setAmount(
-                    <>
-        
-                      {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                      {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+        if(data.outputCoin && data.inputCoin) {
+          
+                  if(data.inputCoin === 'USDC' && data.outputCoin === 'USDT') {
             
-                    </>
-
-                  );
-            }
-
-            if(isUsdToBrla && !success) {
-
-              setAmount(
-                <>
-    
-                  {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                  <FontAwesomeIcon className={margin} icon={faX} />
-                  {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
-        
-                </>
-
-              );
-
-            }
-
-            if(!isUsdToBrla && success) {
-
-              setAmount(
-                <>
-    
-                  {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
-                  {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
-        
-                </>
-
-              );
-
-            }
+                    setAmount(<>
+                    
+                      {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
+                      {usdAmount} 
+                      
+                      </>);
             
-            if(!isUsdToBrla && !success) {
+                  } 
+            
+                  if(data.inputCoin === 'USDT' && data.outputCoin === 'USDC') {
+            
+                    setAmount(<>
+                    
+                      {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
+                      {brlaAmount} 
+                      
+                      </>);
+                      
+                    }
+             
+        }
+
+
+  
+          
+        
+                if(isPaymentSwap) {
+        
+          
+                    if(isUsdToBrla && success) {
+          
+                        setAmount(
+                            <>
                 
-            
-              setAmount(
-                <>
-    
-                  {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
-                  <FontAwesomeIcon className={margin} icon={faX} />
-                  {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                              {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                    
+                            </>
+          
+                          );
         
-                </>
+                    } else if (isUsdToBrla && !success) {
+          
+                      setAmount(
+                        <>
+            
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                          <FontAwesomeIcon className={margin} icon={faX} />
+                          {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                
+                        </>
+          
+                      );
+          
+                    }
+          
+           
+                    if(!isUsdToBrla && success) {
+          
+                      setAmount(
+                        <>
+            
+                          {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                
+                        </>
+          
+                      );
+          
+                    } else if(!isUsdToBrla && !success) {
+                      setAmount(
+                        <>
+            
+                          {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
+                          <FontAwesomeIcon className={margin} icon={faX} />
+                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                
+                        </>
+          
+                      );
+                    }
+          
+                } 
 
-              );
-              }
-        }
 
-        if(!isPaymentSwap) {
+                if(!isPaymentSwap) {
 
-          if(isUsdToBrla && success) {
+                  
+                        if(isUsdToBrla && success) {
+                  
+                            setAmount(
+                              <>
+                              {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
+                              {brlaAmount} 
+                              </>
+                            );
+                  
+                          } else if(!isUsdToBrla && success) {
+                  
+                            setAmount(<>
+                            
+                              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
+                              {usdAmount} 
+                              
+                              </>);
+                          
+                           }
+                  
+                          
+                  
+                          if(isUsdToBrla && !success) {
+                  
+                            setAmount(<>
+                  
+                              {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
+                              <FontAwesomeIcon className={margin} icon={faX}/>
+                              {brlaAmount} 
+                              
+                              </>);
+                  
+                          } else if(!isUsdToBrla && !success) {
+                  
+                            setAmount(<>
+                  
+                              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
+                              <FontAwesomeIcon className={margin} icon={faX}/>
+                              
+                              </>);
+                  
+                          }
+  
+                
+                }
+        
+          
+                    
+                  
+                
 
-            setAmount(
-              <>
-              {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
-              {brlaAmount} 
-              </>
-            );
- 
-          }
+        
+        
+   
 
-
-          if(!isUsdToBrla && success) {
-
-            setAmount(<>
-              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
-              {usdAmount} 
-              
-              </>);
-          }
-
-          if(isUsdToBrla && !success) {
-
-            setAmount(<>
-
-              {usdAmount} <FontAwesomeIcon icon={faArrowRight} />
-              <FontAwesomeIcon className={margin} icon={faX}/>
-              {brlaAmount} 
-              
-              </>);
-
-          }
-
-          if(!isUsdToBrla && !success) {
-
-            setAmount(<>
-
-              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
-              <FontAwesomeIcon className={margin} icon={faX}/>
-              {usdAmount} 
-              
-              </>);
-
-          }
-
-        }
 
 }
 
 export const controlSwapPending = 
-(success: boolean | undefined, data: any, setPending: Dispatch<SetStateAction<boolean>>, 
+(data: any, setPending: Dispatch<SetStateAction<boolean>>, 
   setSuccess: Dispatch<SetStateAction<boolean | undefined>>) => {
 
     if (data.feedback === null) {

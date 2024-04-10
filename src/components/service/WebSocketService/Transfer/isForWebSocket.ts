@@ -8,10 +8,6 @@ import { neitherBrlAndUsd, usdToBrla } from "../WebSocketConstraints/webSocketCo
 
 export const isForWebSocketOnTransfer = (state: CurrencyState)=> {
 
-    if(neitherBrlAndUsd(state) || usdToBrla(state)) {
-        return true
-    }
-    
-    return false;
+    return neitherBrlAndUsd(state) || usdToBrla(state);
 
 }

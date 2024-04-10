@@ -1,4 +1,5 @@
 import { CurrencyState } from "../../../context/CurrencyContext";
+import { isTheSameCoin } from "../../OperationValidities/operationValidities";
 import { isBrl } from "../../Util/isBrl";
 import { isUsdcToUsdc, isUsdtToUsdt } from "../../Util/isTheSameUSDCoin";
 import { isUsdToBrla } from "../../Util/isUsdToBrla";
@@ -16,13 +17,18 @@ export const isBrlToBrl = (state: CurrencyState) => {
 }
 
 export const neitherBrlAndUsd = (state: CurrencyState) => {
-    return !isBrl(state) && (!isUsdcToUsdt(state) && !isUsdtToUsdc(state));
+    return !isBrl(state) && (!isUsdcToUsdt(state) && !isUsdtToUsdc(state) && !isTheSameCoin(state.sendCurrency, state.receiveCurrency));
 }
 
 export const usdToBrla = (state: CurrencyState) => {
-    return isUsdToBrla(state.sendCurrency, state.receiveCurrency);
+    return isUsdToBrla(state);
 }
 
 export const isOnChain = (state: CurrencyState) => {
     return isUsdcToUsdt(state) || isUsdtToUsdc(state) || isUsdcToUsdc(state.sendCurrency, state.receiveCurrency) || isUsdtToUsdt(state.sendCurrency, state.receiveCurrency);
+}
+
+export const isBrlaToUsd = (state:CurrencyState) => {
+    return (state.sendCurrency === 'BRLA' && state.receiveCurrency === 'USDC') ||
+    (state.sendCurrency === 'BRLA' && state.receiveCurrency === 'USDT' )
 }

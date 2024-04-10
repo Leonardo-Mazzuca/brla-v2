@@ -52,6 +52,7 @@ export type ExpectedPayoutData = {
     operationName: string;
     icon: IconProp;
     message: string;
+    feedback: Feedback
 }
 
 export async function getPayoutData() {

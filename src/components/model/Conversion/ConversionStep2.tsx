@@ -10,17 +10,16 @@ import Completed, { CompleteProps } from "../Completed/Completed";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useWebSocket } from "../../context/WebSocketContext";
-import { pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import { useQuote } from "../../context/QuoteContext";
 import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
-import { POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
-import { initConversion } from "../../service/ConversionService/ConversionStep2Service/initConversion";
+import { HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
-import { isUsdcOrUsdt } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
-import { onSwapError, onSwapSuccess } from "../../service/ConversionService/ConversionStep2Service/onSwapResponse";
-import { swapOperationControl } from "../../service/ConversionService/ConversionStep2Service/swapOperationControl";
+import { isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { placeChainOrder } from "../../service/ConversionService/ConversionStep2Service/placeChainOrder";
 import { placeSwapOrder } from "../../service/ConversionService/ConversionStep2Service/placeSwapOrder";
+import { getUserData } from "../../controller/UserDataController/getUserData";
+import { onChainController } from "../../controller/onChainController.ts/onChainController";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 
 const ConversionStep2: React.FC = () => {
@@ -29,7 +28,7 @@ const ConversionStep2: React.FC = () => {
     const {state:quoteState} = useQuote();
     const [loading, showLoading] = useState(false);
     const [completed, showCompleted] = useState(false);
-    const [buttonClassname, setButtonClassname] = useState(pointsNone);
+    const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
     const [baseFee ,setBaseFee] = useState(0);
     const [markupFee, setMarkupFee] = useState(0);
     const [quoteId, setQuoteId] = useState<number>(0);
@@ -55,9 +54,28 @@ const ConversionStep2: React.FC = () => {
 
     useEffect(() => {
 
-        initConversion(state, setInputValue,setOutputValue,setWalletAddress,setButtonClassname);
+        // console.log(state.sendValue);
+        // console.log(state.receiveValue);
         
-    }, [webSocketState.webSocket, pointsAll, inputValue, outputValue]);
+        setInputValue(state.sendValue)
+        setOutputValue(state.receiveValue);
+    
+        const getWallet = async () => {
+    
+            const data = await getUserData();
+
+            if(data?.wallets.evm) {
+                setWalletAddress(data.wallets.evm);
+            }
+        }
+        
+        if(!isForWebSocketOnSwap(state)) {
+            setButtonClassname(POINTS_ALL);
+        }
+    
+        getWallet();
+        
+    }, [webSocketState.webSocket, inputValue, outputValue]);
 
     const socketMessageHandler = () => {
 
@@ -68,8 +86,10 @@ const ConversionStep2: React.FC = () => {
                 const message = JSON.parse(e.data);
                 
                 if(message.error) {
+
                     setErrorMessage(message.error)
                     onError(true);
+
                 }
                 
                 if(message.data) {
@@ -77,8 +97,6 @@ const ConversionStep2: React.FC = () => {
                     setBaseFee(parseFloat(message.data.baseFee));
                     setMarkupFee(parseFloat(message.data.basePrice));
                     setQuoteId(message.data.quoteId);
-                    setInputValue(message.data.amountBrl / 100);
-                    setOutputValue(message.data.amountUsd / 100);
                     
                 }   
 
@@ -95,8 +113,7 @@ const ConversionStep2: React.FC = () => {
 
             if(webSocketState.webSocket && quoteId) {
                 setButtonClassname(POINTS_ALL);
-            }
-
+            } 
             
         }
 
@@ -104,22 +121,69 @@ const ConversionStep2: React.FC = () => {
 
     useEffect(() => {
 
-        onSwapSuccess(success, showLoading,showCompleted,setButtonClassname,setSuccessMessage);
+        if (success) {
+
+            showLoading(false);
+            showCompleted(true);
+            setButtonClassname('invisible');
+            setSuccessMessage({
+                buttonText: 'Concluir',
+                completeMessage: 'Conversão concluída',
+                text: 'Você pode monitorar suas transações através do dashboard inicial.',
+                path: '/home',
+            });
+          
+        }
+
+   
         
     }, [success]);
 
 
     useEffect(() => {
 
-        onSwapError(error,errorMessage, showLoading,showCompleted,setButtonClassname,setSuccessMessage);
+        if (error) {
+            showCompleted(true);
+            showLoading(false);
+            setButtonClassname('invisible');
+            setSuccessMessage({
+                buttonText: 'Voltar',
+                path: '/convert/1',
+                completeMessage: errorMessage,
+                text: 'Realize a operação novamente',
+                image: '/X-error.png',
+            });
+   
+        }
 
     }, [error, errorMessage]);
 
     useEffect(()=> {
 
-        swapOperationControl(isForWebSocketOnSwap, setButtonClassname, success,error, socketMessageHandler, state);
+        if(success || error) {
+            setButtonClassname('invisible');
+        }
 
-    },[socketMessageHandler, buttonClassname, success, error]);
+    },[success, error, buttonClassname])
+
+    useEffect(()=> {
+
+        if(isForWebSocketOnSwap(state)) {
+            socketMessageHandler();
+        }
+
+        if(!isForWebSocketOnSwap(state) && onSuccessMessage.completeMessage === '') {
+            setButtonClassname(POINTS_ALL);
+        }
+
+
+        if(onSuccessMessage.completeMessage !== '') {
+            setButtonClassname(HIDDEN);
+        }
+
+        console.log(buttonClassname);
+        
+    },[socketMessageHandler, buttonClassname,onSuccessMessage, isForWebSocketOnSwap]);
 
 
 
@@ -128,18 +192,46 @@ const ConversionStep2: React.FC = () => {
         setButtonClassname(POINTS_NONE);
         showLoading(true);  
         
-        if(isUsdcOrUsdt(state) && !isForWebSocketOnSwap(state)){
+        if(isOnChain(state)){
 
-            placeChainOrder(state,walletAddress,setButtonClassname,showLoading,onSuccess,onError,setErrorMessage);
+            const data = {
     
-        } 
-
-        if(webSocketState.webSocket && isForWebSocketOnSwap(state)) {
-    
-            placeSwapOrder(webSocketState.webSocket, quoteId)
-
+                chain: 'Polygon',
+                to: walletAddress,
+                inputCoin: state.sendCurrency,
+                outputCoin: state.receiveCurrency,
+                value: parseInt(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
+                
+              }
+              
         
-        };
+              setButtonClassname(POINTS_NONE);
+              showLoading(true);   
+        
+        
+              try {
+        
+                await onChainController(data.chain, data.to,data.inputCoin, data.outputCoin, data.value);
+                
+                onSuccess(true);
+                
+        
+              } catch(e:any) {
+        
+                setErrorMessage('Falha ao enviar dados')
+                onError(true);
+        
+              }
+
+        } else {
+            
+            if(webSocketState.webSocket) {
+                
+                placeSwapOrder(webSocketState.webSocket, quoteId)
+            
+            };
+
+        }
 
     }   
 
@@ -174,7 +266,7 @@ const ConversionStep2: React.FC = () => {
 
                         <ConversionCard currency={state.sendCurrency} value={formatNumberToString(inputValue, state.sendCurrency)} />
                         <IconBall absolute={false} icon={faArrowRightArrowLeft} rotation={90}/>
-                        <ConversionCard currency={state.receiveCurrency} value={formatNumberToString(outputValue, state.receiveCurrency)} />
+                        <ConversionCard currency={state.receiveCurrency} value={formatNumberToString(outputValue - baseFee, state.receiveCurrency)} />
 
                         <div className="mt-6">
                             <div className="flex justify-between mb-6">

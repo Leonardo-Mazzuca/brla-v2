@@ -9,7 +9,7 @@ export async function placeChainOrder(state: CurrencyState,walletAddress:string,
      showLoading: React.Dispatch<React.SetStateAction<boolean>>, 
      onSuccess: React.Dispatch<React.SetStateAction<boolean>>, 
      onError: React.Dispatch<React.SetStateAction<boolean>>,
-      setErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
 
     const data = {
     
@@ -31,10 +31,6 @@ export async function placeChainOrder(state: CurrencyState,walletAddress:string,
         await onChainController(data.chain, data.to,data.inputCoin, data.outputCoin, data.value);
 
         onSuccess(true);
-        // showLoading(false);
-        // showCompleted(true);
-        // setButtonClassname(HIDDEN);
-
         
 
       } catch(e:any) {

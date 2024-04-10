@@ -4,7 +4,7 @@
 export const isUsdcToUsdc = (input: string, output: string) => {
 
 
-    return input === 'USDC' && output === 'USDT';
+    return input === 'USDC' && output === 'USDC';
 
 }
 

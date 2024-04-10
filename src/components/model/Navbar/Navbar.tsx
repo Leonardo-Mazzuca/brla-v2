@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import TextModel from "../Text/Text";
 import IconButton from "../Button/IconButton";
 import LinkModel from "../Link/Link";
@@ -64,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {
             </LinkModel>
        
 
-              <div className='flex flex-wrap gap-10 items-center'>
+              <div className='flex gap-10 items-center'>
 
                      <div className="md:flex md:items-center gap-3 hidden">
 
@@ -73,7 +72,16 @@ const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {
                       
                     </div>  
 
-                    <div className="flex flex-wrap flex-col sm:flex-row gap-3">
+
+                    <div className="flex items-center flex-wrap gap-3 my-3 md:hidden">
+
+                    <TextModel content="Cotação hoje" />
+
+                    {component}
+
+                    </div>  
+
+                    <div className="flex gap-3">
 
                         {buttonItems.map((item, index) => (
 
@@ -86,13 +94,6 @@ const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {
 
                     </div>
 
-                    <div className="flex items-center flex-wrap gap-3 my-3 md:hidden">
-
-                    <TextModel content="Cotação hoje" />
-
-                    <TextModel color="gray-400 mt-1" size="text-lg" content="1 BRL = 0.198220 USD"/>
-
-                    </div>  
 
                 </div>
   

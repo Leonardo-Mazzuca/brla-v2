@@ -11,7 +11,6 @@ import { useWebSocket } from "../../context/WebSocketContext";
 import Heading from "../Heading/Heading";
 import { isBrl } from "../../service/Util/isBrl";
 import { transferController } from "../../controller/TransferController/transferController";
-import { getCurrencyCoinToFormat } from "../../service/CoinsService/getCurrencyCoinToFormat";
 import { onChainController } from "../../controller/onChainController.ts/onChainController";
 import Completed, { CompleteProps } from "../Completed/Completed";
 import Loading from "../Loading/Loading";
@@ -19,6 +18,7 @@ import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfe
 import { isBrlToBrl, isOnChain, neitherBrlAndUsd, usdToBrla } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { FLEX, FLEX_COL, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 const TransferStep3 = () => {
 
@@ -38,7 +38,7 @@ const TransferStep3 = () => {
 
     const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
 
-    const [onSuccessMessage, setSuccessMessage] = useState<CompleteProps>({
+    const [finalMessage, setFinalMessage] = useState<CompleteProps>({
         buttonText: '',
         completeMessage: '',
         text: '',
@@ -130,7 +130,7 @@ const TransferStep3 = () => {
 
           showCompleted(true);
           showLoading(false);
-          setSuccessMessage({
+          setFinalMessage({
               buttonText: 'Concluir',
               completeMessage: 'Transferência concluída',
               text: 'Você pode monitorar suas transações através do dashboard inicial.',
@@ -148,7 +148,7 @@ const TransferStep3 = () => {
        
           showCompleted(true);
           showLoading(false);
-          setSuccessMessage({
+          setFinalMessage({
               buttonText: 'Voltar',
               path: '/transfer/1',
               completeMessage: errorMessage,
@@ -204,7 +204,7 @@ const TransferStep3 = () => {
           to: state.walletAddress,
           inputCoin: state.sendCurrency,
           outputCoin: state.receiveCurrency,
-          value: parseFloat(state.receiveValue.toFixed(2)) * 100,
+          value: parseFloat(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
           
         }
 
@@ -312,14 +312,12 @@ const TransferStep3 = () => {
 
                         <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
                           <TextModel content={`valor enviado - 
-                          ${formatNumberToString((state.sendValue), 
-                          getCurrencyCoinToFormat(state.sendCurrency))}`}/>
+                          ${formatNumberToString((state.sendValue))}${state.sendCurrency}`}/>
                         </div>
 
                         <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
                           <TextModel content={`valor a receber - 
-                          ${formatNumberToString((state.receiveValue), 
-                          getCurrencyCoinToFormat(state.receiveCurrency))}`}/>
+                          ${formatNumberToString((state.receiveValue))}${state.receiveCurrency}`}/>
                         </div>
 
                       </div>
@@ -333,7 +331,7 @@ const TransferStep3 = () => {
 
                 {loading && <Loading text="Processando..." />}
 
-                {completed && <Completed {...onSuccessMessage} />}
+                {completed && <Completed {...finalMessage} />}
 
               
 

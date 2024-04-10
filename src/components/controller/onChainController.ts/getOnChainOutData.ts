@@ -10,7 +10,6 @@ import { BRLA_ON_CHAIN, USDTC_ON_CHAIN } from "../../contants/divisionValues/div
 
 export const getOnChainOutData = async () => {
 
-    const CONVERT_DIVIDER = 1000000;
 
     try {
 
@@ -22,23 +21,21 @@ export const getOnChainOutData = async () => {
         const userData = await getUserData();
         const onChainInData = await getOnChainInData();
         
+        
         const walletAddress=  userData?.wallets.evm;
-        
+
+
         const data = request.data.onchainLogs.map((item:any) => {
+
+        const txs = item.smartContractOps.map((op: any) => op.Tx);
+        const correspondingInData = onChainInData.filter((inItem: any) => txs.includes(inItem.tx));
         
-            const outputValue = onChainInData.reduce((acc: number | null, data: any) => {
+        const outputValue = correspondingInData
+        .filter((item: any) => item.amount !== undefined)
+        .map((item: any) => item.amount)[0];
 
-                if (!acc || new Date(data.createdAt) > new Date(item.createdAt)) {
-                    return data;
-                }
 
-                return acc;
-            }, null);
-            
-           
-            const amountWithLatestDate = outputValue ? outputValue.amount : 0;
-         
-            
+
          return {
 
             id: item.id,
@@ -47,8 +44,8 @@ export const getOnChainOutData = async () => {
             from: item.from,
             title: item.chain,
 
-            brlaAmount: amountWithLatestDate,
-            usdAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
+            brlaAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
+            usdAmount: outputValue ?? 2,
             
             amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
             
@@ -63,7 +60,7 @@ export const getOnChainOutData = async () => {
                 return acc;
             }, '') ,
             
-            feedback: item. smartContractOps.reduce((acc: string, op: any) => {
+            feedback: item.smartContractOps.reduce((acc: string, op: any) => {
                 acc = op.feedback;
                 return acc;
             }, []),
@@ -72,6 +69,8 @@ export const getOnChainOutData = async () => {
             icon: faArrowUp,
 
         }});
+
+        console.log(data);
         
         
         
@@ -96,3 +95,4 @@ function getOnChainOutValue (value:number,coin:string) {
     }
 
 }
+

@@ -3,7 +3,7 @@ import { getCurrencyCoinToFormat } from "../../CoinsService/getCurrencyCoinToFor
 
 export const formatNumberToString = (number: number, currency?: string) => {
     
- 
+    
     if (number === 0) {
 
         return '00,00';

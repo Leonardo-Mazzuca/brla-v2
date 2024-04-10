@@ -14,6 +14,7 @@ type ConversionConfig = {
     activeIndex: number;
     onSubmit?: () => void;
     buttonControl?: string
+    hideButton?:boolean;
     
     
 }
@@ -23,12 +24,15 @@ const ConversionContainer:React.FC<ConversionConfig> = ({
     buttonComponent,
     activeIndex,
     onSubmit,
-    buttonControl}) => {
+    buttonControl,
+    hideButton
+    }) => {
 
     const navigate = useNavigate();
 
     const [buttonClassname, setButtonClassname] = useState(buttonControl);
-
+    const [buttonHidded, setButtonHidded] = useState(hideButton);
+    
 
     useEffect(() => {
         handleButtonVisibility();

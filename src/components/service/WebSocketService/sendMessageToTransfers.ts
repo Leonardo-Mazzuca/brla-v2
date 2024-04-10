@@ -15,7 +15,7 @@ export const sendMessageToTransfers = (state: CurrencyState, webSocket: WebSocke
 
             data: {
                 
-                amount: (state.sendValue * 100),
+                amount: Number(state.sendValue * 100),
         
                 chain: 'Polygon',
 
