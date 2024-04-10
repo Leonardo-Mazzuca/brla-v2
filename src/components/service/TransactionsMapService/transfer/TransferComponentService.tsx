@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faX } from "@fortawesome/free-solid-svg-icons";
 import { margin } from "../swap/SwapComponentService";
 import { formatNumberToString } from "../../Formatters/FormatNumber/formatNumber";
+import { TEXT_GRAY_500, TEXT_RED_600 } from "../../../contants/classnames/classnames";
 
 export const controlTextComponent = (
     setTitle:  Dispatch<SetStateAction<string>>,
@@ -13,23 +14,22 @@ export const controlTextComponent = (
 
         setTitle(data.title);
     
-        if(data.transfers && data.feedback && !data.feedback.success) {
+        if(data.transfers && data.feedback && data.feedback.success === false) {
           
           setText('Falha na transferência ');
           setTaxId('');
+          return;
 
-        } {
+        } 
           
-          if(data.transfers && !data.feedback  || !data.transfers.taxId) {
-  
+          if(data.feedback && data.feedback.success === null) {
             setText('Pendente...');
             setTaxId('');
-    
-          } else {
+        } else {
               setTaxId(data.transfers.taxId);
-          }
-
         }
+
+        
 
 
         
@@ -43,12 +43,12 @@ export const controlTextComponent = (
 export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: ExpectedPayoutData | any) => {
 
   
-  if(data.feedback && !data.feedback.success) {
-    setColor('text-red-500');
+  if(data.feedback && data.feedback.success === false) {
+    setColor(TEXT_RED_600);
   }
 
-  if(data.transfers && !data.transfers.taxId || !data.feedback) {
-      setColor('text-gray-500');
+  if(data.feedback && data.feedback.success === null) {
+      setColor(TEXT_GRAY_500);
   }
 
 } 

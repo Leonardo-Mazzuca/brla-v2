@@ -70,9 +70,6 @@ export const getOnChainOutData = async () => {
 
         }});
 
-        console.log(data);
-        
-        
         
         return data;
         

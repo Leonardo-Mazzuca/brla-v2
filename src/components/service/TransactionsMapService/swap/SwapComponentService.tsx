@@ -39,66 +39,66 @@ export function controlAmount
   
           
         
-                if(isPaymentSwap) {
+                // if(isPaymentSwap) {
         
           
-                    if(isUsdToBrla && success) {
+                //     if(isUsdToBrla && success) {
           
-                        setAmount(
-                            <>
+                //         setAmount(
+                //             <>
                 
-                              {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                              {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                //               {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                //               {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
                     
-                            </>
+                //             </>
           
-                          );
+                //           );
         
-                    } else if (isUsdToBrla && !success) {
+                //     } else if (isUsdToBrla && !success) {
           
-                      setAmount(
-                        <>
+                //       setAmount(
+                //         <>
             
-                          {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                          <FontAwesomeIcon className={margin} icon={faX} />
-                          {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
+                //           {usdAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                //           <FontAwesomeIcon className={margin} icon={faX} />
+                //           {brlaAmount} <FontAwesomeIcon icon={faArrowRight} /> {brlaAmount}{" "}
                 
-                        </>
+                //         </>
           
-                      );
+                //       );
           
-                    }
+                //     }
           
            
-                    if(!isUsdToBrla && success) {
+                //     if(!isUsdToBrla && success) {
           
-                      setAmount(
-                        <>
+                //       setAmount(
+                //         <>
             
-                          {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
-                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                //           {brlaAmount} <FontAwesomeIcon className={margin} icon={faArrowRightArrowLeft} /> 
+                //           {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
                 
-                        </>
+                //         </>
           
-                      );
+                //       );
           
-                    } else if(!isUsdToBrla && !success) {
-                      setAmount(
-                        <>
+                //     } else if(!isUsdToBrla && !success) {
+                //       setAmount(
+                //         <>
             
-                          {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
-                          <FontAwesomeIcon className={margin} icon={faX} />
-                          {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
+                //           {brlaAmount} <FontAwesomeIcon icon={faArrowRightArrowLeft} /> 
+                //           <FontAwesomeIcon className={margin} icon={faX} />
+                //           {usdAmount} <FontAwesomeIcon icon={faArrowRight} /> {usdAmount}{" "}
                 
-                        </>
+                //         </>
           
-                      );
-                    }
+                //       );
+                //     }
           
-                } 
+                // } 
 
 
-                if(!isPaymentSwap) {
+                // if(!isPaymentSwap) {
 
                   
                         if(isUsdToBrla && success) {
@@ -145,7 +145,7 @@ export function controlAmount
                           }
   
                 
-                }
+                // }
         
           
                     

@@ -39,16 +39,7 @@ export async function getPaymentData() {
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
                 outputCoin: 'BRLA',
-                operationName: item.paymentOps.map((op: any) => {
-                    const latestDate = op.smartContractOps.reduce((latest: string, curr: any) => {
-                        const currentOpDate = new Date(curr.createdAt);
-                        const latestOpDate = new Date(latest);
-                        return currentOpDate > latestOpDate ? curr.createdAt : latest;
-                    }, op.smartContractOps[0].createdAt);
-
-                    const latestOp = op.smartContractOps.find((op: any) => op.createdAt === latestDate);
-                    return latestOp?.operationName;
-                })[0],
+                operationName: 'BURN',
                 feedback: feedback,
                 status: item.status,
                 taxId: formatInTaxId(item.userTaxId),
@@ -67,6 +58,8 @@ export async function getPaymentData() {
             };
 
         });
+
+        console.log(data);
 
         return data;
         

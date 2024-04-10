@@ -103,21 +103,21 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const [text, setText] = useState("Transferência feita para ");
   const [color, setColor] = useState(TEXT_GREEN_700);
 
+  const numberAmount = data.amount;
 
   useEffect(()=> {
 
-    const numberAmount = (data.amount || data.trasfers?.amount);
 
     controlTransferAmount(numberAmount, setAmount, data);
   
 
-  },[data, setAmount])
+  },[data, setAmount, numberAmount])
 
   useEffect(() => {
 
     controlTextComponent(setTitle, setText, setTaxId, data);
 
-  }, [data]);
+  }, [data,setTaxId,setText]);
   
 
   useEffect(() => {
@@ -197,8 +197,6 @@ const Swap = ({ data }: any) => {
   formatNumberToString(data.usdAmount) :  formatNumberToString(data.brlaAmount))  +  " " + choseCoin;
   
   const usdAmount =  formatNumberToString(data.usdAmount) + " " + data.outputCoin;
-  
-  console.log(brlaAmount);
   
   useEffect(() => {
 

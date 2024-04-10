@@ -181,7 +181,6 @@ const ConversionStep2: React.FC = () => {
             setButtonClassname(HIDDEN);
         }
 
-        console.log(buttonClassname);
         
     },[socketMessageHandler, buttonClassname,onSuccessMessage, isForWebSocketOnSwap]);
 
