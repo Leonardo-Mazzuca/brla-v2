@@ -53,9 +53,6 @@ const ConversionStep2: React.FC = () => {
     const { state: webSocketState } = useWebSocket();
 
     useEffect(() => {
-
-        // console.log(state.sendValue);
-        // console.log(state.receiveValue);
         
         setInputValue(state.sendValue)
         setOutputValue(state.receiveValue);

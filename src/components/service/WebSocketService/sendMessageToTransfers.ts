@@ -1,5 +1,6 @@
 import { CurrencyState } from "../../context/CurrencyContext";
 import { sendCoinToWebSocket } from "../CurrencyService/sendCoinToWebSocket";
+import { isUsdToBrla } from "../Util/isUsdToBrla";
 import { usdToBrla } from "./WebSocketConstraints/webSocketContrainst";
 
 
@@ -19,9 +20,9 @@ export const sendMessageToTransfers = (state: CurrencyState, webSocket: WebSocke
         
                 chain: 'Polygon',
 
-                coin: sendCoinToWebSocket(state.receiveCurrency),
+                coin: isUsdToBrla(state) ? sendCoinToWebSocket(state.sendCurrency) : sendCoinToWebSocket(state.receiveCurrency),
              
-                usdToBrla: usdToBrla(state),
+                usdToBrla: isUsdToBrla(state),
 
                 fixOutPut: state.fixOutput,
 

@@ -1,3 +1,4 @@
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { CurrencyState } from "../../context/CurrencyContext";
 import { sendCoinToWebSocket } from "../CurrencyService/sendCoinToWebSocket";
 import { isUsdToBrla } from "../Util/isUsdToBrla";
@@ -13,12 +14,12 @@ export const sendMessageToSwap = (webSocket: WebSocket,state: CurrencyState) => 
         operation: 'Quote',
         data: {
             
-            amount: state.fixOutput ? (state.receiveValue * 100)
-             : (state.sendValue * 100),
+            amount: state.fixOutput ? (state.receiveValue * TO_WEBSOCKET)
+             : (state.sendValue * TO_WEBSOCKET),
 
             chain: 'Polygon',
 
-            coin: sendCoinToWebSocket(state.receiveCurrency),
+            coin: isUsdToBrla(state) ? sendCoinToWebSocket(state.sendCurrency) : sendCoinToWebSocket(state.receiveCurrency),
 
             usdToBrla: isUsdToBrla(state),
 

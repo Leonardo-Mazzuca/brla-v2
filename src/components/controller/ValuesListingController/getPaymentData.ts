@@ -10,6 +10,9 @@ export async function getPaymentData() {
             withCredentials: true,
         });
 
+
+        console.log(request.data.paymentLogs);
+        
         
 
         const data = request.data.paymentLogs.map((item: any) => {
@@ -38,6 +41,7 @@ export async function getPaymentData() {
                 title: item.chain,
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
+                inputCoin: item.coin,
                 outputCoin: 'BRLA',
                 operationName: 'BURN',
                 feedback: feedback,
@@ -58,9 +62,6 @@ export async function getPaymentData() {
             };
 
         });
-
-        console.log(data);
-        
         
         return data;
         

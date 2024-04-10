@@ -6,7 +6,7 @@ export const BUTTON_PADDING = 'p-3';
 
 //form
 export const FORM_PADDING = 'p-8';
-export const FORM_WIDTH = 'md:w-1/2 lg:w-1/3 xl:w-1/4'
+export const FORM_WIDTH = 'md:w-1/2 lg:w-1/3 max-w-xl'
 
 
 //containers

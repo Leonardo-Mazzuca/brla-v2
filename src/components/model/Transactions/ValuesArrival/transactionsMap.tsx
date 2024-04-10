@@ -106,8 +106,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   const numberAmount = data.amount;
 
   useEffect(()=> {
-
-
+    
     controlTransferAmount(numberAmount, setAmount, data);
   
 
@@ -185,6 +184,9 @@ const Swap = ({ data }: any) => {
       setIsUsdToBrla(true);
 
     }
+
+    // console.log(data);
+    
 
   },[isPaymentSwap,usdToBrla,data])
 

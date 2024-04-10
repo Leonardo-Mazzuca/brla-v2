@@ -5,7 +5,7 @@ export const formatNumberToString = (number: number, currency?: string) => {
     
     try {
         
-        if (number === 0) {
+        if (number === 0 || !number) {
     
             return '00,00';
     

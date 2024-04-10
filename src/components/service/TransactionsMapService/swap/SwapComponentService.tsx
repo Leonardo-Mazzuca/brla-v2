@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 
+
 export const margin = "mx-2";
 
 export function controlAmount
@@ -10,7 +11,6 @@ export function controlAmount
      isPaymentSwap: boolean, brlaAmount: string, usdAmount: string, isUsdToBrla: boolean, data:any) {
 
             if(data.isOnChain) {
-
 
                     if(data.isPaymentChain) {
 
@@ -22,22 +22,34 @@ export function controlAmount
                       </>);
 
                     } 
+                    
                     else {
 
-                    setAmount(<>
-                    
-                      {data.inputValue} <FontAwesomeIcon icon={faArrowRight} />
-                      {data.outputValue} 
+                      if(!data.feedback) {
+                        setAmount(<>
                       
-                      </>);
+                          {data.inputCoin} <FontAwesomeIcon icon={faArrowRight} />
+                          {data.outputValue} 
+                          
+                          </>);
+                      } else {
 
+                        setAmount(<>
+                        
+                          {data.inputValue} <FontAwesomeIcon icon={faArrowRight} />
+                          {data.outputValue} 
+                          
+                          </>);
+
+                      }
+
+  
                     }
+
   
               }
 
-                if(isPaymentSwap) {
-
-                  
+                if(isPaymentSwap && !data.isOnChain) {
         
           
                     if(isUsdToBrla && success) {
@@ -100,7 +112,6 @@ export function controlAmount
 
 
 
-                  
                         if(isUsdToBrla && success) {
                   
                             setAmount(
@@ -139,6 +150,7 @@ export function controlAmount
                   
                               {brlaAmount} <FontAwesomeIcon icon={faArrowRight} />
                               <FontAwesomeIcon className={margin} icon={faX}/>
+                              {usdAmount}
                               
                               </>);
                   

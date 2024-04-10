@@ -1,7 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { ExpectedPayoutData } from "../../../controller/ValuesListingController/getPayoutData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faMinus, faX } from "@fortawesome/free-solid-svg-icons";
 import { margin } from "../swap/SwapComponentService";
 import { formatNumberToString } from "../../Formatters/FormatNumber/formatNumber";
 import { TEXT_GRAY_500, TEXT_RED_600 } from "../../../contants/classnames/classnames";
@@ -22,7 +22,7 @@ export const controlTextComponent = (
 
         } 
           
-          if(data.feedback && data.feedback.success === null) {
+          if(data.feedback && data.feedback.success === null || data.transfers === null) {
 
             setText('Pendente...');
             setTaxId('');
@@ -45,7 +45,7 @@ export const controlTextComponent = (
 export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: ExpectedPayoutData | any) => {
 
   
-  if(data.feedback && data.feedback.success === false) {
+  if(data.feedback !== null && data.feedback.success === false) {
     setColor(TEXT_RED_600);
   }
 
@@ -62,45 +62,73 @@ export const controlTransferAmount = (numberAmount: number,
   setAmount: Dispatch<SetStateAction<ReactNode>>, data: ExpectedPayoutData | any) => {
    
     const formattedAmount = (formatNumberToString(numberAmount) + " " + data.outputCoin);
-    const usdAmount = (formatNumberToString(data.usdAmount)) + " "
+    const usdAmount = (formatNumberToString(data.usdAmount) + " " + data.inputCoin);
 
     
     if(!data.feedback) {
 
       setAmount(<>
-
-        <FontAwesomeIcon icon={faMinus} /> 
-        <FontAwesomeIcon className={margin} icon={faX} /> 
-        {formattedAmount}
-
-      </>);
-
-    }
-
-    if(data.feedback && !data.feedback.success) {
-
-      setAmount(<>
-
-        <FontAwesomeIcon icon={faMinus} /> 
-        <FontAwesomeIcon className={margin} icon={faX} /> 
-        {formattedAmount}
+                
+              <FontAwesomeIcon icon={faArrowRight} /> 
+              <FontAwesomeIcon className={margin} icon={faX} /> 
+              {formattedAmount}{" "}
 
       </>);
 
-    } 
-  
-    if(data.feedback && data.feedback.success)  {
+    } else {
 
-        setAmount(
-          <>
+          if(data.usdToBrla) {
 
-          <FontAwesomeIcon icon={faMinus} /> 
-          {formattedAmount}  
-  
-          </>
-        );
+            if(data.feedback.success) {
+              
+              setAmount(<>
 
+                  {usdAmount}{" "}
+                  <FontAwesomeIcon icon={faArrowRight} /> 
+                  {formattedAmount}{" "}
+        
+              </>);
 
+            } else {
+
+              setAmount(<>
+
+                {usdAmount}{" "}
+                <FontAwesomeIcon icon={faArrowRight} /> 
+                <FontAwesomeIcon className={margin} icon={faX} /> 
+                {formattedAmount}{" "}
+      
+            </>);
+
+            }
+            
+          } else {
+            
+            if(!data.feedback.success) {
+        
+              setAmount(<>
+        
+                <FontAwesomeIcon icon={faMinus} /> 
+                <FontAwesomeIcon className={margin} icon={faX} /> 
+                {formattedAmount}{" "}
+        
+              </>);
+        
+            } else {
+                  
+              setAmount(
+                <>
+      
+                <FontAwesomeIcon icon={faMinus} /> 
+                {formattedAmount}{" "}
+        
+                </>
+              );
+
+              }
+          
+
+          }
 
     }
 

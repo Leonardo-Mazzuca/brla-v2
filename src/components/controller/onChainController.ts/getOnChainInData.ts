@@ -52,8 +52,7 @@ export const getOnChainInData =  async () => {
 
         }});
         
-        console.log(data);
-        
+
         return data;
         
 

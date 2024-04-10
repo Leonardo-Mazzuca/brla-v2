@@ -77,7 +77,7 @@ export const getOnChainOutData = async () => {
 
         }});
 
-        console.log('On chain out: ', data);
+        // console.log('On chain out: ', data);
         
         
         return data;

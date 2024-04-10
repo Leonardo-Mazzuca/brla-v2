@@ -61,6 +61,8 @@ export async function getPayoutData() {
         
         const request = await http.get('/pay-out/history', { withCredentials: true });
         
+        console.log(request.data.transfersLogs);
+        
         
         const data = request.data.transfersLogs.map((item: PayoutData) => {
         
