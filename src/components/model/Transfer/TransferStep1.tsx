@@ -42,9 +42,9 @@ const TransferStep1: React.FC = () => {
 
     useEffect(() => {
 
-        if(outputValue && inputValue ) {
+        if(outputValue && inputValue) {
 
-          if(isForWebSocketOnTransfer(state)) {
+          if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket?.OPEN) {
 
               fetchWebSocket(webSocketState, webSocketDispatch);
         
@@ -86,7 +86,7 @@ const TransferStep1: React.FC = () => {
       }
 
     },[buttonClassname]);
-    
+
 
   useEffect(() => {
 

@@ -20,12 +20,19 @@ const ValuesArrival: React.FC = () => {
     const [chunks, setChunks] = useState<any[]>([]);
 
     const fetchData = async () => {
+        
         try {
+
             let data = await valuesListingController();
+
+            console.log(data);
+            
             
             if (location.pathname === '/home') {
                 data = data.slice(0, 5);
             }
+
+            
 
             setAllData(data);
             setLoading(false);
