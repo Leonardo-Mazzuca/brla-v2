@@ -76,8 +76,17 @@ const TransferStep1: React.FC = () => {
       
           }
 
-    },[webSocketState.webSocket,buttonClassname, isForWebSocketOnTransfer])
+    },[webSocketState.webSocket,buttonClassname, isForWebSocketOnTransfer]);
 
+
+    useEffect(()=> {
+
+      if(!isForWebSocketOnTransfer(state)){
+        setButtonClassname(POINTS_ALL);
+      }
+
+    },[buttonClassname]);
+    
 
   useEffect(() => {
 

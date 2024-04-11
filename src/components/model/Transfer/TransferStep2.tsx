@@ -103,8 +103,13 @@ const TransferStep2 = () => {
 
       }
 
+      if(!isForWebSocketOnTransfer(state)){
+        setInputValue(state.sendValue);
+        setOutputValue(state.receiveValue);
+      }
 
-  }, [socketMessageHandler]);
+
+  }, [socketMessageHandler,inputValue,outputValue]);
 
         
     const handleTaxIdValue = (e:React.ChangeEvent<HTMLInputElement>) => {
