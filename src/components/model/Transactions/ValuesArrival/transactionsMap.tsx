@@ -68,7 +68,7 @@ const DefaultTemplate = ({
   </div>
 );
 
-const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
+const Receive = ({ data }: TransactionData<ExpectedPayInData | any>) => {
   
   const amount = formatNumberToString(data.amount) ?? 0;
 
@@ -85,7 +85,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
 
       </p>}
       footerText={`Valor recebido de`}
-      addressNumber={data.walletAddress}
+      addressNumber={data.walletAddress || data.transfers?.taxId}
       operationName={data.operationName}
 
     />
@@ -244,10 +244,10 @@ export const TransactionMap: React.FC<TransactionData<any>> = ({ data }) => {
   switch (data.operationName) {
 
     case "MINT":
+    case "BATCH-PERMIT":
       return <Receive data={data} />;
 
     case "BURN":
-    case "BATCH-PERMIT":
     case "TRANSFER-WITH-PERMIT":
       return <Transfer data={data} />;
 

@@ -35,6 +35,7 @@ export type ExpectedPayInData = {
     icon: IconProp;
     feedback : Feedback;
     walletAddress: string;
+    transfers: any;
     
 }
 
@@ -47,7 +48,7 @@ export async function getPayInData() {
         const request = await http.get('/pay-in/pix/history', {
             withCredentials: true
         });
-        
+    
         
         const data = request.data.depositsLogs.map((item: any) => {
 

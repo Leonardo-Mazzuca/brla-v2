@@ -3,9 +3,6 @@ import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
 import { useCurrency } from "../../context/CurrencyContext";
 import { useQuote } from "../../context/QuoteContext";
-import {
-  block,
-} from "../../types/Button/buttonVariables";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useBalance } from "../../context/BalanceContext";
 import TextModel from "../Text/Text";
@@ -16,8 +13,9 @@ import { useWebSocket } from "../../context/WebSocketContext";
 import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
 import { isBrl } from "../../service/Util/isBrl";
-import { POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
+import { is0Value, isBalanceLessThanValue, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
 
 const TransferStep1: React.FC = () => {
 
@@ -26,7 +24,7 @@ const TransferStep1: React.FC = () => {
   const { state: quoteState, createConversionTable } = useQuote();
   const [inputValue, setInputValue] = useState(0);
   const [outputValue, setOutputValue] = useState(0);
-  const [buttonClassname, setButtonClassname] = useState(block);
+  const [buttonClassname, setButtonClassname] = useState(BLOCK);
   const [errorMessage, setErrorMessage] = useState("");
   const [isValuable, setIsValuable] = useState(false);
   const [isVisible, setVisibility] = useState("hidden");
@@ -47,45 +45,31 @@ const TransferStep1: React.FC = () => {
           if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket?.OPEN) {
 
               fetchWebSocket(webSocketState, webSocketDispatch);
-        
+            
           } 
 
         }
 
-    }, [webSocketState.webSocket,outputValue,inputValue, state,buttonClassname]);
+    }, [outputValue,inputValue, state, buttonClassname, fetchWebSocket]);
+  
 
-    useEffect(()=> {
-      
-          if(!isBrl(state)) {
-      
-            if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket) {
-      
-              setButtonClassname(POINTS_NONE);
-      
-            } else {
+    
 
-              setTimeout(()=> {
-                
-                setButtonClassname(POINTS_ALL);
+  useEffect(() => {
 
-              },3000)
-      
-      
-            }
-      
-      
-          }
+    console.log(isValuable);
 
-    },[webSocketState.webSocket,buttonClassname, isForWebSocketOnTransfer]);
+    isValuable ? setButtonClassname(POINTS_ALL) : setButtonClassname(POINTS_NONE);
 
+  }, [
 
-    useEffect(()=> {
+    isValuable,
+    inputValue,
+    balanceState,
+    state.sendCurrency,
+    getCoinToBalance,
 
-      if(!isForWebSocketOnTransfer(state)){
-        setButtonClassname(POINTS_ALL);
-      }
-
-    },[buttonClassname]);
+  ]);
 
 
   useEffect(() => {
@@ -98,28 +82,61 @@ const TransferStep1: React.FC = () => {
 
     const coinBalance = getCoinToBalance(state.sendCurrency, balanceState);
 
-    doValidations(coinBalance, inputValue, outputValue, setIsValuable, setErrorMessage);
+    const withoutValue = is0Value(inputValue, outputValue);
+    const withoutBalance = isBalanceLessThanValue(
+      inputValue,
+      coinBalance,
+    ); 
+
+    if(isForWebSocketOnTransfer(state)) {
+
+        if (withoutValue || withoutBalance || !webSocketState.webSocket?.OPEN) {
+    
+          setIsValuable(false);
+          setErrorMessage(withoutValue || withoutBalance);
+      
+        } 
+
+        if(webSocketState.webSocket?.OPEN && !withoutBalance && !withoutValue){
+
+          setTimeout(()=> {
+
+            setIsValuable(true);
+            setErrorMessage("");
+
+          },3000)
 
 
-  }, [inputValue, outputValue, state.sendCurrency, state.receiveCurrency]);
+        }
+        
+      
+        
+    } else {
 
-  useEffect(() => {
+      if (withoutValue || withoutBalance) {
+    
+        setIsValuable(false);
+        setErrorMessage(withoutValue || withoutBalance);
+    
+      } else {
 
-    verifyIfIsValuable(isValuable, setButtonClassname);
+        setIsValuable(true);
+        setErrorMessage("");
+      
+      }
+  
 
-  }, [
+    }
 
-    isValuable,
-    inputValue,
-    balanceState,
-    state.sendCurrency,
-    getCoinToBalance,
 
-  ]);
+  }, [inputValue, outputValue, state.sendCurrency, state.receiveCurrency, 
+    buttonClassname, isValuable, isForWebSocketOnTransfer, webSocketState.webSocket]);
+
+
 
   const handleSubmit = () => {
 
-    if(webSocketState.webSocket && webSocketState.webSocket.OPEN) {
+    if(isForWebSocketOnTransfer(state) && webSocketState.webSocket && webSocketState.webSocket.OPEN) {
 
         sendMessageToTransfers(state, webSocketState.webSocket);
 
@@ -173,7 +190,7 @@ const TransferStep1: React.FC = () => {
 
         </div>
 
-        <div>
+        <div className="my-3">
           {errorMessage && (
             <TextModel
               addons="text-gray-500 text-center"

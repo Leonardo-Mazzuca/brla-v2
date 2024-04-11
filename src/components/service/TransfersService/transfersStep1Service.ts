@@ -1,7 +1,9 @@
-import { CurrencyActions } from "../../context/CurrencyContext";
+import { CurrencyActions, CurrencyState } from "../../context/CurrencyContext";
 import { QuoteState } from "../../context/QuoteContext";
+import { WebSocketState } from "../../context/WebSocketContext";
 import { pointsAll, pointsNone } from "../../types/Button/buttonVariables";
-import { is0Value, isBalanceLessThanValue } from "../OperationValidities/operationValidities";
+import { is0Value, isBalanceLessThanValue, isWebSocketOff } from "../OperationValidities/operationValidities";
+import { isForWebSocketOnTransfer } from "../WebSocketService/Transfer/isForWebSocket";
 
 
 export const verifyIfIsValuable = (isValuable: boolean, setter: React.Dispatch<React.SetStateAction<string>>) => {
@@ -14,27 +16,54 @@ export const verifyIfIsValuable = (isValuable: boolean, setter: React.Dispatch<R
 export const doValidations = (
     coinBalance: number, inputValue: number, outputValue: number,
     setIsValuable: React.Dispatch<React.SetStateAction<boolean>>, 
-    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    state: CurrencyState, webSocketState: WebSocketState
     ) => {
 
 
     const withoutValue = is0Value(inputValue, outputValue);
     const withoutBalance = isBalanceLessThanValue(
       inputValue,
-      coinBalance
-    );
+      coinBalance,
+    ); 
+    
 
-    if (withoutValue || withoutBalance) {
+    if(isForWebSocketOnTransfer(state)) {
 
-      setIsValuable(false);
-      setErrorMessage(withoutValue || withoutBalance);
+        if (withoutValue || withoutBalance || isWebSocketOff(webSocketState)) {
+    
+          setIsValuable(false);
+          setErrorMessage(withoutValue || withoutBalance);
+      
+        } else {
+      
+          setIsValuable(true);
+          setErrorMessage("");
+      
+        }
 
     } else {
 
-      setIsValuable(true);
-      setErrorMessage("");
+      if (withoutValue || withoutBalance) {
+    
+        setIsValuable(false);
+        setErrorMessage(withoutValue || withoutBalance);
+    
+      } else {
+    
+        setIsValuable(true);
+        setErrorMessage("");
+    
+      }
 
     }
+
+
+    
+
+
+    
+
 
 }
 

@@ -59,7 +59,13 @@ const TransferStep2 = () => {
         navigate('/home');
       }
 
-    },[state.receiveValue]);
+      if(!webSocketState.webSocket?.OPEN) {
+
+        navigate('/home');
+        
+      }
+ 
+    },[state.receiveValue, isForWebSocketOnTransfer, webSocketState.webSocket]);
 
     
     const socketMessageHandler = () => {
@@ -71,6 +77,11 @@ const TransferStep2 = () => {
               const message = JSON.parse(e.data);
               
               if(message.data) {
+
+              
+
+
+               
 
                 if(isUsdToBrla(state)){
 
@@ -86,7 +97,12 @@ const TransferStep2 = () => {
                 
               }   
 
-              console.log(message);
+              if(inputValue && outputValue) {
+
+                setButtonClassname(POINTS_ALL);
+
+              }
+
 
                         
           }
@@ -115,6 +131,13 @@ const TransferStep2 = () => {
     const handleTaxIdValue = (e:React.ChangeEvent<HTMLInputElement>) => {
 
       const value = e.target.value;
+
+      
+      if(value === '') {
+
+        setIsTaxIdValid(false);
+
+      }
     
       setTaxIdValue(value);
 
@@ -123,6 +146,10 @@ const TransferStep2 = () => {
     const handlePixkeyValue = (e:React.ChangeEvent<HTMLInputElement>) => {
 
       const value = e.target.value;
+
+      if(value === '') {
+        setIsPixkeyValid(false);
+      }
 
       
 
@@ -133,6 +160,10 @@ const TransferStep2 = () => {
     const handleWalletAddress = (e:React.ChangeEvent<HTMLInputElement>) => {
 
       const value = e.target.value;
+
+      if(value === '') {
+        setValidWallet(false);
+      }
 
       setWalletAddressValue(value);
 
@@ -156,7 +187,6 @@ const TransferStep2 = () => {
         
         userData();
 
-
       }
 
     },[userWallet]);
@@ -164,7 +194,7 @@ const TransferStep2 = () => {
 
     const validateWallet = (wallet:string) => {
 
-      const isValid =  wallet !== userWallet;
+      const isValid =  wallet !== userWallet && walleAddressValue !== '';
       setValidWallet(isValid);
       return isValid;
 
@@ -198,7 +228,7 @@ const TransferStep2 = () => {
       } else {
 
         setSchema(z.object({
-          walletAddress: z.string().min(3).refine(wallet => validateWallet(wallet),{message: 'Você não pode transferir para si mesmo'}),
+          walletAddress: z.string().min(3,{message: 'O endereço não pode ser vazio!'}).refine(wallet => validateWallet(wallet),{message: 'Você não pode transferir para si mesmo'}),
         }));
 
         setField([
@@ -277,11 +307,15 @@ const TransferStep2 = () => {
 
           setButtonClassname(POINTS_ALL);
 
-        } 
+        } else {
+
+          setButtonClassname(POINTS_NONE);
+
+        }
 
       } else {
         
-                if(isPixkeyTaxId) {
+              if(isPixkeyTaxId) {
           
                   if (isPixkeyValid) {
               
@@ -318,31 +352,31 @@ const TransferStep2 = () => {
   }, [isPixkeyValid,validWallet, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname]);
 
 
-    useEffect(()=> {
+    // useEffect(()=> {
 
-      if(!isBrl(state)){
+    //   if(!isBrl(state)){
 
-        if(!validWallet || walleAddressValue === '') {
-          setButtonClassname(POINTS_NONE);
-        }
+    //     if(!validWallet || walleAddressValue === '') {
+    //       setButtonClassname(POINTS_NONE);
+    //     }
 
-      } else {
+    //   } else {
         
-              if((!isPixkeyValid || pixkeyValue === '')) {
-                setButtonClassname(POINTS_NONE);
-              }
+    //           if((!isPixkeyValid || pixkeyValue === '')) {
+    //             setButtonClassname(POINTS_NONE);
+    //           }
         
-              if(!isPixkeyTaxId){
-                if((!isTaxIdValid || taxIdValue === '')) {
+    //           if(!isPixkeyTaxId){
+    //             if((!isTaxIdValid || taxIdValue === '')) {
         
-                  setButtonClassname(POINTS_NONE);
+    //               setButtonClassname(POINTS_NONE);
         
-                }
-              }
+    //             }
+    //           }
 
-      }
+    //   }
 
-    },[isPixkeyValid,validWallet,isTaxIdValid,isPixkeyTaxId])
+    // },[isPixkeyValid,validWallet,isTaxIdValid,isPixkeyTaxId])
   
 
 

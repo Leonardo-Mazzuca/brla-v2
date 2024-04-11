@@ -101,10 +101,7 @@ export async function getPayoutData() {
            
             title: item.chain,
 
-            operationName: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
-                acc = op.operationName;
-                return acc;
-            }, ''),
+            operationName: 'BURN',
 
             feedback : feedback,
             

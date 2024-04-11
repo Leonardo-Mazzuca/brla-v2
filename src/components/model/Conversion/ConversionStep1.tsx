@@ -26,7 +26,7 @@ const ConversionStep1: React.FC = () => {
     const [inputValue, setInputValue] = useState(0);
     const [outputValue, setOutputValue] = useState(0);
     const [isValuable, setIsValuable] = useState(false);
-    const [buttonClassname, setButtonClassname] = useState(BLOCK);
+    const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
     const [errorMessage, setErrorMessage] = useState('');
     const {state:balanceState, getCoinToBalance} = useBalance();
     const {state:quoteState, createConversionTable} = useQuote();
@@ -38,11 +38,45 @@ const ConversionStep1: React.FC = () => {
 
     useEffect(()=> {
 
-        if(isForWebSocketOnSwap(state)) {
-            fetchWebSocket(webSocketState, webSocketDispatch);
+        if(inputValue && outputValue) {
+
+            if(isForWebSocketOnSwap(state)) {
+                fetchWebSocket(webSocketState, webSocketDispatch);
+            }
+
         }
 
-    },[webSocketState.webSocket]);
+    },[webSocketState.webSocket, inputValue, outputValue, buttonClassname]);
+
+    useEffect(()=> {
+    
+        if(isForWebSocketOnSwap(state) && webSocketState.webSocket?.OPEN) {
+  
+          setTimeout(()=> {
+  
+            if(isValuable){
+  
+              setButtonClassname(POINTS_ALL);
+  
+            } else {
+  
+              setButtonClassname(POINTS_NONE);
+  
+            }
+  
+            
+          },3200);
+  
+        } 
+  
+        if(isValuable){
+          setButtonClassname(POINTS_ALL);
+        } else {
+          setButtonClassname(POINTS_NONE);
+        }
+        
+  
+      },[buttonClassname, webSocketState.webSocket, isValuable]);
 
     useEffect(() => {
       
@@ -58,6 +92,8 @@ const ConversionStep1: React.FC = () => {
 
     useEffect(() => {
 
+        console.log(isValuable);
+        
         const coinBalance = getCoinToBalance(state.sendCurrency, balanceState);
         const withoutValue = is0Value(inputValue, outputValue);
         const sameCoin =  isTheSameCoin(state.sendCurrency, state.receiveCurrency);
@@ -72,24 +108,14 @@ const ConversionStep1: React.FC = () => {
             
         } else {
 
-            setTimeout(()=> {
-                setIsValuable(true);
-                setErrorMessage('');
-            },1000);
+            setErrorMessage("");
+            setIsValuable(true);
 
         }
 
-    }, [inputValue,webSocketState.webSocket, outputValue, state.sendCurrency, state.receiveCurrency]);
+    }, [inputValue,webSocketState.webSocket,isValuable,
+         outputValue, state.sendCurrency, state.receiveCurrency]);
 
-    useEffect(() => {
-
-        if(isValuable) {
-            setButtonClassname(POINTS_ALL)
-        } else {
-            setButtonClassname(POINTS_NONE)
-        }
-
-    }, [isValuable, inputValue, balanceState, state.sendCurrency, getCoinToBalance]);
 
     const handleSubmit = async () => {
 
