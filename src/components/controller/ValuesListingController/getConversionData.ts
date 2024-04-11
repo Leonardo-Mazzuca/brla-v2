@@ -96,7 +96,7 @@ export async function getConversionData () {
                 return acc;
             }, {} as Feedback),
 
-            usdAmount: (parseFloat(item.usdAmount) / TO_WEBSOCKET) - parseFloat(item.baseFee),
+            usdAmount: (parseFloat(item.usdAmount) / TO_WEBSOCKET),
             brlaAmount: parseFloat(item.brlaAmount) / TO_WEBSOCKET,
             outputCoin: item.coin,
             userDocument: item.userDocument,

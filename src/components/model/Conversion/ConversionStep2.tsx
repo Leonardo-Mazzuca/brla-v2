@@ -292,7 +292,7 @@ const ConversionStep2: React.FC = () => {
 
                         <ConversionCard currency={state.sendCurrency} value={formatNumberToString(inputValue, state.sendCurrency)} />
                         <IconBall absolute={false} icon={faArrowRightArrowLeft} rotation={90}/>
-                        <ConversionCard currency={state.receiveCurrency} value={formatNumberToString(outputValue - baseFee, state.receiveCurrency)} />
+                        <ConversionCard currency={state.receiveCurrency} value={formatNumberToString(outputValue, state.receiveCurrency)} />
 
                         <div className="mt-6">
                             <div className="flex justify-between mb-6">
