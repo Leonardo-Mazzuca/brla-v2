@@ -21,6 +21,8 @@ const OutputSelect:React.FC <ConvertOperation>
 
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
 
+    
+
     },[coin,availableValue,balanceState]);
 
 

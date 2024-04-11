@@ -48,7 +48,8 @@ export async function getPayInData() {
         const request = await http.get('/pay-in/pix/history', {
             withCredentials: true
         });
-    
+        
+
         
         const data = request.data.depositsLogs.map((item: any) => {
 
@@ -61,11 +62,12 @@ export async function getPayInData() {
             const title = payerName;
             const icon = faPlus;
             const smartContractOps = item.mintOps[0].smartContractOps;
-            let { amount, id } = item.mintOps[0];
-            amount /= TO_WEBSOCKET;
+            let { id } = item.mintOps[0];
+            
             const feedback = smartContractOps[0].feedback;
 
-
+          
+            
             return {
 
                 walletAddress: formatInTaxId(item.taxId),
@@ -73,7 +75,7 @@ export async function getPayInData() {
                 title,
                 chain,
                 operationName,
-                amount,
+                amount: (item.amount / TO_WEBSOCKET),
                 id,
                 icon,
                 feedback,

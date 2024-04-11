@@ -4,8 +4,6 @@ export async function validateUserController (email: string, token: string) {
 
 
     const body = {email, token};
-
-    console.log(body)
     
     try {
 
@@ -21,6 +19,5 @@ export async function validateUserController (email: string, token: string) {
         return error.response?.data || error.message;
         
       }
-
 
 }

@@ -31,6 +31,8 @@ export async function getPaymentData() {
                 updatedAt: latestFeedback?.updatedAt ?? '...', 
             };
 
+
+
             return {
 
                 baseFee: item.baseFee,
@@ -59,6 +61,9 @@ export async function getPaymentData() {
             };
 
         });
+
+        console.log(data);
+        
         
         return data;
         

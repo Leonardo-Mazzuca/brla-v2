@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
-import { useCurrency } from "../../context/CurrencyContext";
+import { CurrencyActions, useCurrency } from "../../context/CurrencyContext";
 import { useQuote } from "../../context/QuoteContext";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useBalance } from "../../context/BalanceContext";
@@ -57,7 +57,6 @@ const TransferStep1: React.FC = () => {
 
   useEffect(() => {
 
-    console.log(isValuable);
 
     isValuable ? setButtonClassname(POINTS_ALL) : setButtonClassname(POINTS_NONE);
 
@@ -108,7 +107,6 @@ const TransferStep1: React.FC = () => {
 
 
         }
-        
       
         
     } else {
@@ -135,6 +133,16 @@ const TransferStep1: React.FC = () => {
 
 
   const handleSubmit = () => {
+
+    dispatch({
+      type: CurrencyActions.setSendValue,
+      payload: {sendValue: inputValue}
+    })
+
+    dispatch({
+      type: CurrencyActions.setReceiveValue,
+      payload: {receiveValue: outputValue}
+    })
 
     if(isForWebSocketOnTransfer(state) && webSocketState.webSocket && webSocketState.webSocket.OPEN) {
 

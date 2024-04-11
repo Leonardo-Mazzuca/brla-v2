@@ -15,6 +15,7 @@ const FormStep2: React.FC = () => {
   const [state, setState] = useState('');
   const [street, setStreet] = useState('');
   const [number, setNumber] = useState('');
+  const [complement, setComplement] = useState('');
 
   const { dispatch } = useFormContext();
 
@@ -33,7 +34,6 @@ const FormStep2: React.FC = () => {
       setCity(response.localidade);
       setState(response.uf);
       setStreet(response.logradouro);
-      console.log(city);
       return true;
 
     }
@@ -73,7 +73,13 @@ const FormStep2: React.FC = () => {
 
   }
   
+  const handleComplement = (e:React.ChangeEvent<HTMLInputElement>) => {
 
+    const value = e.target.value
+    setComplement(value)
+
+  }
+  
   const schema = z.object({
     cep: z
       .string()
@@ -88,37 +94,26 @@ const FormStep2: React.FC = () => {
 
   });
 
-  type Step2Data = z.infer<typeof schema>;
-
   const fields: Field[] = [
     { type: "text", placeholder: "CEP", name: "cep", onChange: handleCep, value: cep },
     { type: "text", placeholder: "Cidade", name: "city", onChange: handleCity, value: city },
     { type: "text", placeholder: "Estado", name: "state", onChange: handleState, value: state },
     { type: "text", placeholder: "Bairro", name: "street", onChange: handleStreet, value: street },
-    { type: "text", placeholder: "Complemento", name: "complement" },
+    { type: "text", placeholder: "Complemento", name: "complement", onChange: handleComplement, value: complement },
     { type: "text", placeholder: "Número", name: "number", onChange: handleNumber, value: number },
   ];
 
-  useEffect(()=> {
+ 
 
-    console.log(city, street, state);
-    
-
-  },[city, street, state])
-
-    const handleSubmit = async (data: Step2Data) => {
-
-
-
+    const handleSubmit = () => {
 
         const district = "District";
-        const { cep, city, state, street, number, complement } = data;
 
         dispatch({
           type: FormActions.setStep2,
           payload: { cep, city, state, street, number, district, complement },
         });
-
+ 
       };
 
   return (

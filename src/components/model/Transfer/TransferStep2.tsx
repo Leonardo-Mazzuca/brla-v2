@@ -78,11 +78,9 @@ const TransferStep2 = () => {
               
               if(message.data) {
 
-              
 
-
-               
-
+                console.log(message.data);
+                
                 if(isUsdToBrla(state)){
 
                   setInputValue(message.data.amountUsd / TO_WEBSOCKET);

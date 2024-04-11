@@ -15,7 +15,7 @@ export const formatNumberToString = (number: number, currency?: string) => {
              const coin = getCurrencyCoinToFormat(currency);
     
              return new Intl.NumberFormat('en-US', { style: 'currency',
-             minimumFractionDigits: number < 0.01 ? 3 : 2,
+             minimumFractionDigits: number <= 0.01 ? 3 : 2,
              currency:  coin}).format(number);
     
         } else {

@@ -24,7 +24,7 @@ const initialData: State = {
         password: '',
         confirmPassword: '',
         phone: '',
-        cpf: '502.757.250-65',
+        cpf: '241.100.320-08',
         birthDate: '2005-Oct-21',
         taxIdType: 'CPF',
     

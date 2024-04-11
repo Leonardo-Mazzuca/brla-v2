@@ -59,7 +59,7 @@ const TransactionsManagement: React.FC = () => {
              ${TEXT_GRAY_500} ${WIDTH_FULL}
              ${ROUNDED_DEFAULT} transition duration-300 ease-in-out hover:bg-black hover:text-white ${BUTTON_PADDING}`}
 
-                onClick={() => exportData(state)}
+                onClick={state.data.length > 0 ? () => exportData(state) : ()=> {}}
                 >
                 <FontAwesomeIcon icon={faArrowUpFromBracket} /> Export
             </button>

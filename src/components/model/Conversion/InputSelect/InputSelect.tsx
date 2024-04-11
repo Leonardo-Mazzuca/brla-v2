@@ -21,6 +21,7 @@ const InputSelect = ({ coin, state, value, dispatch,
     useEffect(()=> {
 
 
+
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
 
 

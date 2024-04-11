@@ -30,8 +30,10 @@ const FormStep4: React.FC = () => {
   };
 
   useEffect(() => {
+
     inputRefs.current[0]?.focus();
     handleRegister();
+
   }, []);
 
   const handleKeyUp = (

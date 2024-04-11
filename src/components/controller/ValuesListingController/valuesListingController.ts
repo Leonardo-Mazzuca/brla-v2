@@ -30,12 +30,15 @@ export async function valuesListingController(): Promise<any[]> {
                 ...paymentData, ...onChainOutData, ...onChainInData,];
                 
         }
+
+
         
         data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         data.forEach(item => {
             item.createdAt = formatDate(item.createdAt);
         });
+        
 
     
         return data;
