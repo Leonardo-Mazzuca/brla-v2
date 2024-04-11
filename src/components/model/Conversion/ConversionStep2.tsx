@@ -14,13 +14,12 @@ import { useQuote } from "../../context/QuoteContext";
 import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import { HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
-import { isBrlaToUsd, isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
+import { isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { placeSwapOrder } from "../../service/ConversionService/ConversionStep2Service/placeSwapOrder";
 import { getUserData } from "../../controller/UserDataController/getUserData";
 import { onChainController } from "../../controller/onChainController.ts/onChainController";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { getMarkupFee } from "../../service/FeeService/getBaseFee";
-import { getBaseFee } from "../../controller/FeeController/getBaseFee";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 
 
@@ -56,9 +55,6 @@ const ConversionStep2: React.FC = () => {
 
     useEffect(() => {
         
-        
-        setInputValue(state.sendValue)
-        setOutputValue(state.receiveValue);
     
         const getWallet = async () => {
     
@@ -93,6 +89,17 @@ const ConversionStep2: React.FC = () => {
                 }
                 
                 if(message.data) {
+                    
+                    if(isUsdToBrla(state)){
+
+                        setInputValue(message.data.amountUsd / TO_WEBSOCKET);
+                        setOutputValue(message.data.amountBrl / TO_WEBSOCKET);
+
+                    } else {
+
+                        setInputValue(message.data.amountBrl / TO_WEBSOCKET);
+                        setOutputValue(message.data.amountUsd / TO_WEBSOCKET);
+                    }
                     
                     setBaseFee(parseFloat(message.data.baseFee));
                     setMarkupFee(parseFloat(message.data.basePrice));
@@ -183,6 +190,8 @@ const ConversionStep2: React.FC = () => {
         
         if(!isForWebSocketOnSwap(state)) {
 
+            setInputValue(state.sendValue)
+            setOutputValue(state.receiveValue);
             currencyMarkupFee();
 
         }
@@ -191,7 +200,7 @@ const ConversionStep2: React.FC = () => {
         
 
 
-    },[markupFee,isForWebSocketOnSwap]);
+    },[markupFee,isForWebSocketOnSwap,inputValue,outputValue]);
 
     useEffect(()=> {
 

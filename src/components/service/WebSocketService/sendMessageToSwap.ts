@@ -8,6 +8,7 @@ import { isUsdToBrla } from "../Util/isUsdToBrla";
 export const sendMessageToSwap = (webSocket: WebSocket,state: CurrencyState) => {
 
 
+    
     webSocket.send(JSON.stringify({
 
         messageId: 'qualquer',
