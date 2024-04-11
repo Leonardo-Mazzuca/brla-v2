@@ -146,7 +146,9 @@ const TransferStep2 = () => {
       const value = e.target.value;
 
       if(value === '') {
+
         setIsPixkeyValid(false);
+
       }
 
       
@@ -447,15 +449,15 @@ const TransferStep2 = () => {
     const handleSubmit = () => {
 
       dispatch({
-        type: CurrencyActions.setSendCurrency,
-        payload: {sendCurrency: inputValue}
+        type: CurrencyActions.setSendValue,
+        payload: {sendValue: inputValue}
       });
       
       dispatch({
-        type: CurrencyActions.setReceiveCurrency,
-        payload: {sendCurrency: outputValue}
+        type: CurrencyActions.setReceiveValue,
+        payload: {receiveValue: outputValue}
       });
-      
+
     }
 
 

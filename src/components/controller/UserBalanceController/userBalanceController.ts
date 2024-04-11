@@ -37,6 +37,7 @@ export async function userBalanceController () {
             const brlBalance = await getUserTokenBalance(web3, BRLA_CONTRACT_ADDRESS, BRLAContractAbi, userData, BRLA_ON_CHAIN);
             const usdcBalance = await getUserTokenBalance(web3, USDC_CONTRACT_ADDRESS, USDCContractAbi, userData, USDTC_ON_CHAIN);
             const usdtBalance = await getUserTokenBalance(web3, USDT_CONTRACT_ADDRESS, USDTContractAbi, userData, USDTC_ON_CHAIN);
+
             
             return {brlBalance, usdcBalance, usdtBalance};
             

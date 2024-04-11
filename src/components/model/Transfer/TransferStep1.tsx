@@ -81,6 +81,9 @@ const TransferStep1: React.FC = () => {
 
     const coinBalance = getCoinToBalance(state.sendCurrency, balanceState);
 
+
+
+    
     const withoutValue = is0Value(inputValue, outputValue);
     const withoutBalance = isBalanceLessThanValue(
       inputValue,

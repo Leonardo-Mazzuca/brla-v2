@@ -22,8 +22,10 @@ export const isTheSameCoin = (inputCoin: string, outputCoin: string) => {
 
 export const isBalanceLessThanValue = (inputValue: number, balance: number) => {
 
-    if(inputValue > balance) {
+
+    if(parseFloat(inputValue.toFixed(2)) > parseFloat(balance.toFixed(2))) {
         return 'Saldo insuficiente';
+    
     } else {
         return '';
     }

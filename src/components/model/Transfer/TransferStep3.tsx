@@ -65,6 +65,10 @@ const TransferStep3 = () => {
 
     useEffect(()=> {
 
+      console.log(state.sendCurrency);
+      console.log(state.receiveCurrency);
+      
+
           
     if(!isForWebSocketOnTransfer(state)) {
       setButtonClassname(POINTS_ALL);
@@ -83,7 +87,7 @@ const TransferStep3 = () => {
               
    
               if(message.error) {
-                  
+
                   setErrorMessage(message.error);
                   onError(true);  
                 

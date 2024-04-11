@@ -21,7 +21,6 @@ const OutputSelect:React.FC <ConvertOperation>
 
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
 
-    
 
     },[coin,availableValue,balanceState]);
 
@@ -36,10 +35,6 @@ const OutputSelect:React.FC <ConvertOperation>
         createConversionTable(quoteState))
 
         setInputValue(converted);
-
-        console.log('Estou no Output');
-        console.log('Output value: ', maxValue);
-        console.log('Converted: ', converted);
 
     }
 
