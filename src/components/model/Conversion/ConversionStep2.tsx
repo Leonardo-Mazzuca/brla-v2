@@ -14,12 +14,14 @@ import { useQuote } from "../../context/QuoteContext";
 import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
 import { HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
-import { isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
+import { isBrlaToUsd, isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { placeSwapOrder } from "../../service/ConversionService/ConversionStep2Service/placeSwapOrder";
 import { getUserData } from "../../controller/UserDataController/getUserData";
 import { onChainController } from "../../controller/onChainController.ts/onChainController";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { getMarkupFee } from "../../service/FeeService/getBaseFee";
+import { getBaseFee } from "../../controller/FeeController/getBaseFee";
+import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 
 
 const ConversionStep2: React.FC = () => {
@@ -53,6 +55,7 @@ const ConversionStep2: React.FC = () => {
     const { state: webSocketState } = useWebSocket();
 
     useEffect(() => {
+        
         
         setInputValue(state.sendValue)
         setOutputValue(state.receiveValue);
@@ -90,7 +93,7 @@ const ConversionStep2: React.FC = () => {
                 }
                 
                 if(message.data) {
-
+                    
                     setBaseFee(parseFloat(message.data.baseFee));
                     setMarkupFee(parseFloat(message.data.basePrice));
                     setQuoteId(message.data.quoteId);
@@ -170,8 +173,13 @@ const ConversionStep2: React.FC = () => {
             const fee = await getMarkupFee(state.receiveCurrency);
             setMarkupFee(fee);
 
-            console.log(fee);
+
+
+
+
         }
+
+        
         
         if(!isForWebSocketOnSwap(state)) {
 
@@ -218,7 +226,7 @@ const ConversionStep2: React.FC = () => {
                 to: walletAddress,
                 inputCoin: state.sendCurrency,
                 outputCoin: state.receiveCurrency,
-                value: parseInt(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
+                value: parseFloat(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
                 
               }
               

@@ -17,7 +17,7 @@ const CurrencyDropdown: React.FC<CurrencyConfig> = ({ coin, onCurrencyChange, in
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currencies = [
-    { code: "BRLA", name: "Brazilian Real", flag: getCurrencyIMG('BRL') },
+    { code: "BRL", name: "Brazilian Real", flag: getCurrencyIMG('BRL') },
     { code: "USDC", name: "USD Coin", flag: getCurrencyIMG('USDC') },
     { code: "USDT", name: "Tether (USDT)", flag: getCurrencyIMG('USDT') }
   ];

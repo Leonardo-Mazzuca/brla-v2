@@ -19,6 +19,7 @@ import { isBrlToBrl, isOnChain, neitherBrlAndUsd, usdToBrla } from "../../servic
 import { FLEX, FLEX_COL, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { getBaseFee } from "../../controller/FeeController/getBaseFee";
 
 const TransferStep3 = () => {
 
@@ -33,6 +34,7 @@ const TransferStep3 = () => {
     const [success, onSuccess] = useState(false);
     const [error, onError] = useState(false);
 
+    const [fee, setFee] = useState(0);
 
     const [errorMessage  ,setErrorMessage ] = useState<string>('');
 
@@ -123,6 +125,22 @@ const TransferStep3 = () => {
         }
 
     }, [socketMessageHandler, buttonClassname, success, error]);
+
+    useEffect(()=> {
+
+      const getFee = async () => {
+        const currencyFee = await getBaseFee();
+
+        setFee(currencyFee.pixOutFee);
+        console.log(currencyFee.pixOutFee);
+        
+      }
+
+      if(isBrlToBrl(state)){
+        getFee();
+      }
+
+    },[fee]);
   
     useEffect(() => {
 
@@ -313,6 +331,15 @@ const TransferStep3 = () => {
                           <TextModel content={`valor enviado - 
                           ${formatNumberToString((state.sendValue))}${state.sendCurrency}`}/>
                         </div>
+
+                        {isBrlToBrl(state) ? (
+
+                          <div>
+                            <TextModel content={`Taxa de transação - 
+                            ${formatNumberToString(fee)} ${state.sendCurrency}`}/>
+                          </div>
+
+                        ) : <></>}
 
                         <div className="bg-slate-100 w-full p-5 text-3xl mt-3 mb-3">
                           <TextModel content={`valor a receber - 

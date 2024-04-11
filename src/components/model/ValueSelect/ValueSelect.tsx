@@ -41,7 +41,7 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
     switch (coin) {
 
-        case 'BRLA':
+        case 'BRL':
             availableValue = state.brlBalance;
             break;
         case 'USDC':

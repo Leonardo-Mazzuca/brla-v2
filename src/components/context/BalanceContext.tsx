@@ -89,7 +89,7 @@ const getCoinToBalance = (coin: string, state: BalanceState) => {
 
 
     switch(coin) {
-        case 'BRLA':
+        case 'BRL':
             return state.brlBalance;
         case 'USDC':
             return state.usdcBalance;

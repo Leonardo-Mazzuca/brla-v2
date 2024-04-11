@@ -3,7 +3,7 @@ import { useContext, useReducer, createContext } from "react";
 import { ProviderProps } from "../types/Provider/Provider";
 
 
-export type CoinTypes = "BRLA" | "USDC" | "USDT";
+export type CoinTypes = "BRL" | "USDC" | "USDT";
 
 export type CurrencyState = {
 
@@ -44,7 +44,7 @@ type ContextType = {
 
 const initialData :CurrencyState = {
     
-    sendCurrency: 'BRLA',
+    sendCurrency: 'BRL',
     receiveCurrency: 'USDC',
     sendValue: 0,
     receiveValue: 0,
@@ -94,20 +94,33 @@ const conversor = (value: number, fromCurrency: string, toCurrency: string, conv
     const amountInDefaultCurrency = value;
 
     let amountInSecondCurrency;
+    
 
-    if (conversionTable[fromCurrency] && conversionTable[fromCurrency][toCurrency]) {
-     
-        const conversionRate = conversionTable[fromCurrency][toCurrency];
-        amountInSecondCurrency = amountInDefaultCurrency * conversionRate;
+     if (fromCurrency === 'BRL' && toCurrency === 'BRL') {
 
-    } else if (conversionTable[toCurrency] && conversionTable[toCurrency][fromCurrency]) {
-     
+        
         const conversionRate = conversionTable[toCurrency][fromCurrency];
-        amountInSecondCurrency = amountInDefaultCurrency / conversionRate;
+        amountInSecondCurrency = amountInDefaultCurrency - conversionRate;
+
     } else {
-     
-        return value;
+
+        if (conversionTable[fromCurrency] && conversionTable[fromCurrency][toCurrency]) {
+         
+            const conversionRate = conversionTable[fromCurrency][toCurrency];
+            amountInSecondCurrency = amountInDefaultCurrency * conversionRate;
+    
+        } else if (conversionTable[toCurrency] && conversionTable[toCurrency][fromCurrency]) {
+         
+            const conversionRate = conversionTable[toCurrency][fromCurrency];
+            amountInSecondCurrency = amountInDefaultCurrency / conversionRate;
+    
+        }  else {
+         
+            return value;
+        }
+
     }
+
     
 
     return amountInSecondCurrency;

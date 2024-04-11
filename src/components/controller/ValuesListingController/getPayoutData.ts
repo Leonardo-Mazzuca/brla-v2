@@ -123,7 +123,7 @@ export async function getPayoutData() {
 
             accountNumber: formatWalletAddress(item.walletAddress),
 
-            outputCoin: 'BRLA',
+            outputCoin: 'BRL',
       
 
         }});

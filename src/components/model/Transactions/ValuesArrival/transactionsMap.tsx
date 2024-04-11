@@ -70,7 +70,7 @@ const DefaultTemplate = ({
 
 const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
   
-  const amount = data.amount ?? 0;
+  const amount = formatNumberToString(data.amount) ?? 0;
 
   return (
 
@@ -81,7 +81,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData>) => {
       amount={<p
         className={"bg-green-400/50 rounded-xl p-2"}         
       >
-      {`+ ${amount} BRLA`}
+      {`+ ${amount} BRL`}
 
       </p>}
       footerText={`Valor recebido de`}
@@ -108,7 +108,7 @@ const Transfer = ({ data }: TransactionData<ExpectedPayoutData | any>) => {
   useEffect(()=> {
     
     controlTransferAmount(numberAmount, setAmount, data);
-  
+    
 
   },[data, setAmount, numberAmount])
 
@@ -185,13 +185,12 @@ const Swap = ({ data }: any) => {
 
     }
 
-    // console.log(data);
     
 
   },[isPaymentSwap,usdToBrla,data])
 
-  const choseCoin = isUsdToBrla(state) ? 'BRLA' : 
-  data.inputCoin === undefined ? 'BRLA' : data.inputCoin
+  const choseCoin = isUsdToBrla(state) ? 'BRL' : 
+  data.inputCoin === undefined ? 'BRL' : data.inputCoin
 
 
   const brlaAmount = data.isSwap ? formatNumberToString(data.brlaAmount)  +  " " + choseCoin :

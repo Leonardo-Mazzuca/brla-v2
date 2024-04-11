@@ -32,6 +32,7 @@ export type ConversionData = {
     icon: IconProp
     receiverAddress: string
     tx: string;
+    baseFee: string;
    
 }
 
@@ -95,7 +96,7 @@ export async function getConversionData () {
                 return acc;
             }, {} as Feedback),
 
-            usdAmount: parseFloat(item.usdAmount) / TO_WEBSOCKET,
+            usdAmount: (parseFloat(item.usdAmount) / TO_WEBSOCKET) - parseFloat(item.baseFee),
             brlaAmount: parseFloat(item.brlaAmount) / TO_WEBSOCKET,
             outputCoin: item.coin,
             userDocument: item.userDocument,
@@ -115,7 +116,7 @@ export async function getConversionData () {
             
         }));
 
-        // console.log(data);
+
     
         
         return data;

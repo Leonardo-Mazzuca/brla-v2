@@ -40,8 +40,8 @@ const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {
 
         } else {
 
-            setComponent(  <TextModel color="gray-400 mt-1" size="text-1xl" 
-            content={`1 BRL = ${state.brl.toUsdc.toFixed(7)} USDC`}
+            setComponent(  <TextModel color="gray-400 mt-1" size="text-md" 
+            content={`1 BRL = ${state.brl.toUsdc.toFixed(4)} USDC`}
             />);
 
         }

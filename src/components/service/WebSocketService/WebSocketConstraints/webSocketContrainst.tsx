@@ -13,7 +13,7 @@ export const isUsdcOrUsdt = (state: CurrencyState) => {
 }
 
 export const isBrlToBrl = (state: CurrencyState) => {
-    return state.sendCurrency === 'BRLA' && state.receiveCurrency === 'BRLA';
+    return state.sendCurrency === 'BRL' && state.receiveCurrency === 'BRL';
 }
 
 export const neitherBrlAndUsd = (state: CurrencyState) => {
@@ -29,6 +29,6 @@ export const isOnChain = (state: CurrencyState) => {
 }
 
 export const isBrlaToUsd = (state:CurrencyState) => {
-    return (state.sendCurrency === 'BRLA' && state.receiveCurrency === 'USDC') ||
-    (state.sendCurrency === 'BRLA' && state.receiveCurrency === 'USDT' )
+    return (state.sendCurrency === 'BRL' && state.receiveCurrency === 'USDC') ||
+    (state.sendCurrency === 'BRL' && state.receiveCurrency === 'USDT' )
 }

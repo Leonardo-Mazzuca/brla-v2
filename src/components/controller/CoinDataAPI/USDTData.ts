@@ -1,5 +1,6 @@
 import axios from "axios";
 import { USDC_ENDPOINT, USDT_ENDPOINT } from "./endpoints";
+import { USD_OUT } from "../../contants/divisionValues/divisionValues";
 
 export const getUSDTData = async () => {
     
@@ -27,7 +28,7 @@ export const getUSDTData = async () => {
                 close: data[4],
                 volume: data[5],
                 emmitedDate: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toLocaleDateString(),
-                toBrl: parseFloat(data[4]),
+                toBrl: (parseFloat(data[4])) * USD_OUT,
                 toUsdc: 1 / parseFloat(usdtToUsdc.toFixed(8)),
                 pctChange: (((parseFloat(data[4]) - parseFloat(data[1])) / parseFloat(data[1])) * 100).toFixed(2)
 

@@ -45,14 +45,14 @@ export const getOnChainOutData = async () => {
             from: item.from,
             title: item.chain,
 
-            usdAmount: inputValue ?? getOnChainOutValue(parseFloat(item.value), item.inputCoin),
-            brlaAmount: getOnChainOutValue(parseFloat(item.value), item.outputCoin),
+            usdAmount: inputValue ?? getOnChainOutValue(parseFloat(parseFloat(item.value).toFixed(2)), item.inputCoin),
+            brlaAmount: getOnChainOutValue(parseFloat(parseFloat(item.value).toFixed(2)), item.outputCoin),
 
-            inputValue: formatNumberToString(inputValue ?? getOnChainOutValue(parseFloat(item.value), item.inputCoin)) + ' ' + item.inputCoin,
+            inputValue: formatNumberToString(inputValue ?? getOnChainOutValue(parseFloat(parseFloat(item.value).toFixed(2)), item.inputCoin)) + ' ' + item.inputCoin,
             outputValue:formatNumberToString(getOnChainOutValue(parseFloat(item.value), item.outputCoin)) + ' ' + item.outputCoin,
           
             
-            amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
+            amount: parseFloat(getOnChainOutValue(parseFloat(item.value),item.outputCoin).toFixed(2)),
             
             transfers: {
                 amount: getOnChainOutValue(parseFloat(item.value),item.outputCoin),
@@ -76,10 +76,7 @@ export const getOnChainOutData = async () => {
             isOnChain: true,
 
         }});
-
-        // console.log('On chain out: ', data);
-        
-        
+         
         return data;
         
 
@@ -92,9 +89,10 @@ export const getOnChainOutData = async () => {
 function getOnChainOutValue (value:number,coin:string) {
 
     switch(coin) {
+        
         case 'USDT':
         case 'USDC':
-            return value / USDTC_ON_CHAIN;
+            return (parseFloat((value / USDTC_ON_CHAIN).toFixed(2)));
         default:
             return value;
 

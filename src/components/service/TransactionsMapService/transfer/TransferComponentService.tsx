@@ -21,15 +21,19 @@ export const controlTextComponent = (
           return;
 
         } 
+        
           
-          if(data.feedback && data.feedback.success === null || data.transfers === null) {
+        if(data.feedback === null || data.feedback.success === null || data.transfers === null) {
 
-            setText('Pendente...');
-            setTaxId('');
+          setText('Pendente...');
+          setTaxId('');
 
-          } else {
-                setTaxId(data.transfers.taxId);
-          }
+        } 
+        
+        if(data.feedback !== null && data.feedback.success) {
+          setTaxId(data.transfers?.taxId || data.taxId);
+        }
+        
 
         
 

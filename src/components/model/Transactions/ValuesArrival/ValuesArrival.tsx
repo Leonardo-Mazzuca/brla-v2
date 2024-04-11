@@ -7,26 +7,27 @@ import Loading from "../../Loading/Loading";
 import TextModel from "../../Text/Text";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { LOG_SIZE } from "../../../contants/divisionValues/divisionValues";
 
 const ValuesArrival: React.FC = () => {
     const [allData, setAllData] = useState<any[]>([]);
     const [filteredData, setFilteredData] = useState<any[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1); // Estado para controlar a página atual
+    const [currentPage, setCurrentPage] = useState<number>(1); 
     const { dispatch, state } = useValuesFilter();
     const [error, setError] = useState<ReactNode>();
     const [loading, setLoading] = useState<boolean>(true);
     const location = useLocation();
+    const [chunks, setChunks] = useState<any[]>([]);
 
     const fetchData = async () => {
         try {
             let data = await valuesListingController();
-
+            
             if (location.pathname === '/home') {
                 data = data.slice(0, 5);
             }
 
             setAllData(data);
-            setFilteredData(data);
             setLoading(false);
         } catch (error: any) {
             setError(
@@ -44,14 +45,15 @@ const ValuesArrival: React.FC = () => {
     }, [location.pathname]);
 
     useEffect(() => {
+        let newData = allData;
+
         if (state.searchDate && !isNaN(Date.parse(state.searchDate))) {
-            const newData = allData.filter(
+            newData = allData.filter(
                 (item: any) => item.createdAt && item.createdAt.substring(0, 10).includes(state.searchDate)
             );
-            setFilteredData(newData);
-        } else {
-            setFilteredData(allData);
         }
+
+        setFilteredData(newData);
     }, [state.searchDate, allData]);
 
     useEffect(() => {
@@ -61,6 +63,18 @@ const ValuesArrival: React.FC = () => {
         });
     }, [dispatch, filteredData]);
 
+    useEffect(() => {
+        
+        const chunks = [];
+
+        for (let i = 0; i < filteredData.length; i += LOG_SIZE) {
+            chunks.push(filteredData.slice(i, i + LOG_SIZE));
+        }
+
+        setChunks(chunks);
+
+    }, [filteredData]);
+
     return (
         <section className="flex flex-col w-full items-center gap-10 py-5 overflow-y-scroll h-auto">
             {error ? (
@@ -69,22 +83,27 @@ const ValuesArrival: React.FC = () => {
                 <Loading text="Carregando dados..." />
             ) : filteredData.length > 0 ? (
                 <>
-                    {filteredData.length > 100 ? (
-                        <Swiper
+                    {chunks.length > 1 && location.pathname !== '/home' ? (
+                        <Swiper 
+                            className="w-full h-full"
                             spaceBetween={50}
                             slidesPerView={1}
                             navigation
                             pagination={{ clickable: true }}
                             onSlideChange={(swiper: any) => setCurrentPage(swiper.activeIndex + 1)}
                         >
-                            {filteredData.map((data: any, index: number) => (
+                            {chunks.map((chunk: any[], index: number) => (
                                 <SwiperSlide key={index}>
-                                    <TransactionMap data={data} />
+                                    {chunk.map((data: any, dataIndex: number) => (
+                                        <TransactionMap key={dataIndex} data={data} />
+                                    ))}
                                 </SwiperSlide>
                             ))}
                         </Swiper>
                     ) : (
-                        filteredData.map((data: any, index: number) => <TransactionMap key={index} data={data} />)
+                        filteredData.map((data: any, index: number) => (
+                            <TransactionMap key={index} data={data} />
+                        ))
                     )}
                 </>
             ) : (
@@ -95,3 +114,4 @@ const ValuesArrival: React.FC = () => {
 };
 
 export default ValuesArrival;
+

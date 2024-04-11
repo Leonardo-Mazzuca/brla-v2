@@ -96,8 +96,6 @@ const TransferStep2 = () => {
         if(userWallet){
           setUserWallet(userWallet);
         }
-
-        console.log(userWallet);
         
 
       }

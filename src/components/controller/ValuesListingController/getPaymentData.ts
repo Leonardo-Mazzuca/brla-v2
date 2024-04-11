@@ -39,7 +39,7 @@ export async function getPaymentData() {
                 usdAmount: item.usdAmount / TO_WEBSOCKET,
                 createdAt: item.createdAt,
                 inputCoin: item.coin,
-                outputCoin: 'BRLA',
+                outputCoin: 'BRL',
                 operationName: 'BURN',
                 feedback: feedback,
                 status: item.status,

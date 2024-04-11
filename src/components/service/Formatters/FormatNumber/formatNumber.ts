@@ -2,6 +2,7 @@ import { getCurrencyCoinToFormat } from "../../CoinsService/getCurrencyCoinToFor
 
 
 export const formatNumberToString = (number: number, currency?: string) => {
+
     
     try {
         
@@ -28,7 +29,7 @@ export const formatNumberToString = (number: number, currency?: string) => {
                 useGrouping: true,  
             };
     
-            return number.toLocaleString('en-IN', options);
+            return number.toLocaleString('en-US', options);
             
         }
 
