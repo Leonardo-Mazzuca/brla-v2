@@ -9,9 +9,6 @@ export async function getPaymentData() {
         const request = await http.get('/payment/history', {
             withCredentials: true,
         });
-
-
-        console.log(request.data.paymentLogs);
         
         
 

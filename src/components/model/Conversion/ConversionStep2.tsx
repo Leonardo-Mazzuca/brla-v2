@@ -15,11 +15,11 @@ import { formatNumberToString } from "../../service/Formatters/FormatNumber/form
 import { HIDDEN, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
 import { isOnChain } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
-import { placeChainOrder } from "../../service/ConversionService/ConversionStep2Service/placeChainOrder";
 import { placeSwapOrder } from "../../service/ConversionService/ConversionStep2Service/placeSwapOrder";
 import { getUserData } from "../../controller/UserDataController/getUserData";
 import { onChainController } from "../../controller/onChainController.ts/onChainController";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { getMarkupFee } from "../../service/FeeService/getBaseFee";
 
 
 const ConversionStep2: React.FC = () => {
@@ -165,6 +165,28 @@ const ConversionStep2: React.FC = () => {
 
     useEffect(()=> {
 
+        const currencyMarkupFee = async () => {
+
+            const fee = await getMarkupFee(state.receiveCurrency);
+            setMarkupFee(fee);
+
+            console.log(fee);
+        }
+        
+        if(!isForWebSocketOnSwap(state)) {
+
+            currencyMarkupFee();
+
+        }
+
+   
+        
+
+
+    },[markupFee,isForWebSocketOnSwap]);
+
+    useEffect(()=> {
+
         if(isForWebSocketOnSwap(state)) {
             socketMessageHandler();
         }
@@ -271,7 +293,7 @@ const ConversionStep2: React.FC = () => {
                             </div>
                             <div className="flex justify-between">
                                 <TextModel addons="text-gray-400" weight="font-light" content={"Taxa de câmbio"} />
-                                <TextModel addons="text-gray-400" weight="font-light" content={`- ${formatNumberToString(markupFee, state.sendCurrency)}`} />
+                                <TextModel addons="text-gray-400" weight="font-light" content={` ${formatNumberToString(markupFee, state.sendCurrency)}`} />
                             </div>
                         </div>
                     </>

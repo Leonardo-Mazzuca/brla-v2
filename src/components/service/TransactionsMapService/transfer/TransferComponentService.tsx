@@ -49,7 +49,7 @@ export const controlColor = (setColor: Dispatch<SetStateAction<string>>, data: E
     setColor(TEXT_RED_600);
   }
 
-  if(data.feedback && data.feedback.success === null) {
+  if(!data.feedback || data.feedback.success === null) {
       setColor(TEXT_GRAY_500);
   }
 
@@ -69,7 +69,7 @@ export const controlTransferAmount = (numberAmount: number,
 
       setAmount(<>
                 
-              <FontAwesomeIcon icon={faArrowRight} /> 
+              <FontAwesomeIcon icon={faMinus} /> 
               <FontAwesomeIcon className={margin} icon={faX} /> 
               {formattedAmount}{" "}
 

@@ -38,6 +38,7 @@ const TransactionsManagement: React.FC = () => {
     return (
         
         <section className={`${FLEX} ${JUSTIFY_BETWEEN} ${GAP_DEFAULT} md:${FLEX_ROW} ${FLEX_COL}`}>
+            
             {inputConfig.map((item, index) => {
                 return (
                     <div key={index}>

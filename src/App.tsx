@@ -1,12 +1,10 @@
 
 
-import { useEffect } from "react";
 import AppRoutes from "./client/routes";
 import { BalanceProvider } from "./components/context/BalanceContext";
 import { CurrencyProvider } from "./components/context/CurrencyContext";
 import { FormProvider } from "./components/context/FormContext";
 import { TransactionsProvider } from "./components/context/TransactionsContext";
-import { useWebSocket } from "./components/context/WebSocketContext";
 import { QuoteProvider } from "./components/context/QuoteContext";
 
 

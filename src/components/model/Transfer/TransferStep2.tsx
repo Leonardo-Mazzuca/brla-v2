@@ -1,6 +1,6 @@
 
 
-import { ZodSchema, z } from "zod";
+import { ZodSchema, isValid, z } from "zod";
 import { Field } from "../../types/Field/Field";
 import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
@@ -17,16 +17,16 @@ import { isCnpj } from "../../service/TaxId/Cnpj/verifyCnpj";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { isBrl } from "../../service/Util/isBrl";
-import { hidden, pointsAll, pointsNone } from "../../types/Button/buttonVariables";
 import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNumber/formatValueInPhoneNumber";
 import { isPhoneNumber, validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
 import { isEmail } from "../../service/PixkeyService/verifyEmail";
 import { isRandomKey } from "../../service/PixkeyService/verifiyRandomkey";
-import { FLEX, FONT_LIGHT, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
+import { FLEX, FONT_LIGHT, HIDDEN, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
 import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
+import { getUserData } from "../../controller/UserDataController/getUserData";
 
 
 const TransferStep2 = () => {
@@ -42,6 +42,8 @@ const TransferStep2 = () => {
     const [walleAddressValue, setWalletAddressValue] = useState('');
     const [isPixkeyValid, setIsPixkeyValid] = useState(false);
     const [isTaxIdValid, setIsTaxIdValid] = useState(false);
+    const [userWallet,setUserWallet] = useState('');
+    const [validWallet,setValidWallet] = useState(false);
 
     
     const {state:webSocketState, dispatch:webSocketDispatch} = useWebSocket();
@@ -85,6 +87,40 @@ const TransferStep2 = () => {
     }
 
     useEffect(()=> {
+
+      const userData = async ()=> {
+
+        const data = await getUserData();
+        const userWallet = data?.wallets.evm;
+
+        if(userWallet){
+          setUserWallet(userWallet);
+        }
+
+        console.log(userWallet);
+        
+
+      }
+
+      if(!isBrl(state)) {
+        
+        userData();
+
+
+      }
+
+    },[userWallet]);
+
+
+    const validateWallet = (wallet:string) => {
+
+      const isValid =  wallet !== userWallet;
+      setValidWallet(isValid);
+      return isValid;
+
+    }
+    
+    useEffect(()=> {
       
 
       if(isBrl(state)) {
@@ -112,7 +148,7 @@ const TransferStep2 = () => {
       } else {
 
         setSchema(z.object({
-          walletAddress: z.string().min(3),
+          walletAddress: z.string().min(3).refine(wallet => validateWallet(wallet),{message: 'Você não pode transferir para si mesmo'}),
         }));
 
         setField([
@@ -198,7 +234,7 @@ const TransferStep2 = () => {
 
       if(!isBrl(state)) {
 
-        if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket) {
+        if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket && !validWallet) {
 
           setButtonClassname(POINTS_NONE);
   
@@ -248,8 +284,31 @@ const TransferStep2 = () => {
       }
 
 
-  }, [isPixkeyValid, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname, 
+  }, [isPixkeyValid,validWallet, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname, 
     webSocketState.webSocket, isForWebSocketOnTransfer]);
+
+
+    useEffect(()=> {
+
+      if(!isBrl(state)){
+        if(!validWallet || walleAddressValue === '') {
+          setButtonClassname(POINTS_NONE);
+        }
+      } 
+
+      if((!isPixkeyValid || pixkeyValue === '')) {
+        setButtonClassname(POINTS_NONE);
+      }
+
+      if(!isPixkeyTaxId){
+        if((!isTaxIdValid || taxIdValue === '')) {
+
+          setButtonClassname(POINTS_NONE);
+
+        }
+      }
+
+    },[isPixkeyValid,validWallet,isTaxIdValid,isPixkeyTaxId])
   
 
 
@@ -286,7 +345,7 @@ const TransferStep2 = () => {
       if(pixkey === '') {
         
         setPixkeyValue(pixkey);
-        setTaxIdClassname(hidden);
+        setTaxIdClassname(HIDDEN);
         setIsPixkeyValid(false);
         controlPixkey(false)
         return;
@@ -327,7 +386,7 @@ const TransferStep2 = () => {
 
         if(isCpf(pixkey) || isCnpj(pixkey)) {
           
-          setTaxIdClassname(hidden);
+          setTaxIdClassname(HIDDEN);
           controlPixkey(true);
           
         } else {
