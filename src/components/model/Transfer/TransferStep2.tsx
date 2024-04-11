@@ -349,32 +349,6 @@ const TransferStep2 = () => {
 
   }, [isPixkeyValid,validWallet, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname]);
 
-
-    // useEffect(()=> {
-
-    //   if(!isBrl(state)){
-
-    //     if(!validWallet || walleAddressValue === '') {
-    //       setButtonClassname(POINTS_NONE);
-    //     }
-
-    //   } else {
-        
-    //           if((!isPixkeyValid || pixkeyValue === '')) {
-    //             setButtonClassname(POINTS_NONE);
-    //           }
-        
-    //           if(!isPixkeyTaxId){
-    //             if((!isTaxIdValid || taxIdValue === '')) {
-        
-    //               setButtonClassname(POINTS_NONE);
-        
-    //             }
-    //           }
-
-    //   }
-
-    // },[isPixkeyValid,validWallet,isTaxIdValid,isPixkeyTaxId])
   
 
 
@@ -472,6 +446,15 @@ const TransferStep2 = () => {
 
     const handleSubmit = () => {
 
+      dispatch({
+        type: CurrencyActions.setSendCurrency,
+        payload: {sendCurrency: inputValue}
+      });
+      
+      dispatch({
+        type: CurrencyActions.setReceiveCurrency,
+        payload: {sendCurrency: outputValue}
+      });
       
     }
 

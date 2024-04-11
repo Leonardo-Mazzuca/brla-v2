@@ -83,7 +83,7 @@ const TransferStep3 = () => {
               
    
               if(message.error) {
-
+                  
                   setErrorMessage(message.error);
                   onError(true);  
                 
