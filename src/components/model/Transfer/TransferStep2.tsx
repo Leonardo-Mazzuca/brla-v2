@@ -23,10 +23,10 @@ import { isEmail } from "../../service/PixkeyService/verifyEmail";
 import { isRandomKey } from "../../service/PixkeyService/verifiyRandomkey";
 import { FLEX, FONT_LIGHT, HIDDEN, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
 import { useWebSocket } from "../../context/WebSocketContext";
-import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
-import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
-import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
 import { getUserData } from "../../controller/UserDataController/getUserData";
+import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 
 
 const TransferStep2 = () => {
@@ -44,9 +44,11 @@ const TransferStep2 = () => {
     const [isTaxIdValid, setIsTaxIdValid] = useState(false);
     const [userWallet,setUserWallet] = useState('');
     const [validWallet,setValidWallet] = useState(false);
+    const [inputValue, setInputValue] = useState(0);
+    const [outputValue, setOutputValue] = useState(0);
 
     
-    const {state:webSocketState, dispatch:webSocketDispatch} = useWebSocket();
+    const {state:webSocketState} = useWebSocket();
 
 
     const navigate = useNavigate();
@@ -58,6 +60,51 @@ const TransferStep2 = () => {
       }
 
     },[state.receiveValue]);
+
+    
+    const socketMessageHandler = () => {
+
+      if(webSocketState.webSocket && webSocketState.webSocket.OPEN) {
+
+          webSocketState.webSocket.onmessage = e => {
+
+              const message = JSON.parse(e.data);
+              
+              if(message.data) {
+
+                if(isUsdToBrla(state)){
+
+                  setInputValue(message.data.amountUsd / TO_WEBSOCKET);
+                  setOutputValue(message.data.amountBrl / TO_WEBSOCKET);
+
+              } else {
+
+                  setInputValue(message.data.amountBrl / TO_WEBSOCKET);
+                  setOutputValue(message.data.amountUsd / TO_WEBSOCKET);
+              }
+
+                
+              }   
+
+              console.log(message);
+
+                        
+          }
+
+      }
+
+    }
+
+    useEffect(() => {
+
+      if(isForWebSocketOnTransfer(state)) {
+
+        socketMessageHandler();
+
+      }
+
+
+  }, [socketMessageHandler]);
 
         
     const handleTaxIdValue = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -158,15 +205,6 @@ const TransferStep2 = () => {
 
     },[taxIdValue, classname,pixkeyValue, isPixkeyTaxId, walleAddressValue]);
 
-      useEffect(() => {
-
-          if(isForWebSocketOnTransfer(state)) {
-
-              fetchWebSocket(webSocketState, webSocketDispatch);
-        
-          } 
-
-    }, [webSocketState.webSocket, state,buttonClassname]);
 
 
     useEffect(()=> {
@@ -225,85 +263,78 @@ const TransferStep2 = () => {
 
     },[dispatch, isPixkeyValid, pixkeyValue, walleAddressValue, isBrl, taxIdValue])
 
-
     useEffect(() => {
 
-
-
+      
       if(!isBrl(state)) {
 
-        if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket && !validWallet) {
+        if(validWallet) {
 
-          setButtonClassname(POINTS_NONE);
-  
-        } else {
+          setButtonClassname(POINTS_ALL);
 
-          setTimeout(()=> {
-
-            setButtonClassname(POINTS_ALL);
-
-          },2000)
-
-
-        }
-  
+        } 
 
       } else {
-
-        if(isPixkeyTaxId) {
-  
-          if (isPixkeyValid) {
-      
-            setButtonClassname(POINTS_ALL);
-  
-          }
-  
-        } 
-  
-        if(!isPixkeyTaxId) {
-  
-          if (pixkeyValue === '' || taxIdValue === '') {
         
-            setButtonClassname(POINTS_NONE);
-    
-          } else {
-  
-           if (isPixkeyValid && isTaxIdValid) {
-                setButtonClassname(POINTS_ALL);
-      
-            } else {
-                setButtonClassname(POINTS_NONE); 
-            }
-  
-          }
-  
-        }
+                if(isPixkeyTaxId) {
+          
+                  if (isPixkeyValid) {
+              
+                    setButtonClassname(POINTS_ALL);
+          
+                  }
+          
+                } 
+          
+                if(!isPixkeyTaxId) {
+          
+                  if (pixkeyValue === '' || taxIdValue === '') {
+                
+                    setButtonClassname(POINTS_NONE);
+            
+                  } else {
+          
+                   if (isPixkeyValid && isTaxIdValid) {
+                        setButtonClassname(POINTS_ALL);
+              
+                    } else {
+                        setButtonClassname(POINTS_NONE); 
+                    }
+          
+                  }
+          
+                }
 
       }
 
+      
 
-  }, [isPixkeyValid,validWallet, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname, 
-    webSocketState.webSocket, isForWebSocketOnTransfer]);
+
+  }, [isPixkeyValid,validWallet, isTaxIdValid, isPixkeyTaxId, pixkeyValue, taxIdValue, buttonClassname]);
 
 
     useEffect(()=> {
 
       if(!isBrl(state)){
+
         if(!validWallet || walleAddressValue === '') {
           setButtonClassname(POINTS_NONE);
         }
-      } 
 
-      if((!isPixkeyValid || pixkeyValue === '')) {
-        setButtonClassname(POINTS_NONE);
-      }
+      } else {
+        
+              if((!isPixkeyValid || pixkeyValue === '')) {
+                setButtonClassname(POINTS_NONE);
+              }
+        
+              if(!isPixkeyTaxId){
+                if((!isTaxIdValid || taxIdValue === '')) {
+        
+                  setButtonClassname(POINTS_NONE);
+        
+                }
+              }
 
-      if(!isPixkeyTaxId){
-        if((!isTaxIdValid || taxIdValue === '')) {
-
-          setButtonClassname(POINTS_NONE);
-
-        }
       }
 
     },[isPixkeyValid,validWallet,isTaxIdValid,isPixkeyTaxId])
@@ -404,11 +435,6 @@ const TransferStep2 = () => {
 
     const handleSubmit = () => {
 
-      if(webSocketState.webSocket && webSocketState.webSocket.OPEN) {
-
-          sendMessageToTransfers(state, webSocketState.webSocket);
-
-      }
       
     }
 
@@ -420,21 +446,22 @@ const TransferStep2 = () => {
             <TransfersContainer isButtonPresent = {false} activeIndex={1}>
                 
                   <FormModel 
+                   onSubmit={handleSubmit}
                    buttonClassname={buttonClassname} 
                    location="/transfer/3" 
                    buttonText={<>Proximo <FontAwesomeIcon className="ms-2" icon={faArrowRight} /></>}
-                   fields={fields} schema={schema} onSubmit={handleSubmit}>
+                   fields={fields} schema={schema}>
 
                     <div className="mt-6">
                       
                         <div className={`${FLEX} ${JUSTIFY_BETWEEN} mb-6`}>
                               <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={"Valor a ser enviado"} />
-                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(state.sendValue, state.sendCurrency)}`} />
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(inputValue, state.sendCurrency)}`} />
                         </div>
 
                         <div className={`${FLEX} ${JUSTIFY_BETWEEN} my-6`}>
                               <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={"Valor a receber"} />
-                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(state.receiveValue, state.receiveCurrency)}`} />
+                              <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(outputValue, state.receiveCurrency)}`} />
                         </div>
 
                     </div>  

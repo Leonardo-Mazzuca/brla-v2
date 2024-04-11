@@ -41,7 +41,7 @@ export async function connectWebSocket() {
 
     } catch(e:any) {
 
-        throw new Error('Falha ao conectar-se com o webSocket: ', e.message)
+        throw e;
 
     }
     

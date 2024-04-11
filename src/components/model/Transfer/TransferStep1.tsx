@@ -12,8 +12,15 @@ import TextModel from "../Text/Text";
 import InputSelect from "../Conversion/InputSelect/InputSelect";
 import OutputSelect from "../Conversion/InputSelect/OutputSelect";
 import { controllValueChange, doValidations, verifyIfIsValuable } from "../../service/TransfersService/transfersStep1Service";
+import { useWebSocket } from "../../context/WebSocketContext";
+import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
+import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
+import { isBrl } from "../../service/Util/isBrl";
+import { POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
 
 const TransferStep1: React.FC = () => {
+
   const { state, dispatch, conversor } = useCurrency();
   const { state: balanceState, getCoinToBalance } = useBalance();
   const { state: quoteState, createConversionTable } = useQuote();
@@ -24,6 +31,7 @@ const TransferStep1: React.FC = () => {
   const [isValuable, setIsValuable] = useState(false);
   const [isVisible, setVisibility] = useState("hidden");
 
+  const {state:webSocketState, dispatch:webSocketDispatch} = useWebSocket();
 
   const converted = conversor(
     inputValue,
@@ -31,6 +39,45 @@ const TransferStep1: React.FC = () => {
     state.receiveCurrency,
     createConversionTable(quoteState)
   );
+
+    useEffect(() => {
+
+        if(outputValue && inputValue ) {
+
+          if(isForWebSocketOnTransfer(state)) {
+
+              fetchWebSocket(webSocketState, webSocketDispatch);
+        
+          } 
+
+        }
+
+    }, [webSocketState.webSocket,outputValue,inputValue, state,buttonClassname]);
+
+    useEffect(()=> {
+      
+          if(!isBrl(state)) {
+      
+            if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket) {
+      
+              setButtonClassname(POINTS_NONE);
+      
+            } else {
+
+              setTimeout(()=> {
+                
+                setButtonClassname(POINTS_ALL);
+
+              },3000)
+      
+      
+            }
+      
+      
+          }
+
+    },[webSocketState.webSocket,buttonClassname, isForWebSocketOnTransfer])
+
 
   useEffect(() => {
 
@@ -61,6 +108,16 @@ const TransferStep1: React.FC = () => {
 
   ]);
 
+  const handleSubmit = () => {
+
+    if(webSocketState.webSocket && webSocketState.webSocket.OPEN) {
+
+        sendMessageToTransfers(state, webSocketState.webSocket);
+
+    }
+    
+  }
+
   
 
   return (
@@ -68,7 +125,8 @@ const TransferStep1: React.FC = () => {
     <ContainerService path="/home" linkText="Dashboard">
 
       <TransfersContainer
-      
+
+        onSubmit={handleSubmit}
         buttonControl={buttonClassname}
         activeIndex={0}
         location={'/transfer/2/'}
@@ -119,6 +177,7 @@ const TransferStep1: React.FC = () => {
 
     </ContainerService>
   );
-};
+  
+}
 
 export default TransferStep1;
