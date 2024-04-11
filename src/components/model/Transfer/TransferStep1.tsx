@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContainerService from "../Container/ContainerService";
 import TransfersContainer from "../Container/TransfersContainer";
-import { CurrencyActions, useCurrency } from "../../context/CurrencyContext";
+import { useCurrency } from "../../context/CurrencyContext";
 import { useQuote } from "../../context/QuoteContext";
 import {
   block,

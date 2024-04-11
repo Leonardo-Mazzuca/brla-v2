@@ -132,7 +132,6 @@ const TransferStep3 = () => {
         const currencyFee = await getBaseFee();
 
         setFee(currencyFee.pixOutFee);
-        console.log(currencyFee.pixOutFee);
         
       }
 
@@ -222,7 +221,7 @@ const TransferStep3 = () => {
           to: state.walletAddress,
           inputCoin: state.sendCurrency,
           outputCoin: state.receiveCurrency,
-          value: parseInt(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
+          value: parseInt((state.receiveValue * TO_WEBSOCKET).toFixed(2)) ,
           
         }
 
@@ -249,7 +248,7 @@ const TransferStep3 = () => {
 
           try {
 
-           await transferController(state.pixkey, state.taxId, (state.receiveValue * 100));
+           await transferController(state.pixkey, state.taxId, ((state.receiveValue + fee) * 100));
            onSuccess(true);
  
             
