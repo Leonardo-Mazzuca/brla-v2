@@ -36,6 +36,18 @@ const OutputSelect:React.FC <ConvertOperation>
 
         setInputValue(converted);
 
+    
+        
+
+        dispatch({
+            type: CurrencyActions.setReceiveValue,
+            payload: { receiveValue: maxValue },
+        });
+    
+        dispatch({
+            type: CurrencyActions.setSendValue,
+            payload: { sendValue: converted },
+        });
 
 
     }

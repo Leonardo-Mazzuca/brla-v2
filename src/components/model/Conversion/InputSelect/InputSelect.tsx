@@ -27,14 +27,14 @@ const InputSelect = ({ coin, state, value, dispatch,
     const handleMaxButtonClick = () => {
 
         const maxValue = availableValue;
+        
 
         const converted = conversor(availableValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState))
 
         
         setInputValue(maxValue);
-        setOutputValue(converted);
+        setOutputValue(converted);       
 
-            
         dispatch({
             type: CurrencyActions.setSendValue,
             payload: { sendValue: maxValue },

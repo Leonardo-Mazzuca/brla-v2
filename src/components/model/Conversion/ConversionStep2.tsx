@@ -235,7 +235,7 @@ const ConversionStep2: React.FC = () => {
                 to: walletAddress,
                 inputCoin: state.sendCurrency,
                 outputCoin: state.receiveCurrency,
-                value: parseFloat(state.receiveValue.toFixed(2)) * TO_WEBSOCKET,
+                value: Math.floor(state.receiveValue * TO_WEBSOCKET),
                 
               }
               

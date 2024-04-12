@@ -42,9 +42,9 @@ const ConversionStep1: React.FC = () => {
 
         if(inputValue && outputValue) {
 
-            if(isForWebSocketOnSwap(state)) {
-                fetchWebSocket(webSocketState, webSocketDispatch);
-            }
+     
+            fetchWebSocket(webSocketState, webSocketDispatch);
+            
 
         }
 
@@ -94,7 +94,6 @@ const ConversionStep1: React.FC = () => {
 
     useEffect(() => {
 
-        console.log(isValuable);
         
         const coinBalance = getCoinToBalance(state.sendCurrency, balanceState);
         const withoutValue = is0Value(inputValue, outputValue);
@@ -131,8 +130,8 @@ const ConversionStep1: React.FC = () => {
                     operation: 'Quote',
                     data: {
                         
-                        amount: state.fixOutput ? parseInt((state.receiveValue  * TO_WEBSOCKET).toFixed(2))
-                         : parseInt((state.sendValue  * TO_WEBSOCKET).toFixed(2)),
+                        amount: state.fixOutput ? Math.floor(parseInt((state.receiveValue  * TO_WEBSOCKET).toFixed(2)))
+                         : Math.floor(parseInt((state.sendValue  * TO_WEBSOCKET).toFixed(2))),
             
                         chain: 'Polygon',
             

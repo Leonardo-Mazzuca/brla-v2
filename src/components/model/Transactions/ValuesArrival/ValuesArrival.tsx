@@ -77,16 +77,19 @@ const ValuesArrival: React.FC = () => {
             {error ? (
                 error
             ) : loading ? (
-                <Loading text="Carregando dados..." />
+                <Loading text="Carregando dados..
+                ." />
             ) : filteredData.length > 0 ? (
-                <>
+
+                <section className="w-full">
                     {chunks.length > 1 && location.pathname !== '/home' ? (
                         <Swiper 
-                            className="w-full h-full"
+                            className="w-full h-full swiper-wrapper"
                             spaceBetween={50}
                             slidesPerView={1}
                             navigation
-                            pagination={{ clickable: true }}
+                            pagination={{ clickable: true, type: 'bullets' }} 
+                            grabCursor={true}
                             onSlideChange={(swiper: any) => setCurrentPage(swiper.activeIndex + 1)}
                         >
                             {chunks.map((chunk: any[], index: number) => (
@@ -102,7 +105,7 @@ const ValuesArrival: React.FC = () => {
                             <TransactionMap key={index} data={data} />
                         ))
                     )}
-                </>
+                </section>
             ) : (
                 <TextModel content="Nenhum dado encontrado" />
             )}
