@@ -6,6 +6,7 @@ import ValueSelect from "../../ValueSelect/ValueSelect";
 import { useBalance } from "../../../context/BalanceContext";
 import { useEffect, useState } from "react";
 import { getAvaliableBalance } from "../../../service/BalanceService/getAvaliableBalance";
+import { log } from "util";
 
 
 
@@ -20,23 +21,33 @@ const InputSelect = ({ coin, state, value, dispatch,
 
     useEffect(()=> {
 
-
-
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
 
 
-    },[coin, availableValue]);
+    },[coin, balanceState]);
 
     const handleMaxButtonClick = () => {
 
         const maxValue = availableValue;
 
-        setInputValue(maxValue);
 
         const converted = conversor(availableValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState))
 
+        
+        setInputValue(maxValue);
         setOutputValue(converted);
 
+            
+        dispatch({
+            type: CurrencyActions.setSendValue,
+            payload: { sendValue: maxValue },
+        });
+    
+        dispatch({
+            type: CurrencyActions.setReceiveValue,
+            payload: { receiveValue: converted },
+        });
+        
     }
 
     const handleCurrency = (currency: string) => {

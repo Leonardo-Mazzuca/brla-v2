@@ -7,6 +7,8 @@ import { usdToBrla } from "./WebSocketConstraints/webSocketContrainst";
 
 export const sendMessageToTransfers = (state: CurrencyState, webSocket: WebSocket) => {
 
+   
+    
     if (webSocket && webSocket.OPEN) {
                   
         webSocket.send(JSON.stringify({
@@ -16,7 +18,7 @@ export const sendMessageToTransfers = (state: CurrencyState, webSocket: WebSocke
 
             data: {
                 
-                amount: Number(state.sendValue * 100),
+                amount: Number(state.sendValue) * 100,
         
                 chain: 'Polygon',
 

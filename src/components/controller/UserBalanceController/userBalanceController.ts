@@ -17,10 +17,13 @@ const getUserTokenBalance = async (
 
         const contract = new web3.eth.Contract(contractAbi, contractAddress);
         const rawBalance: BigInt = await contract.methods.balanceOf(userData.wallets.evm).call();
+        
         return Number(rawBalance) / decimals;
 
     } catch (error:any) {
+
         throw new Error(`Failed to get token balance: ${error.message}`);
+        
     }
 };
 
@@ -37,7 +40,6 @@ export async function userBalanceController () {
             const brlBalance = await getUserTokenBalance(web3, BRLA_CONTRACT_ADDRESS, BRLAContractAbi, userData, BRLA_ON_CHAIN);
             const usdcBalance = await getUserTokenBalance(web3, USDC_CONTRACT_ADDRESS, USDCContractAbi, userData, USDTC_ON_CHAIN);
             const usdtBalance = await getUserTokenBalance(web3, USDT_CONTRACT_ADDRESS, USDTContractAbi, userData, USDTC_ON_CHAIN);
-
             
             return {brlBalance, usdcBalance, usdtBalance};
             
@@ -49,7 +51,8 @@ export async function userBalanceController () {
 
 
     } catch (error: any) {
-        console.error(error);
+   
         throw error;
+
     }
 }

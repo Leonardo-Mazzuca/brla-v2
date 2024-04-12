@@ -16,6 +16,10 @@ import { isBrl } from "../../service/Util/isBrl";
 import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
 import { is0Value, isBalanceLessThanValue, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
+import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
+import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
+import { usdToBrla } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 const TransferStep1: React.FC = () => {
 
@@ -40,7 +44,7 @@ const TransferStep1: React.FC = () => {
 
     useEffect(() => {
 
-        if(outputValue && inputValue) {
+       
 
           if(isForWebSocketOnTransfer(state) && !webSocketState.webSocket?.OPEN) {
 
@@ -48,7 +52,7 @@ const TransferStep1: React.FC = () => {
             
           } 
 
-        }
+      
 
     }, [outputValue,inputValue, state, buttonClassname, fetchWebSocket]);
   
@@ -148,8 +152,39 @@ const TransferStep1: React.FC = () => {
     })
 
     if(isForWebSocketOnTransfer(state) && webSocketState.webSocket && webSocketState.webSocket.OPEN) {
+      
+        dispatch({
+          type: CurrencyActions.setSendValue,
+          payload: {sendValue: inputValue}
+        });
+    
+        dispatch({
+          type: CurrencyActions.setReceiveValue,
+          payload: {receiveValue: outputValue}
+        });
 
-        sendMessageToTransfers(state, webSocketState.webSocket);
+        webSocketState.webSocket.send(JSON.stringify({
+
+          messageId: 'qualquer',
+          operation: 'Quote',
+
+          data: {
+              
+              amount: Number(state.sendValue.toFixed(2)) * TO_WEBSOCKET,
+      
+              chain: 'Polygon',
+
+              coin: isUsdToBrla(state) ? sendCoinToWebSocket(state.sendCurrency) : sendCoinToWebSocket(state.receiveCurrency),
+           
+              usdToBrla: isUsdToBrla(state),
+
+              fixOutPut: state.fixOutput,
+
+              operation: !usdToBrla(state) ? 'swap' : 'pix-to-usd',
+
+          }
+
+      }));
 
     }
     

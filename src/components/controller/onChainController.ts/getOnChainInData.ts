@@ -26,24 +26,21 @@ export const getOnChainInData =  async () => {
         });
         
         const conversionData = await getConversionData();
-        
 
         
         
         const data = request.data.onchainLogs.map((item: ExpectedOnChainInData) => {
 
-            const tx = conversionData.filter((data: ExpectedConversionData) => data.tx === item.tx);      
+            const tx = conversionData.filter((data: ExpectedConversionData) => item.tx !== data.tx)[0];
             
-            const operationName = tx ? '' : 'MINT';
-            const createdAt = tx ? '' : item.createdAt;
             
             return {
 
-            operationName:  operationName,
+            operationName: tx ? '' : 'MINT',
             walletAddress: formatWalletAddress(item.fromAddress),
             amount: parseFloat(item.amount),
             date: formatDate(item.createdAt),
-            createdAt: createdAt,
+            createdAt: tx ? '' : item.createdAt,
             title: item.chain,
             icon: faPlus,
             tx: item.tx,
@@ -51,6 +48,11 @@ export const getOnChainInData =  async () => {
         
 
         }});
+
+        console.log(data);
+        
+
+        
         
         return data;
         

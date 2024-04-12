@@ -18,6 +18,8 @@ import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/
 import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isBrlaToUsd } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
+import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
 
 
 const ConversionStep1: React.FC = () => {
@@ -122,7 +124,28 @@ const ConversionStep1: React.FC = () => {
         if ((isUsdToBrla(state)) || isBrlaToUsd(state)) {   
 
             if(webSocketState.webSocket) {
-                sendMessageToSwap(webSocketState.webSocket, state);
+
+                webSocketState.webSocket.send(JSON.stringify({
+
+                    messageId: 'qualquer',
+                    operation: 'Quote',
+                    data: {
+                        
+                        amount: state.fixOutput ? Number(state.receiveValue.toFixed(2)) * TO_WEBSOCKET
+                         : Number(state.sendValue.toFixed(2)) * TO_WEBSOCKET,
+            
+                        chain: 'Polygon',
+            
+                        coin: isUsdToBrla(state) ? sendCoinToWebSocket(state.sendCurrency) : sendCoinToWebSocket(state.receiveCurrency),
+            
+                        usdToBrla: isUsdToBrla(state),
+            
+                        fixOutPut: state.fixOutput,
+            
+                        operation: 'swap'
+                    }
+            
+                }));
             }
         }
 

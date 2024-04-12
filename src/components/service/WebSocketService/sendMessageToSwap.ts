@@ -15,8 +15,8 @@ export const sendMessageToSwap = (webSocket: WebSocket,state: CurrencyState) => 
         operation: 'Quote',
         data: {
             
-            amount: state.fixOutput ? (state.receiveValue * TO_WEBSOCKET)
-             : (state.sendValue * TO_WEBSOCKET),
+            amount: state.fixOutput ? (state.receiveValue) * TO_WEBSOCKET
+             : (state.sendValue) * TO_WEBSOCKET,
 
             chain: 'Polygon',
 

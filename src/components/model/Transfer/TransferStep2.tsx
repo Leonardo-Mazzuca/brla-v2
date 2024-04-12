@@ -75,11 +75,11 @@ const TransferStep2 = () => {
           webSocketState.webSocket.onmessage = e => {
 
               const message = JSON.parse(e.data);
+
+              console.log(message.data);
               
               if(message.data) {
 
-
-                console.log(message.data);
                 
                 if(isUsdToBrla(state)){
 
@@ -243,6 +243,7 @@ const TransferStep2 = () => {
 
 
     useEffect(()=> {
+      
       
 
       if(isBrl(state)) {

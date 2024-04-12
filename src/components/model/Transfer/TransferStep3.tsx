@@ -51,23 +51,8 @@ const TransferStep3 = () => {
 
     const {state:webSocketState} = useWebSocket();
 
-    const navigate = useNavigate();
-
 
     useEffect(()=> {
-
-      if(!state.receiveValue) {
-        navigate('/home');
-      }
-      
-    },[]);
-
-
-    useEffect(()=> {
-
-      console.log(state.sendCurrency);
-      console.log(state.receiveCurrency);
-      
 
           
     if(!isForWebSocketOnTransfer(state)) {
@@ -85,13 +70,15 @@ const TransferStep3 = () => {
 
               const message = JSON.parse(e.data);
               
-   
               if(message.error) {
 
                   setErrorMessage(message.error);
                   onError(true);  
                 
               }
+
+              console.log(message.data);
+              
               
               if(message.data) {
 
@@ -100,7 +87,6 @@ const TransferStep3 = () => {
 
               }   
 
-              console.log(message);
 
               if(message.data && message.success && message.data.quoteId === quoteId && 
                 message.data.id) {

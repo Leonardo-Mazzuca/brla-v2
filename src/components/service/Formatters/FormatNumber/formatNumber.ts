@@ -3,7 +3,6 @@ import { getCurrencyCoinToFormat } from "../../CoinsService/getCurrencyCoinToFor
 
 export const formatNumberToString = (number: number, currency?: string) => {
 
-    
     try {
         
         if (number === 0 || !number) {
@@ -15,8 +14,10 @@ export const formatNumberToString = (number: number, currency?: string) => {
              const coin = getCurrencyCoinToFormat(currency);
     
              return new Intl.NumberFormat('en-US', { style: 'currency',
-             minimumFractionDigits: number <= 0.01 ? 3 : 2,
-             currency:  coin}).format(number);
+
+             minimumFractionDigits: number <= 0.01 ? 4 : 2,
+
+             currency: coin}).format(number);
     
         } else {
     
@@ -25,7 +26,6 @@ export const formatNumberToString = (number: number, currency?: string) => {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 minimumIntegerDigits: 2,
-                
                 useGrouping: true,  
             };
     

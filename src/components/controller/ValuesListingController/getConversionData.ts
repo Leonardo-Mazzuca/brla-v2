@@ -53,6 +53,7 @@ export type ExpectedConversionData = {
     isPayment: boolean;
     tx: string;
     isSwap: boolean,
+    receiverAddress: string;
 
 }
 
@@ -71,7 +72,6 @@ export async function getConversionData () {
         
         
         const walletAddress = userData?.wallets.evm;
-        
         
         const data = request.data.swapLogs.map((item: ConversionData) => ({
 
@@ -111,12 +111,14 @@ export async function getConversionData () {
             icon: faArrowRightArrowLeft,
             isPayment: item.receiverAddress !== walletAddress,
             isSwap: true,
+            receiverAddress: item.receiverAddress
            
-
+            
+            
             
         }));
 
-
+        console.log(data);
     
         
         return data;
