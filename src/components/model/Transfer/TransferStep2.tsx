@@ -304,9 +304,9 @@ const TransferStep2 = () => {
     useEffect(() => {
 
       
-      if(!isBrl(state)) {
+      if(!isBrl(state) && inputValue && outputValue) {
 
-        if(validWallet && inputValue && outputValue) {
+        if(validWallet) {
 
           setButtonClassname(POINTS_ALL);
 
