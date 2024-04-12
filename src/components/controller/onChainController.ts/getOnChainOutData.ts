@@ -74,10 +74,14 @@ export const getOnChainOutData = async () => {
             icon: walletAddress === item.to ? faArrowRightArrowLeft : faArrowUp,
             isPaymentChain: item.inputCoin === item.outputCoin,
             isOnChain: true,
+            tx: txs[0]
+            
 
         }});
+        
          
         return data;
+
         
 
     } catch(e:any) {

@@ -18,22 +18,17 @@ const ValuesArrival: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const location = useLocation();
     const [chunks, setChunks] = useState<any[]>([]);
+    const [dataFetched, setDataFetched] = useState<boolean>(false); 
 
     const fetchData = async () => {
-
         try {
-
             let data = await valuesListingController();
-            
-            
             if (location.pathname === '/home') {
                 data = data.slice(0, 5);
             }
-
-            
-
             setAllData(data);
             setLoading(false);
+            setDataFetched(true); 
         } catch (error: any) {
             setError(
                 <TextModel
@@ -46,18 +41,19 @@ const ValuesArrival: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchData();
-    }, [location.pathname]);
+       
+        if (!dataFetched) {
+            fetchData();
+        }
+    }, [dataFetched]);
 
     useEffect(() => {
         let newData = allData;
-
         if (state.searchDate && !isNaN(Date.parse(state.searchDate))) {
             newData = allData.filter(
                 (item: any) => item.createdAt && item.createdAt.substring(0, 10).includes(state.searchDate)
             );
         }
-
         setFilteredData(newData);
     }, [state.searchDate, allData]);
 
@@ -69,15 +65,11 @@ const ValuesArrival: React.FC = () => {
     }, [dispatch, filteredData]);
 
     useEffect(() => {
-        
         const chunks = [];
-
         for (let i = 0; i < filteredData.length; i += LOG_SIZE) {
             chunks.push(filteredData.slice(i, i + LOG_SIZE));
         }
-
         setChunks(chunks);
-
     }, [filteredData]);
 
     return (
@@ -119,4 +111,5 @@ const ValuesArrival: React.FC = () => {
 };
 
 export default ValuesArrival;
+
 

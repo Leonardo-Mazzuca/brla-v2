@@ -5,14 +5,16 @@ import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 
 
 export async function getPaymentData() {
+    
     try {
         const request = await http.get('/payment/history', {
             withCredentials: true,
         });
-        
+    
         
 
         const data = request.data.paymentLogs.map((item: any) => {
+            
             const latestFeedback = item.paymentOps
                 .flatMap((paymentOp: any) => paymentOp?.transfers ?? []) 
                 .flatMap((transfer: any) => transfer?.feedbacks ?? []) 

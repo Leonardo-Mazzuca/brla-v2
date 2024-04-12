@@ -81,7 +81,7 @@ const Receive = ({ data }: TransactionData<ExpectedPayInData | any>) => {
       amount={<p
         className={"bg-green-400/50 rounded-xl p-2"}         
       >
-      {`+ ${amount} BRL`}
+      {`+ ${amount} ${data.coin ? data.coin : 'BRL'}`}
 
       </p>}
       footerText={`Valor recebido de`}

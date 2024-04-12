@@ -35,7 +35,7 @@ const Home: React.FC = () => {
 
     fetchAllData();
 
-  }, [setChartData]);
+  },[]);
 
 
   return (
