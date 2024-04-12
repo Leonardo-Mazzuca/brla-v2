@@ -6,7 +6,7 @@ export const getAvaliableBalance = (coin: string, state: BalanceState) => {
 
     switch (coin) {
         
-        case 'BRLA':
+        case 'BRL':
             return state.brlBalance;
 
         case 'USDC':

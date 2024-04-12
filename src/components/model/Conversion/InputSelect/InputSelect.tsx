@@ -6,12 +6,10 @@ import ValueSelect from "../../ValueSelect/ValueSelect";
 import { useBalance } from "../../../context/BalanceContext";
 import { useEffect, useState } from "react";
 import { getAvaliableBalance } from "../../../service/BalanceService/getAvaliableBalance";
-import { log } from "util";
-
 
 
 const InputSelect = ({ coin, state, value, dispatch,
-     setInputValue, setOutputValue, isToggleButton, topIcon, topText }: ConvertOperation) => {
+     setInputValue, setOutputValue, topIcon, topText }: ConvertOperation) => {
    
     const { conversor } = useCurrency();
     const { state: quoteState, createConversionTable } = useQuote();
@@ -29,7 +27,6 @@ const InputSelect = ({ coin, state, value, dispatch,
     const handleMaxButtonClick = () => {
 
         const maxValue = availableValue;
-
 
         const converted = conversor(availableValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState))
 
@@ -103,7 +100,6 @@ const InputSelect = ({ coin, state, value, dispatch,
             onCurrencyChange={handleCurrency}
             topText={topText}
             topIcon={topIcon}
-            toggleButtonPresent={isToggleButton}
             handleMaxButtonClick={handleMaxButtonClick}
         />
 

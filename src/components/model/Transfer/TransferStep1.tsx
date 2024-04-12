@@ -151,7 +151,7 @@ const TransferStep1: React.FC = () => {
       payload: {receiveValue: outputValue}
     })
 
-    if(isForWebSocketOnTransfer(state) && webSocketState.webSocket && webSocketState.webSocket.OPEN) {
+    if(isForWebSocketOnTransfer(state) && webSocketState.webSocket) {
       
         dispatch({
           type: CurrencyActions.setSendValue,
@@ -163,6 +163,9 @@ const TransferStep1: React.FC = () => {
           payload: {receiveValue: outputValue}
         });
 
+        console.log(Number(state.sendValue.toFixed(2)) * TO_WEBSOCKET);
+        
+
         webSocketState.webSocket.send(JSON.stringify({
 
           messageId: 'qualquer',
@@ -170,7 +173,7 @@ const TransferStep1: React.FC = () => {
 
           data: {
               
-              amount: Number(state.sendValue.toFixed(2)) * TO_WEBSOCKET,
+              amount: parseInt((state.sendValue * TO_WEBSOCKET).toFixed(2)),
       
               chain: 'Polygon',
 
@@ -228,7 +231,6 @@ const TransferStep1: React.FC = () => {
             setOutputValue={setOutputValue}
             topText="Beneficiário Recebe"
             topIcon={faArrowDown}
-            isToggleButton={true}
             state={state}
             dispatch={dispatch}
 

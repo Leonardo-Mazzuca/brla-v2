@@ -76,11 +76,11 @@ const TransferStep2 = () => {
 
               const message = JSON.parse(e.data);
 
-              console.log(message.data);
+              console.log(message);
+              
               
               if(message.data) {
 
-                
                 if(isUsdToBrla(state)){
 
                   setInputValue(message.data.amountUsd / TO_WEBSOCKET);
@@ -118,8 +118,10 @@ const TransferStep2 = () => {
       }
 
       if(!isForWebSocketOnTransfer(state)){
+
         setInputValue(state.sendValue);
         setOutputValue(state.receiveValue);
+
       }
 
 
@@ -304,7 +306,7 @@ const TransferStep2 = () => {
       
       if(!isBrl(state)) {
 
-        if(validWallet) {
+        if(validWallet && inputValue && outputValue) {
 
           setButtonClassname(POINTS_ALL);
 
@@ -316,7 +318,7 @@ const TransferStep2 = () => {
 
       } else {
         
-              if(isPixkeyTaxId) {
+              if(isPixkeyTaxId && inputValue && outputValue) {
           
                   if (isPixkeyValid) {
               
@@ -334,7 +336,7 @@ const TransferStep2 = () => {
             
                   } else {
           
-                   if (isPixkeyValid && isTaxIdValid) {
+                   if (isPixkeyValid && isTaxIdValid && inputValue && outputValue) {
                         setButtonClassname(POINTS_ALL);
               
                     } else {

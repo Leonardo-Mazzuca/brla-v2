@@ -6,6 +6,7 @@ import { CurrencyProvider } from "./components/context/CurrencyContext";
 import { FormProvider } from "./components/context/FormContext";
 import { TransactionsProvider } from "./components/context/TransactionsContext";
 import { QuoteProvider } from "./components/context/QuoteContext";
+import { WebSocketProvider } from "./components/context/WebSocketContext";
 
 
 
@@ -16,6 +17,8 @@ function App() {
   return (
 
     <section className="mn-w-screen min-h-screen">
+
+          <WebSocketProvider>
 
           <QuoteProvider>
   
@@ -38,6 +41,9 @@ function App() {
             </BalanceProvider>
 
           </QuoteProvider>
+
+
+          </WebSocketProvider>
       
 
     </section>

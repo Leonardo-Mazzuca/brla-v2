@@ -10,7 +10,7 @@ import { getAvaliableBalance } from "../../../service/BalanceService/getAvaliabl
 
 
 const OutputSelect:React.FC <ConvertOperation>
-= ({state, coin, value, dispatch, setInputValue, setOutputValue, isToggleButton, topIcon, topText}) => {
+= ({state, coin, value, dispatch, setInputValue, setOutputValue, topIcon, topText}) => {
 
     const {conversor} = useCurrency();
     const {state:quoteState, createConversionTable} = useQuote();
@@ -97,7 +97,6 @@ const OutputSelect:React.FC <ConvertOperation>
         onCurrencyChange={handleCurrency}
         topText={topText}
         topIcon={topIcon}
-        toggleButtonPresent={isToggleButton}
         handleMaxButtonClick={handleMaxButtonClick}
     
     

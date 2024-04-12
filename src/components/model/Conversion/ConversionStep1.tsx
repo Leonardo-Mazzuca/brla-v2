@@ -131,8 +131,8 @@ const ConversionStep1: React.FC = () => {
                     operation: 'Quote',
                     data: {
                         
-                        amount: state.fixOutput ? Number(state.receiveValue.toFixed(2)) * TO_WEBSOCKET
-                         : Number(state.sendValue.toFixed(2)) * TO_WEBSOCKET,
+                        amount: state.fixOutput ? parseInt((state.receiveValue  * TO_WEBSOCKET).toFixed(2))
+                         : parseInt((state.sendValue  * TO_WEBSOCKET).toFixed(2)),
             
                         chain: 'Polygon',
             
