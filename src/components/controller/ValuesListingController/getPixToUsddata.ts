@@ -15,9 +15,9 @@ export const getPixToUsdData = async () => {
         // console.log('PixToUsd data: ', request.data.depositsLogs);
 
 
-
-
     } catch(e:any) {
+
         throw new Error('Erro ao mapear dados de PixToUsd: ', e.message || e.data?.message);
+        
     }
 }

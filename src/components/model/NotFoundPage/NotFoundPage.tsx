@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import Heading from "../Heading/Heading";
 import TextModel from "../Text/Text";
+import { DEFAULT_PATH } from "../../contants/Paths/paths";
 
 
 
@@ -21,7 +22,7 @@ export const NotFoundPage = () => {
 
             <TextModel addons="my-3 text-3xl" content={"A página que você está procurando não existe"} />
 
-            <Button onClick={() => navigate('/')} text = "Voltar" />
+            <Button onClick={() => navigate(DEFAULT_PATH)} text = "Voltar" />
 
             </div>
 

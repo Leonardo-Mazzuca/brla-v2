@@ -9,6 +9,8 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import { connectWebSocket } from '../../controller/WebSocketController/connectWebSocket';
 import { WebSocketActions, useWebSocket } from '../../context/WebSocketContext';
 import { BUTTON_PADDING, DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLEX, ROUNDED_DEFAULT, TEXT_GRAY_600, TEXT_SMALL, WIDTH_FULL } from '../../contants/classnames/classnames';
+import { REGISTER_1, TO_HOME } from '../../contants/Paths/paths';
+import { USER_LOGGED } from '../../contants/sessionStorageKeys/sessionStorageKeys';
 
 
 type LoginData = {
@@ -50,7 +52,8 @@ const FormLogin: React.FC = () => {
                         payload: { webSocket },
                     });
 
-                    navigate('/home');
+                    sessionStorage.setItem(USER_LOGGED, email);
+                    navigate(TO_HOME);
 
                 } catch(e:any) {
 
@@ -74,23 +77,13 @@ const FormLogin: React.FC = () => {
     const formFooter = (
 
         <div className={`${FLEX} flex-col gap-2`}>
-            <a
-                className={`${WIDTH_FULL} text-center ${BUTTON_PADDING} font-medium border border-black 
-                ${ROUNDED_DEFAULT} hover:bg-black hover:text-white text-heading-blue-secondary ${DEFAULT_TEXT_SIZE}
-                 ${FLEX} justify-center gap-2`}
-
-                href=""
-            >
-                <img src="/Google.svg" className={DEFAULT_ICON_SIZE} alt="Google Icon" /> Continue with Google 
-            </a>
-            
             <TextModel 
                 color={TEXT_GRAY_600}
                 addons={TEXT_SMALL}
                 content={
                     <>
                         Não tem conta ainda?{' '}
-                        <Link className="hover:underline" to="/step1">Cadastre-se</Link>
+                        <Link className="hover:underline" to={REGISTER_1}>Cadastre-se</Link>
                     </>
                 } 
             />
@@ -111,7 +104,9 @@ const FormLogin: React.FC = () => {
             />
 
             <hr className='my-5' />
+
             {formFooter}
+
         </>
 
     );

@@ -5,6 +5,7 @@ import LinkModel from "../Link/Link";
 import { useQuote } from "../../context/QuoteContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faUser } from "@fortawesome/free-solid-svg-icons";
+import { TO_HOME } from "../../contants/Paths/paths";
 
 
 interface NavbarProps {
@@ -58,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({classname, headerItem}) => {
             
             '>
 
-            <LinkModel linkPath="/Home">
+            <LinkModel linkPath={TO_HOME}>
                 {headerItem}
             </LinkModel>
        

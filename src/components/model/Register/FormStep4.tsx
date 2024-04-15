@@ -9,6 +9,7 @@ import { registerController } from "../../controller/RegisterController/Register
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_CENTER, MARGIN_Y_3, TEXT_CENTER, TEXT_GRAY_500 } from "../../contants/classnames/classnames";
+import { DEFAULT_PATH } from "../../contants/Paths/paths";
 
 const inputItems = ["code1", "code2", "code3", "code4", "code5", "code6"];
 
@@ -73,10 +74,12 @@ const FormStep4: React.FC = () => {
 
       if (status.error) {
         formRef.current?.reset();
+
         setError("Código incorreto ou inválido!");
       } else {
-        navigate("/");
+        navigate(DEFAULT_PATH);
       }
+
     } catch (e) {
       console.error(e);
     }

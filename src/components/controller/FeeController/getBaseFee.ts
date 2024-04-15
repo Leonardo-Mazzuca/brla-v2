@@ -1,4 +1,4 @@
-import { TO_CENTS, TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { TO_CENTS } from "../../contants/divisionValues/divisionValues";
 import { http } from "../ConectAPI/conectApi"
 
 

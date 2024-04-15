@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { ProviderProps } from "../types/Provider/Provider";
 
 
@@ -9,9 +9,6 @@ export type WebSocketState = {
 export enum WebSocketActions { 
 
   setWebSocket,
-  setSwapOperation,
-  setTransferOperation,
-  setDepositOPeration,
 
 }
 
@@ -41,10 +38,6 @@ const webSocketReducer = (state: WebSocketState, action: Action) => {
 
     case WebSocketActions.setWebSocket:
         return {...state, webSocket: action.payload.webSocket};
-
-    case WebSocketActions.setSwapOperation:
-        return {...state, swapOperation: action.payload.swapOperation};
-
     
     default: 
          return state;

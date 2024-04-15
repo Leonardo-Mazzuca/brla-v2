@@ -21,12 +21,13 @@ import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNu
 import { isPhoneNumber, validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
 import { isEmail } from "../../service/PixkeyService/verifyEmail";
 import { isRandomKey } from "../../service/PixkeyService/verifiyRandomkey";
-import { FLEX, FONT_LIGHT, HIDDEN, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
+import { BLOCK, FLEX, FONT_LIGHT, HIDDEN, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../contants/classnames/classnames";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { getUserData } from "../../controller/UserDataController/getUserData";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
+import { TO_HOME, TO_TRANSFERS_3 } from "../../contants/Paths/paths";
 
 
 const TransferStep2 = () => {
@@ -56,12 +57,12 @@ const TransferStep2 = () => {
     useEffect(()=> {
 
       if(!state.receiveValue) {
-        navigate('/home');
+        navigate(TO_HOME);
       }
 
       if(!webSocketState.webSocket?.OPEN) {
 
-        navigate('/home');
+        navigate(TO_HOME);
         
       }
  
@@ -436,7 +437,7 @@ const TransferStep2 = () => {
           
         } else {
 
-          setTaxIdClassname('block');
+          setTaxIdClassname(BLOCK);
           controlPixkey(false);
 
         }
@@ -466,14 +467,14 @@ const TransferStep2 = () => {
 
     return (
 
-      <ContainerService path = "/home" linkText="Dashboard">
+      <ContainerService path = {TO_HOME} linkText="Dashboard">
 
             <TransfersContainer isButtonPresent = {false} activeIndex={1}>
                 
                   <FormModel 
                    onSubmit={handleSubmit}
                    buttonClassname={buttonClassname} 
-                   location="/transfer/3" 
+                   location={TO_TRANSFERS_3}
                    buttonText={<>Proximo <FontAwesomeIcon className="ms-2" icon={faArrowRight} /></>}
                    fields={fields} schema={schema}>
 

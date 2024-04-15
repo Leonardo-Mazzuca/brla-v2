@@ -11,6 +11,7 @@ import { DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLEX, FLEX_WRAP, GAP_DEFAULT, ITE
 import { useState } from "react";
 import { validityRawPhoneNumber } from "../../service/TaxId/PhoneNumber/verifyPhoneNumber";
 import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNumber/formatValueInPhoneNumber";
+import { REGISTER_2 } from "../../contants/Paths/paths";
 
 
 
@@ -80,7 +81,7 @@ const FromStep1 = () => {
       onSubmit={handleSubmit} 
       buttonText={'Proximo'} 
       fields={fields} 
-      location="/step2"
+      location={REGISTER_2}
       >
 
         <div className="text-start">
@@ -101,7 +102,7 @@ const FromStep1 = () => {
             />
 
             <label htmlFor="checkboxInput" 
-            className={`${FLEX} md:${ITEMS_CENTER}
+            className={`${FLEX} md:items-center
             ${FLEX_WRAP} ${GAP_DEFAULT} ${TEXT_GRAY_400} ${TEXT_SMALL} md:${DEFAULT_TEXT_SIZE}`}>
 
               I agree with

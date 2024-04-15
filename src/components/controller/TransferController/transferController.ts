@@ -11,9 +11,6 @@ export const transferController = async (pixkey: string, taxId: string, amount: 
         const request = await http.post('/pay-out', body, {
             withCredentials: true
         });
-
-        console.log(body);
-        
         
         if(request.status === 200) {
             return request.data;

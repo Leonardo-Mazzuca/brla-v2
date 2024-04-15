@@ -2,8 +2,10 @@ import { getCurrencyIMG } from "../../../service/CurrencyService/getCurrencyIMG"
 import TextModel from "../../Text/Text";
 
 type ConversionCardProps = {
+
     currency: string;
     value: string;
+    
 }
 
 const ConversionCard: React.FC<ConversionCardProps> = ({ currency, value }) => {

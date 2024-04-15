@@ -16,7 +16,6 @@ export const getPayOutOfBRCodeData = async () => {
             withCredentials: true
         });
 
-        console.log('BR code default data: ', request.data.brCodePaymentsLogs);
         
         const data = request.data.brCodePaymentsLogs.map((item:any)=> ({
 

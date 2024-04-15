@@ -7,9 +7,11 @@ import { useQuote } from "./QuoteContext";
 
 
 export type BalanceState = {
+
     brlBalance: number;
     usdcBalance: number;
     usdtBalance: number;
+    
 }
 
 

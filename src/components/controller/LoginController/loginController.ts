@@ -10,7 +10,7 @@ export async function loginController(email: string, password: string) {
     try {
 
       const request = await http.post('/login', body, {
-        withCredentials: true 
+        withCredentials: true,
       })
 
       return request;

@@ -13,13 +13,13 @@ import { useQuote } from "../../context/QuoteContext";
 import { is0Value, isBalanceLessThanValue, isTheSameCoin, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
-import { sendMessageToSwap } from "../../service/WebSocketService/sendMessageToSwap";
 import { isForWebSocketOnSwap } from "../../service/WebSocketService/Conversion/isForWebSocket";
-import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
+import { POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
 import { isBrlaToUsd } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
+import { TO_CONVERT_2, TO_HOME } from "../../contants/Paths/paths";
 
 
 const ConversionStep1: React.FC = () => {
@@ -36,16 +36,13 @@ const ConversionStep1: React.FC = () => {
     const converted = conversor(inputValue, state.sendCurrency, state.receiveCurrency,createConversionTable(quoteState));
     const { state: webSocketState, dispatch:webSocketDispatch } = useWebSocket();
 
-;
-
     useEffect(()=> {
+
 
         if(inputValue && outputValue) {
 
-     
-            fetchWebSocket(webSocketState, webSocketDispatch);
+            fetchWebSocket(webSocketState, webSocketDispatch);     
             
-
         }
 
     },[webSocketState.webSocket, inputValue, outputValue, buttonClassname]);
@@ -54,20 +51,20 @@ const ConversionStep1: React.FC = () => {
     
         if(isForWebSocketOnSwap(state) && webSocketState.webSocket?.OPEN) {
   
-          setTimeout(()=> {
-  
-            if(isValuable){
-  
-              setButtonClassname(POINTS_ALL);
+       
+            if(isValuable && webSocketState.webSocket.OPEN){
+                
+              setTimeout(()=> {
+
+                  setButtonClassname(POINTS_ALL);
+                  
+              },1000);
   
             } else {
   
               setButtonClassname(POINTS_NONE);
   
             }
-  
-            
-          },3200);
   
         } 
   
@@ -130,7 +127,8 @@ const ConversionStep1: React.FC = () => {
                     operation: 'Quote',
                     data: {
                         
-                        amount: state.fixOutput ? Math.floor(parseInt((state.receiveValue  * TO_WEBSOCKET).toFixed(2)))
+                        amount: state.fixOutput ? 
+                           Math.floor(parseInt((state.receiveValue  * TO_WEBSOCKET).toFixed(2)))
                          : Math.floor(parseInt((state.sendValue  * TO_WEBSOCKET).toFixed(2))),
             
                         chain: 'Polygon',
@@ -162,12 +160,12 @@ const ConversionStep1: React.FC = () => {
 
     return (
 
-        <ContainerService path="/home" linkText="Dashboard">
+        <ContainerService path={TO_HOME} linkText="Dashboard">
 
             <ConversionContainer 
                 onSubmit={handleSubmit}
                 activeIndex={0}
-                location="/convert/2" 
+                location={TO_CONVERT_2}
                 buttonComponent={<span>Próximo <FontAwesomeIcon icon={faArrowRight} /></span>}
                 buttonControl={buttonClassname}
             >

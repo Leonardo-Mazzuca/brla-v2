@@ -21,6 +21,7 @@ import { onChainController } from "../../controller/onChainController.ts/onChain
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { getMarkupFee } from "../../service/FeeService/getBaseFee";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
+import { TO_CONVERT_1, TO_HOME } from "../../contants/Paths/paths";
 
 
 const ConversionStep2: React.FC = () => {
@@ -137,7 +138,7 @@ const ConversionStep2: React.FC = () => {
                 buttonText: 'Concluir',
                 completeMessage: 'Conversão concluída',
                 text: 'Você pode monitorar suas transações através do dashboard inicial.',
-                path: '/home',
+                path: TO_HOME,
             });
           
         }
@@ -155,7 +156,7 @@ const ConversionStep2: React.FC = () => {
             setButtonClassname('invisible');
             setSuccessMessage({
                 buttonText: 'Voltar',
-                path: '/convert/1',
+                path: TO_CONVERT_1,
                 completeMessage: errorMessage,
                 text: 'Realize a operação novamente',
                 image: '/X-error.png',
@@ -179,10 +180,6 @@ const ConversionStep2: React.FC = () => {
 
             const fee = await getMarkupFee(state.receiveCurrency);
             setMarkupFee(fee);
-
-
-
-
 
         }
 
@@ -208,7 +205,7 @@ const ConversionStep2: React.FC = () => {
             socketMessageHandler();
         }
 
-        if(!isForWebSocketOnSwap(state) && onSuccessMessage.completeMessage === '') {
+        if(!isForWebSocketOnSwap(state) && markupFee && onSuccessMessage.completeMessage === '') {
             setButtonClassname(POINTS_ALL);
         }
 
@@ -218,7 +215,7 @@ const ConversionStep2: React.FC = () => {
         }
 
         
-    },[socketMessageHandler, buttonClassname,onSuccessMessage, isForWebSocketOnSwap]);
+    },[socketMessageHandler, buttonClassname,onSuccessMessage,markupFee, isForWebSocketOnSwap]);
 
 
 
@@ -272,7 +269,7 @@ const ConversionStep2: React.FC = () => {
 
     return (
 
-        <ContainerService path="/home" linkText="Dashboard">
+        <ContainerService path={TO_HOME} linkText="Dashboard">
 
             <ConversionContainer
             

@@ -36,7 +36,6 @@ type ContextType = {
         convertToBrl: (state: QuoteState, value: number, currency: string) => number
     }
 
-
 }
 
 

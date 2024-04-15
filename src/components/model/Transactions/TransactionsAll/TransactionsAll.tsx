@@ -2,6 +2,7 @@ import ContainerStandart from "../../Container/ContainerDefault";
 import TransactionsManagement from "./TransactionsManagement";
 import MiniMenu from "../MiniMenu/MiniMenu";
 import ValuesArrival from "../ValuesArrival/ValuesArrival";
+import { TO_HOME } from "../../../contants/Paths/paths";
 
 
 const Transactions: React.FC = () => {
@@ -22,7 +23,7 @@ const Transactions: React.FC = () => {
 
                             <MiniMenu 
 
-                                linkPath={'/home'} 
+                                linkPath={TO_HOME} 
                                 headingColReverse ={true} 
                                 linkIsEnable={true}
                                 children = {<TransactionsManagement />} 

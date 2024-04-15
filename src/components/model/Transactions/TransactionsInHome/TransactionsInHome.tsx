@@ -1,6 +1,7 @@
 import TransactionButtons from "./TransactionButtons";
 import MiniMenu from "../MiniMenu/MiniMenu";
 import ValuesArrival from "../ValuesArrival/ValuesArrival";
+import { TO_TRANSACTIONS } from "../../../contants/Paths/paths";
 
 
 const TransactionsHome = () => {
@@ -21,7 +22,7 @@ const TransactionsHome = () => {
         
             <MiniMenu 
 
-            linkPath={'/Transactions'} 
+            linkPath={TO_TRANSACTIONS} 
             headingColReverse ={true} 
             linkIsEnable={true}
             children = {<TransactionButtons />} 

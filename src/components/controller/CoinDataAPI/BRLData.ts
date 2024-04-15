@@ -25,8 +25,9 @@ export const getBRLData = async () => {
 
 
     } catch (error:any) {
-        console.error(error.message);
+
         throw error;
+        
     }
 
 };

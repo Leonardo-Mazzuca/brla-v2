@@ -8,18 +8,17 @@ import { useBalance } from "../../context/BalanceContext";
 import TextModel from "../Text/Text";
 import InputSelect from "../Conversion/InputSelect/InputSelect";
 import OutputSelect from "../Conversion/InputSelect/OutputSelect";
-import { controllValueChange, doValidations, verifyIfIsValuable } from "../../service/TransfersService/transfersStep1Service";
+import { controllValueChange } from "../../service/TransfersService/transfersStep1Service";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { isForWebSocketOnTransfer } from "../../service/WebSocketService/Transfer/isForWebSocket";
 import { fetchWebSocket } from "../../service/WebSocketService/fetchWebSocket";
-import { isBrl } from "../../service/Util/isBrl";
 import { BLOCK, POINTS_ALL, POINTS_NONE } from "../../contants/classnames/classnames";
-import { sendMessageToTransfers } from "../../service/WebSocketService/sendMessageToTransfers";
-import { is0Value, isBalanceLessThanValue, isWebSocketOff } from "../../service/OperationValidities/operationValidities";
+import { is0Value, isBalanceLessThanValue } from "../../service/OperationValidities/operationValidities";
 import { sendCoinToWebSocket } from "../../service/CurrencyService/sendCoinToWebSocket";
 import { isUsdToBrla } from "../../service/Util/isUsdToBrla";
 import { usdToBrla } from "../../service/WebSocketService/WebSocketConstraints/webSocketContrainst";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { TO_HOME, TO_TRANSFERS_2 } from "../../contants/Paths/paths";
 
 const TransferStep1: React.FC = () => {
 
@@ -197,14 +196,14 @@ const TransferStep1: React.FC = () => {
 
   return (
 
-    <ContainerService path="/home" linkText="Dashboard">
+    <ContainerService path={TO_HOME} linkText="Dashboard">
 
       <TransfersContainer
 
         onSubmit={handleSubmit}
         buttonControl={buttonClassname}
         activeIndex={0}
-        location={'/transfer/2/'}
+        location={TO_TRANSFERS_2}
 
       >
 

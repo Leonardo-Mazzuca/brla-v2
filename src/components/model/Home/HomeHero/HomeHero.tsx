@@ -4,7 +4,7 @@ import { formatNumberToString } from "../../../service/Formatters/FormatNumber/f
 import Heading from "../../Heading/Heading";
 import TextModel from "../../Text/Text";
 import CardContainer from "./CardContainer";
-import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, HEIGHT_AUTO, ITEMS_END, TEXT_2X, TEXT_3X } from "../../../contants/classnames/classnames";
+import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, HEIGHT_AUTO, ITEMS_END, TEXT_3X } from "../../../contants/classnames/classnames";
 
 type HomeHeroProps = {
     
@@ -30,7 +30,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({heading}) => {
 
     return (
 
-        <section className={`{${FLEX_COL}} ${FLEX_COL} ${HEIGHT_AUTO} ${GAP_DEFAULT}`}>
+        <section className={`${FLEX_COL} ${FLEX_COL} ${HEIGHT_AUTO} ${GAP_DEFAULT}`}>
 
             <div className={`${FLEX} ${FLEX_WRAP} ${ITEMS_END} ${GAP_DEFAULT}`}>
 

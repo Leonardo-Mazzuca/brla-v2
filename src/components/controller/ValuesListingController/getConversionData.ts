@@ -4,6 +4,8 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Feedback } from "../../types/Feedback/Feedback";
 import { getUserData } from "../UserDataController/getUserData";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { SWAP_DATA, USER_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
+import { UserData } from "../../types/UserData/UserData";
 
 
 type SmartContractOps = {
@@ -57,9 +59,6 @@ export type ExpectedConversionData = {
 
 }
 
-
-
-
 export async function getConversionData () {
 
     try {
@@ -68,58 +67,62 @@ export async function getConversionData () {
             withCredentials: true
         });
         
-        const userData = await getUserData();
+        const stringData = sessionStorage.getItem(USER_DATA);
         
-        
-        const walletAddress = userData?.wallets.evm;
-        
-        const data = request.data.swapLogs.map((item: ConversionData) => ({
 
-            createdAt: item.createdAt,
+        if(stringData) {
 
-            ops: item.smartContractOps.map((op: SmartContractOps) => ({
-                id: op.id,
-                feedback: {
-                    ...op.feedback,
-                    createdAt: item.createdAt 
-                }
-                
-            })),
-
-            tx: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
-                acc = op.tx;
-                return acc;
-            },''),
-
-            feedback: item.smartContractOps.reduce((acc: Feedback, op: SmartContractOps) => {
-                acc = op.feedback;
-                return acc;
-            }, {} as Feedback),
-
-            usdAmount: (parseFloat(item.usdAmount) / TO_WEBSOCKET),
-            brlaAmount: parseFloat(item.brlaAmount) / TO_WEBSOCKET,
-            outputCoin: item.coin,
-            userDocument: item.userDocument,
-            title: item.chain,
-            operationName: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
-                acc = op.operationName;
-                return acc;
-            }, ''),
-            
-            basePrice: item.basePrice,
-            usdToBrla: item.usdToBrla,
-            icon: faArrowRightArrowLeft,
-            isPayment: item.receiverAddress !== walletAddress,
-            isSwap: true,
-            receiverAddress: item.receiverAddress
-           
-            
-            
-            
-        }));
+            const userData : UserData = JSON.parse(stringData);
     
-        
-        return data;
+            const walletAddress = userData?.wallets.evm;
+            
+            const data = request.data.swapLogs.map((item: ConversionData) => ({
+    
+                createdAt: item.createdAt,
+    
+                ops: item.smartContractOps.map((op: SmartContractOps) => ({
+                    id: op.id,
+                    feedback: {
+                        ...op.feedback,
+                        createdAt: item.createdAt 
+                    }
+                    
+                })),
+    
+                tx: item.smartContractOps.reduce((acc: string, op: SmartContractOps) => {
+                    acc = op.tx;
+                    return acc;
+                },''),
+    
+                feedback: item.smartContractOps.reduce((acc: Feedback, op: SmartContractOps) => {
+                    acc = op.feedback;
+                    return acc;
+                }, {} as Feedback),
+    
+                usdAmount: (parseFloat(item.usdAmount) / TO_WEBSOCKET),
+                brlaAmount: parseFloat(item.brlaAmount) / TO_WEBSOCKET,
+                outputCoin: item.coin,
+                userDocument: item.userDocument,
+                title: item.chain,
+                operationName: 'SWAP',
+                basePrice: item.basePrice,
+                usdToBrla: item.usdToBrla,
+                icon: faArrowRightArrowLeft,
+                isPayment: item.receiverAddress !== walletAddress,
+                isSwap: true,
+                receiverAddress: item.receiverAddress
+               
+                
+                
+                
+            }));
+
+
+            sessionStorage.setItem(SWAP_DATA, JSON.stringify(data));
+         
+            return data;
+
+        }
 
     } catch(e: any) {
 

@@ -20,6 +20,7 @@ import { FLEX, FLEX_COL, GAP_DEFAULT, HIDDEN, POINTS_ALL, POINTS_NONE } from "..
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
 import { getBaseFee } from "../../controller/FeeController/getBaseFee";
+import { TO_HOME, TO_TRANSFERS_1, TO_TRANSFERS_3 } from "../../contants/Paths/paths";
 
 const TransferStep3 = () => {
 
@@ -141,7 +142,7 @@ const TransferStep3 = () => {
               buttonText: 'Concluir',
               completeMessage: 'Transferência concluída',
               text: 'Você pode monitorar suas transações através do dashboard inicial.',
-              path: '/home',
+              path: TO_HOME,
           });
           setButtonClassname(HIDDEN); 
 
@@ -157,7 +158,7 @@ const TransferStep3 = () => {
           showLoading(false);
           setFinalMessage({
               buttonText: 'Voltar',
-              path: '/transfer/1',
+              path: TO_TRANSFERS_1,
               completeMessage: errorMessage,
               text: 'Realize a operação novamente',
               image: '/X-error.png',
@@ -300,10 +301,10 @@ const TransferStep3 = () => {
     return (
 
 
-      <ContainerService path = "/home" linkText="Dashboard">
+      <ContainerService path ={TO_HOME} linkText="Dashboard">
 
             <TransfersContainer buttonControl={buttonClassname} onSubmit={handleSubmit}
-             buttonText = "Confirmar envio" activeIndex={2} location="/transfer/3">
+             buttonText = "Confirmar envio" activeIndex={2} location={TO_TRANSFERS_3}>
 
               {!loading && !completed && (
 

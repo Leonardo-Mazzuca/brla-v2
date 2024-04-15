@@ -15,7 +15,7 @@ setChartData: React.Dispatch<React.SetStateAction<ChartData[]>>) => {
         const usdc = await getUSDCData();
         const usdt = await getUSDTData();
         const brl = await getBRLData();
-
+        
 
         if (usdc && usdt && brl) {
           dispatch({

@@ -87,7 +87,7 @@ const CardContainer = () => {
 
     return (
 
-        <section className={`${FLEX} lg:${FLEX_ROW} ${FLEX_COL} gap-5 ${WIDTH_FULL}`}>
+        <section className={`${FLEX} lg:flex-row ${FLEX_COL} gap-5 ${WIDTH_FULL}`}>
 
             {component}
       

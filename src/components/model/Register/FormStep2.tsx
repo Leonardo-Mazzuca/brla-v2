@@ -6,6 +6,7 @@ import { FormActions, useForm as useFormContext } from "../../context/FormContex
 import { addressService } from "../../service/AddressService/addressService";
 import { FLEX, FLEX_COL, GAP_DEFAULT } from "../../contants/classnames/classnames";
 import { formatCep } from "../../service/Formatters/FormatCep/formatCep";
+import { REGISTER_3 } from "../../contants/Paths/paths";
 
 const FormStep2: React.FC = () => {
 
@@ -121,7 +122,7 @@ const FormStep2: React.FC = () => {
     <FormModel
       schema={schema}
       classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:${FLEX} sm:${FLEX_COL}`}
-      location="/step3"
+      location={REGISTER_3}
       buttonText="próximo"
       fields={fields}
       onSubmit={handleSubmit}

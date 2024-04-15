@@ -7,6 +7,7 @@ import { FormActions, useForm } from "../../context/FormContext";
 import { FLEX, FLEX_COL, GAP_4, GAP_DEFAULT, ITEMS_CENTER, MARGIN_Y_3, TEXT_GRAY_500, TEXT_RED_600, TEXT_SMALL } from "../../contants/classnames/classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import { REGISTER_4 } from "../../contants/Paths/paths";
 
 
 const FromStep3: React.FC = () => {
@@ -51,7 +52,7 @@ const FromStep3: React.FC = () => {
 
     return (
 
-        <FormModel schema={schema} location="/step4" buttonText="Next"
+        <FormModel schema={schema} location={REGISTER_4} buttonText="Next"
          fields={fields} onSubmit={handleSubmit}>
 
             {(passwordChanged || confirmPasswordChanged) && (

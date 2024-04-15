@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_800, WIDTH_AUTO, WIDTH_FULL } from "../../../contants/classnames/classnames";
+import { TO_CONVERT_1, TO_DEPOSIT, TO_TRANSFERS_1 } from "../../../contants/Paths/paths";
 
 interface TransactionItemProps {
     content: string;
@@ -32,9 +33,9 @@ const TransactionButtons: React.FC = () => {
 
     const transactionItems: TransactionItemProps[] = [
 
-        {content: 'Depositar', icon: <FontAwesomeIcon icon={faPlus}/>, link: '/deposit', classname: buttonClassname},
-        {content: 'Transferir', icon: <FontAwesomeIcon icon={faArrowUp}/>, link: '/transfer/1', classname: buttonClassname},
-        {content: 'Converter', icon: <FontAwesomeIcon icon={faArrowRightArrowLeft}/>, link: '/convert/1', classname: buttonClassname},
+        {content: 'Depositar', icon: <FontAwesomeIcon icon={faPlus}/>, link: TO_DEPOSIT, classname: buttonClassname},
+        {content: 'Transferir', icon: <FontAwesomeIcon icon={faArrowUp}/>, link: TO_TRANSFERS_1, classname: buttonClassname},
+        {content: 'Converter', icon: <FontAwesomeIcon icon={faArrowRightArrowLeft}/>, link: TO_CONVERT_1, classname: buttonClassname},
     
     ]
 

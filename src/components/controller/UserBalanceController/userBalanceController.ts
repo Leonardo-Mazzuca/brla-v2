@@ -4,6 +4,7 @@ import { BRLAContractAbi, USDCContractAbi, USDTContractAbi } from './abis';
 import { BRLA_CONTRACT_ADDRESS, POLYGON_URL, USDC_CONTRACT_ADDRESS, USDT_CONTRACT_ADDRESS } from './blockchainData';
 import { UserData } from '../../types/UserData/UserData';
 import { BRLA_ON_CHAIN, USDTC_ON_CHAIN } from '../../contants/divisionValues/divisionValues';
+import { USER_DATA } from '../../contants/sessionStorageKeys/sessionStorageKeys';
 
 const getUserTokenBalance = async (
 
@@ -32,14 +33,14 @@ export async function userBalanceController () {
     try {
 
         const web3 = new Web3(POLYGON_URL);
-        const userData: UserData | undefined = await getUserData();
-    
+        const userData: UserData = JSON.parse(sessionStorage.getItem(USER_DATA)??'{}');
         
         if(userData) {
             
             const brlBalance = await getUserTokenBalance(web3, BRLA_CONTRACT_ADDRESS, BRLAContractAbi, userData, BRLA_ON_CHAIN);
             const usdcBalance = await getUserTokenBalance(web3, USDC_CONTRACT_ADDRESS, USDCContractAbi, userData, USDTC_ON_CHAIN);
             const usdtBalance = await getUserTokenBalance(web3, USDT_CONTRACT_ADDRESS, USDTContractAbi, userData, USDTC_ON_CHAIN);
+            
             
             return {brlBalance, usdcBalance, usdtBalance};
             

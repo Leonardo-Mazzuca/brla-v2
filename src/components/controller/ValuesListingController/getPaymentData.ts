@@ -2,6 +2,7 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { http } from "../ConectAPI/conectApi";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { PAYMENT_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
 
 
 export async function getPaymentData() {
@@ -11,7 +12,6 @@ export async function getPaymentData() {
             withCredentials: true,
         });
     
-        
 
         const data = request.data.paymentLogs.map((item: any) => {
             
@@ -34,7 +34,19 @@ export async function getPaymentData() {
             };
 
 
+  
+            
+            const tx = item.paymentOps.flatMap((op: any) => {
+                const smartContractOps = op.smartContractOps || [];
+                
+                return smartContractOps
+                    .filter((smOps: any) => smOps.operationName === 'BURN')
+                    .map((item: any) => item.tx)
+                    .filter((tx: any) => tx !== undefined && tx !== null && tx !== '');
+            }).find((tx: any) => tx !== undefined);
+        
 
+            
             return {
 
                 baseFee: item.baseFee,
@@ -59,11 +71,13 @@ export async function getPaymentData() {
                 },
 
                 amount: item.brlaAmount / TO_WEBSOCKET,
+                tx:tx
 
             };
 
         });
 
+        sessionStorage.setItem(PAYMENT_DATA, JSON.stringify(data));
         
         return data;
         

@@ -1,53 +1,55 @@
+import {  TRANSACTIONS_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
 import { getOnChainInData } from "../onChainController.ts/getOnChainInData";
 import { getOnChainOutData } from "../onChainController.ts/getOnChainOutData";
 import { getConversionData } from "./getConversionData";
 import { getPayInData } from "./getPayInData";
-import { getPayOutOfBRCodeData } from "./getPayOutOfBRCodeData";
 import { getPaymentData } from "./getPaymentData";
 import { getPayoutData } from "./getPayoutData";
-import { getPixToUsdData } from "./getPixToUsddata";
 
-
-export async function valuesListingController(): Promise<any[]> {
+export async function valuesListingController() {
 
     try {
 
-        const payInData = await getPayInData();
-        const payOutData = await getPayoutData();
-        const convertData = await getConversionData(); 
-        const paymentData = await getPaymentData();
-        const onChainOutData = await getOnChainOutData();
-        const onChainInData = await getOnChainInData();
-        // const payOutUsingBrCodeData = await getPayOutOfBRCodeData();
-        // await getPixToUsdData();
-        
-        let data: any[] = [];
+        let currentData: any[] = await Promise.all([
 
-        if (payInData && payOutData && convertData && paymentData && onChainOutData && onChainInData) {
+            getPayInData(),
+            getPayoutData(),
+            getConversionData(),
+            getPaymentData(),
+            getOnChainOutData(),
+     
+          
+        ]);
 
-            data = [...payInData, ...payOutData, ...convertData, 
-                ...paymentData, ...onChainOutData, ...onChainInData,];
-                
-        }
+        currentData.push(await getOnChainInData());
 
-
-        
-        data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-        data.forEach(item => {
+      
+        currentData = currentData.flat();
+        currentData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        currentData.forEach(item => {
             item.createdAt = formatDate(item.createdAt);
         });
         
+        sessionStorage.setItem(TRANSACTIONS_DATA, JSON.stringify(currentData));
 
-    
-        return data;
         
-    } catch (e:any) {
+        const storedDataString = sessionStorage.getItem(TRANSACTIONS_DATA);
+        const storedData = storedDataString ? JSON.parse(storedDataString) : [];
 
+      
+        const dataChanged = JSON.stringify(currentData) !== JSON.stringify(storedData);
 
-        throw new Error("Erro ao concatenar dados de listagem de valores: ", e.message)
+        if (dataChanged) {
+            sessionStorage.setItem(TRANSACTIONS_DATA, JSON.stringify(currentData));
+        }
 
+        
+        
+        return currentData;
+
+    } catch (error: any) {
+        throw new Error("Erro ao concatenar dados de listagem de valores: " + (error.message || error.data?.message));
     }
-}
 
+}

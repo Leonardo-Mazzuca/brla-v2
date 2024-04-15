@@ -8,6 +8,7 @@ import { formatValueInCpf } from "../../service/TaxId/Cpf/formatValueInCpf";
 import { formatValueInCnpj } from "../../service/TaxId/Cnpj/formatValueInCnpj";
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { PAY_IN_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
 
 export type PayinData = {
 
@@ -41,7 +42,7 @@ export type ExpectedPayInData = {
 
 
 
-export async function getPayInData() {
+export async function getPayInData():Promise<ExpectedPayInData[]> {
 
     try {
 
@@ -50,7 +51,6 @@ export async function getPayInData() {
         });
         
 
-        
         const data = request.data.depositsLogs.map((item: any) => {
 
             const { createdAt, payerName,coin, chain } = item;
@@ -84,8 +84,9 @@ export async function getPayInData() {
             };
             
         });
-        
 
+        sessionStorage.setItem(PAY_IN_DATA, JSON.stringify(data));
+        
         return data;
 
     } catch (e: any) {

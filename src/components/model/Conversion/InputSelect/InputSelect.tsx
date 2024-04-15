@@ -16,11 +16,9 @@ const InputSelect = ({ coin, state, value, dispatch,
     const{state:balanceState} = useBalance();
     const [availableValue, setAvaliableValue] = useState(0);
 
-
     useEffect(()=> {
 
         setAvaliableValue(getAvaliableBalance(coin,balanceState));
-
 
     },[coin, balanceState]);
 
@@ -28,10 +26,8 @@ const InputSelect = ({ coin, state, value, dispatch,
 
         const maxValue = availableValue;
         
-
         const converted = conversor(availableValue, state.sendCurrency, state.receiveCurrency, createConversionTable(quoteState))
 
-        
         setInputValue(maxValue);
         setOutputValue(converted);       
 
@@ -82,8 +78,10 @@ const InputSelect = ({ coin, state, value, dispatch,
         });
     
         dispatch({
+
             type: CurrencyActions.setFixOutput,
             payload: { fixOutput: false },
+
         });
 
         
@@ -93,6 +91,7 @@ const InputSelect = ({ coin, state, value, dispatch,
     return (
 
         <ValueSelect
+
             index={1}
             coin={coin}
             inputValue={value}
@@ -101,6 +100,7 @@ const InputSelect = ({ coin, state, value, dispatch,
             topText={topText}
             topIcon={topIcon}
             handleMaxButtonClick={handleMaxButtonClick}
+
         />
 
     );

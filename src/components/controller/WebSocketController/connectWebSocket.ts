@@ -1,4 +1,7 @@
 
+
+import { WEB_SOCKET_CONNECTED } from "../../contants/sessionStorageKeys/sessionStorageKeys";
+import { removeAllFromSessionStorage } from "../../service/SessionStorageService/removeAllFromSessionStorage";
 import { getWebSocketToken } from "./getWebSocketToken";
 
 
@@ -11,13 +14,13 @@ export async function connectWebSocket() {
 
         const SOCKET_SERVER_URL_SANDBOX = `wss://api.brla.digital:4567/v1/websocket/${token}`;
         const SOCKET_SERVER_URL_PRODUCTION = `wss://api.brla.digital:5567/v1/websocket/${token}`;
-        const webSocket = new WebSocket(SOCKET_SERVER_URL_PRODUCTION);
 
+        const webSocket = new WebSocket(SOCKET_SERVER_URL_PRODUCTION);
 
         webSocket.onopen = event => {
           
             console.log('Conexão WebSocket estabelecida!', event);
-            sessionStorage.setItem("wsConnected", "true");
+            sessionStorage.setItem(WEB_SOCKET_CONNECTED, "true");
 
           };
     
@@ -26,8 +29,9 @@ export async function connectWebSocket() {
           };
     
           webSocket.onclose = event => {
+
             console.log('Conexão WebSocket fechada:', event);
-            sessionStorage.removeItem("wsConnected");
+            removeAllFromSessionStorage();
             
           };
     

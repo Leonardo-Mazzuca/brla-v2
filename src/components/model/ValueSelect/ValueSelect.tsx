@@ -9,6 +9,7 @@ import InputMoney from "../Input/InputMoney";
 import { BG_GRAY_100, BG_GRAY_200, BORDER_NONE, FLEX, FLEX_COL, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, ROUNDED_DEFAULT, TEXT_BLACK, TEXT_GRAY_400, TEXT_START, WIDTH_AUTO, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 type ValueSelectConfig = {
+    
     topIcon?: IconProp;
     topText?: string;
     toggleButtonPresent?: boolean;

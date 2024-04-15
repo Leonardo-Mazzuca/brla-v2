@@ -3,7 +3,7 @@ import { useContext, useReducer, createContext } from "react";
 import { ProviderProps } from "../types/Provider/Provider";
 
 
-export type CoinTypes = "BRL" | "USDC" | "USDT";
+export type CoinTypes = "BRL" | "USDC" | "USDT" ;
 
 export type CurrencyState = {
 
@@ -98,7 +98,6 @@ const conversor = (value: number, fromCurrency: string, toCurrency: string, conv
 
      if (fromCurrency === 'BRL' && toCurrency === 'BRL') {
 
-        
         const conversionRate = conversionTable[toCurrency][fromCurrency];
         amountInSecondCurrency = amountInDefaultCurrency - conversionRate;
 

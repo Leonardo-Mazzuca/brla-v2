@@ -1,28 +1,14 @@
-import { http } from "../ConectAPI/conectApi"
+import { USER_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
+import { UserData } from "../../types/UserData/UserData";
 
 
 
 
 export async function brCodeController () {
 
-
-
-    try {
-
-        const request = await http.get('/info',{
-            withCredentials: true
-        });
+        const userData:UserData = JSON.parse(sessionStorage.getItem(USER_DATA) ?? '{}');
     
-        
-        return request.data.brCode;
-
-    } catch(e: any) {
-
-        return false;
-
-    }
-
-
+        return userData.brCode;
 
 }
 

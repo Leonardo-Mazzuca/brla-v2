@@ -6,6 +6,7 @@ import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddres
 import { formatInTaxId } from "../../service/TaxId/FormatInTaxId/formatInTaxId";
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
 import { TO_WEBSOCKET } from "../../contants/divisionValues/divisionValues";
+import { PAY_OUT_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
 
 type SmartContractOps = {
     operationName: string;
@@ -127,6 +128,7 @@ export async function getPayoutData() {
 
   
         
+        sessionStorage.setItem(PAY_OUT_DATA, JSON.stringify(data));
         
         return data;
         

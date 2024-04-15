@@ -14,3 +14,4 @@ export const USD_OUT = 1.001;
 export const TO_CENTS = 100;
 
 export const LOG_SIZE = 30;
+

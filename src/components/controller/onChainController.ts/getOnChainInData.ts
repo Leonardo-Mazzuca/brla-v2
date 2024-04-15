@@ -1,13 +1,13 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddress/formatWalletAddress";
 import { http } from "../ConectAPI/conectApi";
-import { ExpectedConversionData, getConversionData } from "../ValuesListingController/getConversionData";
+import { ExpectedConversionData} from "../ValuesListingController/getConversionData";
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
-import { getOnChainOutData } from "./getOnChainOutData";
+import {  ON_CHAIN_IN_DATA, ON_CHAIN_OUT_DATA, PAYMENT_DATA, SWAP_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
+import { saveTransactionsData } from "../../service/SessionStorageService/saveAllInSessionStorage";
 
 
-
-type ExpectedOnChainInData = {
+export type ExpectedOnChainInData = {
 
     fromAddress: string;
     toAddress: string;
@@ -20,7 +20,9 @@ type ExpectedOnChainInData = {
 
 }
 
-export const getOnChainInData = async () => {
+
+export const saveOnChainInData = async () => {
+
 
     try {
 
@@ -28,76 +30,101 @@ export const getOnChainInData = async () => {
             withCredentials: true,
         });
 
-        const onChainOut = await http.get('/on-chain/history/out', {
+        const currentData = (request.data.onchainLogs);
+
+        sessionStorage.setItem(ON_CHAIN_IN_DATA, JSON.stringify(currentData));
+
+        const storedData = sessionStorage.getItem(ON_CHAIN_IN_DATA);
+
+        const dataChanged = JSON.stringify(currentData) !== JSON.stringify(storedData);
+        
+        if (dataChanged) {
+            sessionStorage.setItem(ON_CHAIN_IN_DATA, JSON.stringify(currentData));
+        }
+
+    } catch(e:any) {
+
+    }
+
+
+}
+
+
+
+export const getOnChainInData = async () => {
+
+
+    try {
+
+        const request = await http.get('/on-chain/history/in', {
             withCredentials: true,
         });
 
-        const payment = await http.get('/payment/history', {
-            withCredentials: true,
-        });
         
-        const paymentTx = payment.data.paymentLogs.reduce((acc: any[], item: any) => {
-            const paymentOps = item.paymentOps || [];
-        
-            paymentOps.forEach((op: any) => {
-                const smartContractOps = op.smartContractOps || [];
-                
-                
-                smartContractOps.forEach((smOps: any) => {
+        const onChainIn = request.data.onchainLogs;
 
-                    if(smOps.tx && smOps.operationName === 'BURN')
-                        acc.push(smOps.tx);
-                    
-                });
-            });
+        const paymentData = JSON.parse(sessionStorage.getItem(PAYMENT_DATA) ?? '{}');
+        const swapData = JSON.parse(sessionStorage.getItem(SWAP_DATA)??'{}') ;
+        const onChainOut = JSON.parse(sessionStorage.getItem(ON_CHAIN_OUT_DATA) ?? '{}')
         
-            return acc;
-
-        }, []);
-   
+        
+        if(paymentData && swapData && onChainOut){
 
         const txOut = onChainOut.data.onchainLogs.map((item: any) => ({
             tx: item.smartContractOps.map((op: any) => op.Tx)[0],
         }));
 
-        const conversionData = await getConversionData();
+            const data = onChainIn.map((item: ExpectedOnChainInData) => {
+        
+                    const matchingConversion = swapData.find((data: ExpectedConversionData) => data.tx === item.tx);
+                    const matchingOnChainOut = txOut.find((data: any) => data.tx === item.tx);
+                    const matchingPayment = paymentData.find((data: any) => data.tx === item.tx);
+                
+                    if (!matchingConversion && !matchingPayment && !matchingOnChainOut) {
+        
+                        return {
+        
+                            operationName: 'MINT',
+                            walletAddress: formatWalletAddress(item.fromAddress),
+                            amount: parseFloat(item.amount),
+                            date: formatDate(item.createdAt),
+                            createdAt: item.createdAt,
+                            title: item.chain,
+                            icon: faPlus,
+                            tx: item.tx,
+                            id: item.id,
+                            coin: getCoinByHash(item.tokenAddress),
+                            tokenAddress: item.tokenAddress,
+        
+                        };
+        
+                    } else {
+                        return null; 
+                    }
+    
+                });
+    
+                const filteredData = data.filter((item:any) => item !== null); 
+    
+                
+                return filteredData;
 
-        const data = request.data.onchainLogs.map((item: ExpectedOnChainInData) => {
+        } 
 
-            const matchingConversion = conversionData.find((data: ExpectedConversionData) => data.tx === item.tx);
-            const matchingOnChainOut = txOut.find((data: any) => data.tx === item.tx);
-            const matchingPayment = paymentTx.find((data: any) => data.tx === item.tx);
-
-            if (!matchingConversion && !matchingOnChainOut && !matchingPayment) {
-
-                return {
-                    operationName: 'MINT',
-                    walletAddress: formatWalletAddress(item.fromAddress),
-                    amount: parseFloat(item.amount),
-                    date: formatDate(item.createdAt),
-                    createdAt: item.createdAt,
-                    title: item.chain,
-                    icon: faPlus,
-                    tx: item.tx,
-                    id: item.id,
-                    coin: getCoinByHash(item.tokenAddress),
-                    tokenAddress: item.tokenAddress,
-                };
-            } else {
-                return null; 
-            }
-        });
-
-        const filteredData = data.filter((item:any) => item !== null); 
-
-        return filteredData;
+        
 
     } catch (e: any) {
+
+        console.error(e.message || e.data?.message)
         throw new Error("Erro ao pegar dados de onChain in: ", e.message || e.data?.message);
+
     }
+
 };
 
 
+
+//production
 
 function getCoinByHash (hash: string) {
     
@@ -113,8 +140,8 @@ function getCoinByHash (hash: string) {
 
 }
 
-//production
 
+//sandbox
 // function getCoinByHash (hash: string) {
 
 //     switch(hash) {

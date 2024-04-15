@@ -1,53 +1,73 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { TransactionsActions, useValuesFilter } from "../../../context/TransactionsContext";
-import { valuesListingController } from "../../../controller/ValuesListingController/valuesListingController";
 import { TransactionMap } from "./transactionsMap";
 import Loading from "../../Loading/Loading";
 import TextModel from "../../Text/Text";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { LOG_SIZE } from "../../../contants/divisionValues/divisionValues";
+import { TO_HOME } from "../../../contants/Paths/paths";
+import { valuesListingController } from "../../../controller/ValuesListingController/valuesListingController";
+
 
 const ValuesArrival: React.FC = () => {
     const [allData, setAllData] = useState<any[]>([]);
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1); 
-    const { dispatch, state } = useValuesFilter();
+    const {dispatch, state } = useValuesFilter();
     const [error, setError] = useState<ReactNode>();
     const [loading, setLoading] = useState<boolean>(true);
     const location = useLocation();
     const [chunks, setChunks] = useState<any[]>([]);
-    const [dataFetched, setDataFetched] = useState<boolean>(false); 
 
     const fetchData = async () => {
+
         try {
-            let data = await valuesListingController();
-            if (location.pathname === '/home') {
+
+            let data:any[] = await valuesListingController();
+            
+            if (location.pathname === TO_HOME) {
                 data = data.slice(0, 5);
             }
+
+            if(data.length === 0) {
+                setError(
+
+                    <TextModel
+                        content={'Nenhum dado registrado'}
+                    />
+                );
+            }
+                
             setAllData(data);
             setLoading(false);
-            setDataFetched(true); 
+
+            
+
         } catch (error: any) {
+
             setError(
+
                 <TextModel
                     content={`Erro ao pegar histórico, tente novamente mais tarde ${error.message || error.data?.message}`}
                 />
             );
-            console.error("Erro ao buscar os dados:", error.message);
+
             setLoading(false);
         }
+
     };
 
     useEffect(() => {
-       
-        if (!dataFetched) {
-            fetchData();
-        }
-    }, [dataFetched]);
+
+        fetchData();
+        
+    }, []);
+    
 
     useEffect(() => {
+
         let newData = allData;
         if (state.searchDate && !isNaN(Date.parse(state.searchDate))) {
             newData = allData.filter(
@@ -55,13 +75,16 @@ const ValuesArrival: React.FC = () => {
             );
         }
         setFilteredData(newData);
+
     }, [state.searchDate, allData]);
 
     useEffect(() => {
+
         dispatch({
             type: TransactionsActions.setData,
             payload: { data: filteredData },
         });
+        
     }, [dispatch, filteredData]);
 
     useEffect(() => {
@@ -74,11 +97,11 @@ const ValuesArrival: React.FC = () => {
 
     return (
         <section className="flex flex-col w-full items-center gap-10 py-5 overflow-y-scroll h-auto">
+
             {error ? (
                 error
             ) : loading ? (
-                <Loading text="Carregando dados..
-                ." />
+                <Loading text="Carregando dados..." />
             ) : filteredData.length > 0 ? (
 
                 <section className="w-full">
@@ -106,9 +129,11 @@ const ValuesArrival: React.FC = () => {
                         ))
                     )}
                 </section>
+
             ) : (
                 <TextModel content="Nenhum dado encontrado" />
             )}
+
         </section>
     );
 };
