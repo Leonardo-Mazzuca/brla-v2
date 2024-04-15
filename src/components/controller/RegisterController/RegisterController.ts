@@ -1,9 +1,9 @@
-import { State } from "../../types/State/State";
+import { FormState } from "../../types/State/State";
 import { http } from "../ConectAPI/conectApi";
 
 
 
-export async function registerController  (data:State) {
+export async function registerController  (data:FormState) {
 
 
     const body = { ...data };

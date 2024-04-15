@@ -15,7 +15,7 @@ export async function connectWebSocket() {
         const SOCKET_SERVER_URL_SANDBOX = `wss://api.brla.digital:4567/v1/websocket/${token}`;
         const SOCKET_SERVER_URL_PRODUCTION = `wss://api.brla.digital:5567/v1/websocket/${token}`;
 
-        const webSocket = new WebSocket(SOCKET_SERVER_URL_PRODUCTION);
+        const webSocket = new WebSocket(SOCKET_SERVER_URL_SANDBOX);
 
         webSocket.onopen = event => {
           

@@ -19,7 +19,8 @@ const InputModel: React.FC<Field> = ({
     value,
     icon,
     addClassName,
-    onBlur
+    onClick,
+    onBlur,
 }) => {
 
 
@@ -40,6 +41,7 @@ const InputModel: React.FC<Field> = ({
       
             <input
                 {...(register && register(name))}
+                onClick={onClick}
                 placeholder={placeholder}
                 type={type}
                 minLength={minLength}

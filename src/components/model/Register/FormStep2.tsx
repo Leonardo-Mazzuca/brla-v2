@@ -20,6 +20,12 @@ const FormStep2: React.FC = () => {
 
   const { dispatch } = useFormContext();
 
+  useEffect(()=> {
+
+    console.log(state);
+    
+  },[])
+
   async function handleCepValue(cep: string) {
 
     const response = await addressService(cep.replace(/\D/g, ''));

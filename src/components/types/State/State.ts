@@ -1,5 +1,19 @@
 
-export type State = {
+export type TaxIdType = 'CPF' | 'CNPJ'
+
+export type Address = {
+
+  cep: string,
+  city: string,
+  state: string,
+  street: string,
+  number: string,
+  district: string,
+  complement: string
+  country: string;
+
+}
+export type FormState = {
 
 
         fullName: string,
@@ -7,21 +21,15 @@ export type State = {
         password: string,
         confirmPassword: string,
         phone: string;
-        taxIdType: string,
+        taxIdType: TaxIdType,
         cpf: string,
         birthDate: string,
     
-        address: {
-          cep: string,
-          city: string,
-          state: string,
-          street: string,
-          number: string,
-          district: string,
-          complement: string
-        },
+        address: Address
    
-        //cnpj: string,
+        cnpj: string,
+        companyName: string,
+        startDate: string,
 
 
     

@@ -6,7 +6,7 @@ const createHttp = (): AxiosInstance => {
     const PRODUCTION_BASE_URL = 'https://api.brla.digital:5567/v1/business'
     
     const http = axios.create({
-        baseURL: PRODUCTION_BASE_URL,
+        baseURL: SANDBOX_URL,
     });
 
     return http;

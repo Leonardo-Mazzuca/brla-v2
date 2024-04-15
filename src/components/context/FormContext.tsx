@@ -1,7 +1,7 @@
 
 
 import { useContext, useReducer, createContext, ReactNode  } from "react";
-import { State } from '../types/State/State';
+import { FormState } from '../types/State/State';
 import { ProviderProps } from "../types/Provider/Provider";
 
 
@@ -11,21 +11,21 @@ type Action = {
 }
 
 type ContextType = {
-    state: State
+    state: FormState
     dispatch: (action: Action) => void
 }
 
 const FormContext = createContext<ContextType | undefined>(undefined);
 
-const initialData: State = {
+const initialData: FormState = {
 
         fullName: '',
         email: '',
         password: '',
         confirmPassword: '',
         phone: '',
-        cpf: '241.100.320-08',
-        birthDate: '2005-Oct-21',
+        cpf: '',
+        birthDate: '',
         taxIdType: 'CPF',
     
         address: {
@@ -35,18 +35,22 @@ const initialData: State = {
           street: '',
           number: '',
           district: '',
-          complement: ''
+          complement: '',
+          country: '',
         },
     
-       // cnpj: '',
+       cnpj: '',
+       companyName: '',
+       startDate: '',
+      
 
-    
 
 }
 
 export enum FormActions {
 
-
+    setPJ,
+    setPF,
     setStep1,
     setStep2,
     setStep3,
@@ -56,20 +60,54 @@ export enum FormActions {
 
 }
 
-const formReducer = (state: State, action: Action) => {
+
+
+const formReducer = (state: FormState, action: Action) => {
     switch (action.type) {
-        case FormActions.setStep1:
+
+
+
+        case FormActions.setPF:
             return {
+
                 ...state,
                 fullName: action.payload.fullName,
                 email: action.payload.email,
                 phone: action.payload.phone,
+                taxIdType: action.payload.taxIdType,
+                country: action.payload.country,
+                cpf: action.payload.cpf,
+                birthDate: action.payload.birthDate,
+             
+                
+
+
             };
+        case FormActions.setPJ:
+            return {
+
+                ...state,
+                email: action.payload.email,
+                phone: action.payload.phone,
+                taxIdType: action.payload.taxIdType,
+                country: action.payload.country,
+                cpf: action.payload.cpf,
+                startDate: action.payload.startDate,
+                companyName: action.payload.companyName,
+                cnpj: action.payload.cnpj,
+                birthDate: action.payload.birthDate,
+
+             
+
+
+            };
+
 
         case FormActions.setStep2:
             return {
                 ...state,
                 address: {
+                    country: action.payload.country,
                     cep: action.payload.cep,
                     city: action.payload.city,
                     state: action.payload.state,
