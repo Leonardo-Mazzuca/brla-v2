@@ -235,7 +235,7 @@ const TransferStep2 = () => {
         }));
 
         setField([
-          { type: "text", placeholder: "Wallet Addrress", name: "walletAddress",  onChange: handleWalletAddress,
+          { type: "text", placeholder: "Wallet Address", name: "walletAddress",  onChange: handleWalletAddress,
           value : walleAddressValue, imageIcon: '/polligon.svg', altIcon : "Polygon icon" },
         ]);
 
