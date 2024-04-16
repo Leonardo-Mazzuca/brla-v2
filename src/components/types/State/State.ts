@@ -1,5 +1,5 @@
 
-export type TaxIdType = 'CPF' | 'CNPJ'
+export type TaxIdType = 'CPF' | 'CNPJ' | 'REGNUM'
 
 export type Address = {
 
@@ -24,12 +24,11 @@ export type FormState = {
         taxIdType: TaxIdType,
         cpf: string,
         birthDate: string,
-    
         address: Address
-   
         cnpj: string,
         companyName: string,
         startDate: string,
+        regnum: string
 
 
     

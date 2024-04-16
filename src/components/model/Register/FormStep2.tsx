@@ -90,8 +90,8 @@ const FormStep2: React.FC = () => {
   const schema = z.object({
     cep: z
       .string()
-      .min(1, "Cep não pode ficar vazio!")
-      .refine((cep) => handleCepValue(cep), { message: error }),
+      .min(1, "Cep não pode ficar vazio!"),
+      //.refine((cep) => handleCepValue(cep), { message: error }),
 
       city: z.string().refine(() => city !== '' ,{message: 'Cidade é obrigatório'}),
       state: z.string().refine(() => state !== '', {message: 'Estado é obrigatório'}),

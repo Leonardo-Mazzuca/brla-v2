@@ -14,6 +14,7 @@ import { formatValueInPhoneNumber } from "../../service/Formatters/FormatPhoneNu
 import { REGISTER_2 } from "../../contants/Paths/paths";
 import { Controller, useForm } from "react-hook-form";
 import Select from 'react-select';
+
 import { countries } from "../../Variables/countries";
 import { useTranslation } from 'react-i18next';
 import InputModel from "../Input/InputModel";
@@ -30,16 +31,18 @@ const FromStep1 = () => {
   const [phone, setPhone] = useState<string>('');
   const [innerFields, setInnerFields] = useState<Field[]>([]);
   const [personType, setPersonType] = useState('PF')
+  const [personCountry, setPersonCountry] = useState('BR')
   const [type, setType] = useState('text');
   const [birthValue,setBirthValue] = useState('');
   const [startDate,setStartDate] = useState('');
   const [cpf,setCpf] = useState('');
+  const [fullName,setFullName] = useState('');
   const [cnpj,setCnpj] = useState('');
   const [country, setCountry] = useState('');
   const { t, i18n} = useTranslation();
   const [companyName, setCompanyName] = useState('');
 
-  const {control} = useForm();
+  const {control, setValue} = useForm();
 
   const {dispatch} = innerUseForm();
 
@@ -69,39 +72,25 @@ const FromStep1 = () => {
     setPhone(value);
   }
 
-
+  interface OptionType {
+    value: string;
+    label: string;
+  }
   
+
+  const handleCountryChange = (selectedOption:any) => {
+    const newValue = selectedOption ? selectedOption.value : '';
+    setCountry(newValue);  // Atualiza o estado local
+    setValue('country', newValue, { shouldValidate: true });  // Atualiza o valor no react-hook-form
+  };
   type Step1Data = z.infer<typeof schema>;
   
   const field: Field[] = [
   
     { type: "email", placeholder: "Digite seu email", name: "email", icon: faEnvelope },
     { type: "tel", placeholder: "Celular (11 11111-1111)", name: "phone", icon: faPhone, value: phone, onChange: handlePhoneChange },
-    {
-
-      type: "select",
-      name: "country",
-      controller: (
-        <Controller
-          name="country"
-          control={control}
-          defaultValue=""
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={countries}
-              isSearchable
-              placeholder={t('country')}
-              onChange={value => field.onChange(value)}
-              onBlur={() => field.onBlur()} 
-              required
-            />
-          )}
-        />
-      )
-    }
-    
+  
+        
 
   ];
 
@@ -113,23 +102,20 @@ const FromStep1 = () => {
   const handleBirthChange = (e:React.ChangeEvent<HTMLInputElement>) => {
 
     const value = e.target.value;
-    setStartDate(formatDate(value));
+    setBirthValue(formatDate(value));
 
   }
 
   const handlestartDateChange = (e:React.ChangeEvent<HTMLInputElement>) => {
 
     const value = e.target.value;
-    setBirthValue(formatDate(value));
+    setStartDate(formatDate(value));
 
   }
 
   const handleCpfChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-
     const value = e.target.value;
-
     setCpf(formatValueInCpf(value))
-    
 
   }
 
@@ -143,19 +129,33 @@ const FromStep1 = () => {
 
   }
 
+  
+  const handleFullNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFullName(value)
+  }
+
+  const handleCompanyNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCompanyName(value)
+  }
+
   useEffect(()=> {
 
-      if(personType === 'PJ') {
+      if(personType === 'PJ' && personCountry==='BR') {
 
         setInnerFields([
-
-          { type: "text", placeholder: "cpf", name: "cpf", icon: faIdCard },
+          { type: "text", placeholder: "Nome completo do representante legal", name: "fullName", onChange:handleFullNameChange, value: fullName},
+          { type: "text", placeholder: "cpf do representante legal", name: "cpf", icon: faIdCard, onChange:handleCpfChange, value: cpf },
+          { type: type, placeholder: "Data de nascimento do representante legal", name: "initDate", onClick: handleDateClick,
+          value: birthValue, onChange: handleBirthChange
+          },
           { type: "text", placeholder: "cnpj", name: "cnpj", icon: faBuilding ,
           value: cnpj, onChange:handleCnpjChange
 
           },
-          { type: "text", placeholder: "Nome da empresa", name: "companyName"},
-          { type: type, placeholder: "Data de início", name: "initDate", onClick: handleDateClick,
+          { type: "text", placeholder: "Nome da empresa", name: "companyName", onChange: handleCompanyNameChange},
+          { type: type, placeholder: "Data de abertura da empresa", name: "initDate", onClick: handleDateClick,
          onChange: handlestartDateChange, value: startDate
 
           },
@@ -166,14 +166,13 @@ const FromStep1 = () => {
       } else {
 
         setInnerFields([
-
-          { type: "text", placeholder: "Digite seu cpf", name: "cpf", icon: faIdCard,onChange:handleCpfChange,
+          { type: "text", placeholder: personCountry === 'BR' ?  "Nome completo" : "Nome da empresa", name: "fullName", onChange:handleFullNameChange, value: fullName},
+          { type: "text", placeholder: personCountry === 'BR' ? "Digite seu cpf" : "Digite seu número de documento", name: "cpf", icon: faIdCard,onChange:handleCpfChange,
             value: cpf
            },
 
-          { type: type, placeholder: "Data de aniversário", name: "initDate", onClick: handleDateClick,
+          { type: type, placeholder: "Data de nascimento", name: "initDate", onClick: handleDateClick,
           value: birthValue, onChange: handleBirthChange
-
           },
 
           
@@ -181,33 +180,40 @@ const FromStep1 = () => {
 
       }
       
-
-  },[personType, type, birthValue, startDate, cpf, cnpj])
+console.log("bithValue: ", birthValue)
+  },[personType, type, birthValue, startDate, cpf, cnpj, personCountry, fullName])
 
   const handleSubmit = (data: Step1Data) => {
 
     const { email, phone } = data;
 
-    if(personType === 'PJ') {
+    if(personType === 'PJ' && personCountry==='BR') {
 
       dispatch({
         type: FormActions.setPJ,
         payload: { email, phone, taxIdType: 'CNPJ', country, cpf,
-        startDate, companyName, cnpj, birthValue
+        startDate, companyName, cnpj, birthDate:birthValue, fullName
         
 
         },
       });
 
-    } else {
+    } else if (personCountry==='BR') {
 
       dispatch({
         type: FormActions.setPF,
-        payload: { email, phone, taxIdType: 'CPF', country, cpf,birthValue
+        payload: { email, phone, taxIdType: 'CPF', country, fullName, cpf, birthDate:birthValue
 
         },
       });
 
+    } else {
+      dispatch({
+        type: FormActions.setRegnum,
+        payload: { email, phone, taxIdType: 'REGNUM', country, cpf,birthDate:birthValue, fullName
+
+        },
+      });
     }
 
  
@@ -218,14 +224,34 @@ const FromStep1 = () => {
 
     const value = e.target.checked;
     
-    if (value) {
-      setPersonType('PJ');
+    if (personCountry==='BR') {
+      if (value) {
+        setPersonType('PJ');
+      } else {
+        setPersonType('PF');
+      }  
     } else {
-      setPersonType('PF');
+      setPersonType('REGNUM');
     }
-    
-
   }
+
+
+  const handlePersonCountry = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.checked;
+
+    console.log("value: ", value)
+    
+          if (value) {
+            console.log("ta caindo aqui")
+        setPersonCountry('GRINGO');
+      } else {
+        setPersonCountry('BR');
+      }  
+     
+  }
+
+
 
   return (
 
@@ -240,7 +266,7 @@ const FromStep1 = () => {
       >
 
         <div className="text-start flex flex-col">
-
+<div className="flex space-x-4">
         <div className={`${FLEX} ${GAP_DEFAULT} ${MARGIN_Y_3} md:${ITEMS_CENTER} ${ITEMS_START}`}>
 
             <input
@@ -262,12 +288,40 @@ const FromStep1 = () => {
             className={`${FLEX} md:items-center
             ${FLEX_WRAP} ${GAP_DEFAULT} ${TEXT_GRAY_400} ${TEXT_SMALL} md:${DEFAULT_TEXT_SIZE}`}>
 
-              Sou pessoa física
+              {t('sou_pj')}
 
             </label>
 
           </div>
 
+
+          <div className={`${FLEX} ${GAP_DEFAULT} ${MARGIN_Y_3} md:${ITEMS_CENTER} ${ITEMS_START}`}>
+
+<input
+  style={{ width: '1em', height: '1em' }}
+
+  className={`checkbox:h-3/4 bg-gray-50 border border-gray-300 text-gray-900
+  ${TEXT_SMALL} ${ROUNDED_DEFAULT} focus:ring-blue-500 focus:border-blue-500 block ${WIDTH_FULL} 
+  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+  
+  `}
+  value={"GRINGO"}
+  type="checkbox"
+  onChange={handlePersonCountry} 
+  id="checkboxInputIsGringo"
+/>
+
+<label htmlFor="checkboxInputIsGringo" 
+className={`${FLEX} md:items-center
+${FLEX_WRAP} ${GAP_DEFAULT} ${TEXT_GRAY_400} ${TEXT_SMALL} md:${DEFAULT_TEXT_SIZE}`}>
+
+  Sou não residente do Brasil
+
+</label>
+
+</div>
+</div>
           
         <div className="my-3">
 

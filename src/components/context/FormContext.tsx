@@ -25,7 +25,6 @@ const initialData: FormState = {
         confirmPassword: '',
         phone: '',
         cpf: '',
-        birthDate: '',
         taxIdType: 'CPF',
     
         address: {
@@ -42,6 +41,9 @@ const initialData: FormState = {
        cnpj: '',
        companyName: '',
        startDate: '',
+       regnum: '',
+       birthDate: '',
+      
       
 
 
@@ -51,6 +53,7 @@ export enum FormActions {
 
     setPJ,
     setPF,
+    setRegnum,
     setStep1,
     setStep2,
     setStep3,
@@ -87,6 +90,7 @@ const formReducer = (state: FormState, action: Action) => {
             return {
 
                 ...state,
+                fullName: action.payload.fullName,
                 email: action.payload.email,
                 phone: action.payload.phone,
                 taxIdType: action.payload.taxIdType,
@@ -96,11 +100,25 @@ const formReducer = (state: FormState, action: Action) => {
                 companyName: action.payload.companyName,
                 cnpj: action.payload.cnpj,
                 birthDate: action.payload.birthDate,
-
-             
-
-
             };
+
+
+            case FormActions.setRegnum:
+                return {
+    
+                    ...state,
+                    fullName: action.payload.fullName,
+                    email: action.payload.email,
+                    phone: action.payload.phone,
+                    taxIdType: action.payload.taxIdType,
+                    country: action.payload.country,
+                    regnum: action.payload.cpf,
+                    birthDate: action.payload.birthDate,
+                 
+                    
+    
+    
+                };      
 
 
         case FormActions.setStep2:
