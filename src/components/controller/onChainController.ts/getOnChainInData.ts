@@ -3,7 +3,7 @@ import { formatWalletAddress } from "../../service/Formatters/FormatWalletAddres
 import { http } from "../ConectAPI/conectApi";
 import { ExpectedConversionData} from "../ValuesListingController/getConversionData";
 import formatDate from "../../service/Formatters/FormatDate/formatDate";
-import {  ON_CHAIN_IN_DATA, ON_CHAIN_OUT_DATA, PAYMENT_DATA, SWAP_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
+import {  ON_CHAIN_IN_DATA, ON_CHAIN_OUT_DATA, PAYMENT_DATA, PAY_IN_DATA, SWAP_DATA } from "../../contants/sessionStorageKeys/sessionStorageKeys";
 import { saveTransactionsData } from "../../service/SessionStorageService/saveAllInSessionStorage";
 
 
@@ -65,10 +65,11 @@ export const getOnChainInData = async () => {
 
         const paymentData = JSON.parse(sessionStorage.getItem(PAYMENT_DATA) ?? '{}');
         const swapData = JSON.parse(sessionStorage.getItem(SWAP_DATA)??'{}') ;
-        const onChainOut = JSON.parse(sessionStorage.getItem(ON_CHAIN_OUT_DATA) ?? '{}')
+        const onChainOut = JSON.parse(sessionStorage.getItem(ON_CHAIN_OUT_DATA) ?? '{}');
+        const payInData = JSON.parse(sessionStorage.getItem(PAY_IN_DATA) ?? '{}');
+    
         
-        
-        if(paymentData && swapData && onChainOut){
+        if(paymentData && swapData && onChainOut && payInData){
 
         const txOut = onChainOut.data.onchainLogs.map((item: any) => ({
             tx: item.smartContractOps.map((op: any) => op.Tx)[0],
@@ -79,8 +80,9 @@ export const getOnChainInData = async () => {
                     const matchingConversion = swapData.find((data: ExpectedConversionData) => data.tx === item.tx);
                     const matchingOnChainOut = txOut.find((data: any) => data.tx === item.tx);
                     const matchingPayment = paymentData.find((data: any) => data.tx === item.tx);
-                
-                    if (!matchingConversion && !matchingPayment && !matchingOnChainOut) {
+                    const matchingPayIn = payInData.find((data: any) => data.tx === item.tx);
+                    
+                    if (!matchingConversion && !matchingPayment && !matchingOnChainOut && !matchingPayIn) {
         
                         return {
         
@@ -105,7 +107,6 @@ export const getOnChainInData = async () => {
                 });
     
                 const filteredData = data.filter((item:any) => item !== null); 
-    
                 
                 return filteredData;
 

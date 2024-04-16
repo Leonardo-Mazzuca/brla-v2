@@ -222,7 +222,7 @@ const TransferStep2 = () => {
           { type: "text", placeholder: "Chave pix", name: "pixkey", onChange: handlePixkeyValue, 
           value: pixkeyValue},
           
-          { type: "text", placeholder: "taxId", name: "taxId" ,
+          { type: "text", placeholder: "CPF/CNPJ", name: "taxId" ,
            maxLength: 18, addClassName: classname, onChange: handleTaxIdValue, 
            value: taxIdValue},
 
@@ -236,7 +236,7 @@ const TransferStep2 = () => {
 
         setField([
           { type: "text", placeholder: "Wallet Addrress", name: "walletAddress",  onChange: handleWalletAddress,
-          value : walleAddressValue},
+          value : walleAddressValue, imageIcon: '/polligon.svg', altIcon : "Polygon icon" },
         ]);
 
       }
@@ -479,7 +479,7 @@ const TransferStep2 = () => {
                    fields={fields} schema={schema}>
 
                     <div className="mt-6">
-                      
+
                         <div className={`${FLEX} ${JUSTIFY_BETWEEN} mb-6`}>
                               <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={"Valor a ser enviado"} />
                               <TextModel color={TEXT_GRAY_400} weight={FONT_LIGHT} content={`${formatNumberToString(inputValue, state.sendCurrency)}`} />

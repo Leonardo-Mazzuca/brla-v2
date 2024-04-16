@@ -66,7 +66,7 @@ export const getOnChainOutData = async () => {
         if(stringUserData && onChainOut) {
 
             const userData: UserData = JSON.parse(stringUserData);
-           
+            
             const walletAddress = userData?.wallets.evm;
     
             const data = onChainOut.map((item:any) => {
@@ -117,7 +117,7 @@ export const getOnChainOutData = async () => {
                 icon: walletAddress === item.to ? faArrowRightArrowLeft : faArrowUp,
                 isPaymentChain: item.inputCoin === item.outputCoin,
                 isOnChain: true,
-                tx: txs[0]
+                tx: txs[0],
                 
     
             }});

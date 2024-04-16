@@ -31,7 +31,7 @@ const Pix: React.FC = () => {
     renderAs="svg"
     imageSettings={{
 
-      src: "https://brla.digital/static/media/logo_b.png",
+      src: "/Logo.svg",
       x: undefined,
       y: undefined,
       height: 24,

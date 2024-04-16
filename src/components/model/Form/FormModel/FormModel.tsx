@@ -104,6 +104,8 @@ const FormModel: React.FC<FormModelProps> = (props) => {
                                     value={field.value}
                                     icon={field.icon}
                                     onInput={handleInput}
+                                    altIcon={field.altIcon}
+                                    imageIcon={field.imageIcon}
                                 />
                                 {errors[field.name] && (
                                     <TextModel

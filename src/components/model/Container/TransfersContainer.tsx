@@ -48,7 +48,9 @@ const TransfersContainer:React.FC<TransferConfig> = (
         
         <MiniContainer className={className}>
 
-            <ProgressBar activeIndex={activeIndex} IsSecondVisible />
+            <div className="md:mx-auto md:w-[70%]">
+             <ProgressBar activeIndex={activeIndex} IsSecondVisible />
+            </div>
 
 
             <div>

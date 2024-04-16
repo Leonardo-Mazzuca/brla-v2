@@ -13,6 +13,8 @@ export type Field = {
     label?: string;
     value?:string;
     icon? : IconProp ;
+    imageIcon? : string ;
+    altIcon?:string;
     addClassName?:string;
     controller?:ReactNode;
     register?: UseFormRegister<FieldValues>;

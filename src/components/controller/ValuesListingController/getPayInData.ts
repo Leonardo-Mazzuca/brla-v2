@@ -49,9 +49,11 @@ export async function getPayInData():Promise<ExpectedPayInData[]> {
         const request = await http.get('/pay-in/pix/history', {
             withCredentials: true
         });
-        
 
+        
         const data = request.data.depositsLogs.map((item: any) => {
+
+            
 
             const { createdAt, payerName,coin, chain } = item;
             const operationName = item.mintOps.reduce((acc: string, op: any) => {
@@ -62,12 +64,13 @@ export async function getPayInData():Promise<ExpectedPayInData[]> {
             const title = payerName;
             const icon = faPlus;
             const smartContractOps = item.mintOps[0].smartContractOps;
-            let { id } = item.mintOps[0];
+            let { id,amount } = item.mintOps[0];
+            
+            const tx = smartContractOps.flatMap((item:any) => item.tx)[0];
             
             const feedback = smartContractOps[0].feedback;
 
           
-            
             return {
 
                 walletAddress: formatInTaxId(item.taxId),
@@ -75,11 +78,12 @@ export async function getPayInData():Promise<ExpectedPayInData[]> {
                 title,
                 chain,
                 operationName,
-                amount: (item.amount / TO_WEBSOCKET),
+                amount: ((amount) / TO_WEBSOCKET),
                 id,
                 icon,
                 feedback,
-                coin
+                coin,
+                tx: tx,
 
             };
             

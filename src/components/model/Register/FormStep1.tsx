@@ -80,8 +80,8 @@ const FromStep1 = () => {
 
   const handleCountryChange = (selectedOption:any) => {
     const newValue = selectedOption ? selectedOption.value : '';
-    setCountry(newValue);  // Atualiza o estado local
-    setValue('country', newValue, { shouldValidate: true });  // Atualiza o valor no react-hook-form
+    setCountry(newValue); 
+    setValue('country', newValue, { shouldValidate: true }); 
   };
   type Step1Data = z.infer<typeof schema>;
   

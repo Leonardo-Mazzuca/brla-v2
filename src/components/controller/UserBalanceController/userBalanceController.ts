@@ -52,7 +52,8 @@ export async function userBalanceController () {
 
 
     } catch (error: any) {
-   
+        
+        console.error(error.message || error.data?.message)
         throw error;
 
     }

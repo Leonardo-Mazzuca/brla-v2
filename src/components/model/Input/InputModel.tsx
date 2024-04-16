@@ -3,7 +3,7 @@ import TextModel from '../Text/Text';
 import { Field } from '../../types/Field/Field';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BUTTON_PADDING, DEFAULT_TEXT_SIZE, FONT_NORMAL } from '../../contants/classnames/classnames';
+import { BUTTON_PADDING, DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLAG_ICON_SIZE, FONT_NORMAL } from '../../contants/classnames/classnames';
 
 
 const InputModel: React.FC<Field> = ({ 
@@ -20,12 +20,15 @@ const InputModel: React.FC<Field> = ({
     icon,
     addClassName,
     onClick,
-    onBlur,
+    imageIcon,
+    altIcon,
+
 }) => {
 
 
     
     return (
+        
         <div className='relative flex-1'>
             
             <TextModel content={label ?? ''} />
@@ -36,7 +39,14 @@ const InputModel: React.FC<Field> = ({
                      <FontAwesomeIcon icon={icon} />
                 </div>
             }
-    
+
+            {imageIcon &&
+
+                <div className="absolute inset-y-0 right-0 me-2 flex items-center pl-3.5 pointer-events-none">
+                    <img className='w-8' src={imageIcon} alt = {altIcon} />
+                </div>
+                
+            }
 
       
             <input
