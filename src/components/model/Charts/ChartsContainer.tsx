@@ -1,8 +1,19 @@
 
 import Chart from './Chart';
-import { ChartData } from '../../types/Chart/ChartData';
 import Loading from '../Loading/Loading';
-import { FLEX, LG_JUSTIFY_BETWEEN } from '../../contants/classnames/classnames';
+
+export type ChartData = {
+
+  id: string,
+  flag: string,
+  values: number[],
+  date: string[],
+  pctChange: string,
+  heading: string,
+  subHeading: string,
+  textHeading: string,
+
+}
 
 type Data = {
 
@@ -15,8 +26,8 @@ const ChartsContainer = ({data}: Data) => {
 
   return (
 
-    <section className={`${FLEX}
-     ${LG_JUSTIFY_BETWEEN} flex-col md:flex-row w-full gap-5 pb-10`}>
+    <section className={`flex
+     lg:justify-between flex-col md:flex-row w-full gap-5 pb-10`}>
 
       {data ? (
         

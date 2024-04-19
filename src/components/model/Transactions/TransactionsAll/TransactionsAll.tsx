@@ -2,7 +2,8 @@ import ContainerStandart from "../../Container/ContainerDefault";
 import TransactionsManagement from "./TransactionsManagement";
 import MiniMenu from "../MiniMenu/MiniMenu";
 import ValuesArrival from "../ValuesArrival/ValuesArrival";
-import { TO_HOME } from "../../../contants/Paths/paths";
+import { TO_HOME } from "../../../../contants/Paths/paths";
+
 
 
 const Transactions: React.FC = () => {

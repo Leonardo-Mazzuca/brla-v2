@@ -2,10 +2,11 @@ import { ReactNode, useEffect, useState } from "react";
 import TextModel from "../Text/Text";
 import IconButton from "../Button/IconButton";
 import LinkModel from "../Link/Link";
-import { useQuote } from "../../context/QuoteContext";
+import { useQuote } from "../../../context/Quote/QuoteContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faUser } from "@fortawesome/free-solid-svg-icons";
-import { TO_HOME } from "../../contants/Paths/paths";
+import { TO_HOME } from "../../../contants/Paths/paths";
+
 
 
 interface NavbarProps {

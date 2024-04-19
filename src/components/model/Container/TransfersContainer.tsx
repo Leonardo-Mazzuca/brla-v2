@@ -64,6 +64,7 @@ const TransfersContainer:React.FC<TransferConfig> = (
             classname={buttonControl}
             onClick={handleSubmit}
             text = { buttonText ? buttonText :  defaultButtonText } 
+            
             />}
 
     

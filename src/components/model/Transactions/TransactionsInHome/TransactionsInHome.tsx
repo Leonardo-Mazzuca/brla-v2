@@ -1,7 +1,8 @@
 import TransactionButtons from "./TransactionButtons";
 import MiniMenu from "../MiniMenu/MiniMenu";
 import ValuesArrival from "../ValuesArrival/ValuesArrival";
-import { TO_TRANSACTIONS } from "../../../contants/Paths/paths";
+import { TO_TRANSACTIONS } from "../../../../contants/Paths/paths";
+
 
 
 const TransactionsHome = () => {

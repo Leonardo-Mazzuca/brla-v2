@@ -1,14 +1,14 @@
 import { useForm } from 'react-hook-form';
 import Button from '../../Button/Button';
-import InputModel from '../../Input/InputModel';
-import { Field } from '../../../types/Field/Field';
+import InputModel, { Field } from '../../Input/InputModel';
+
 import { useNavigate } from 'react-router-dom';
 import { Schema } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextModel from '../../Text/Text';
 import { ReactNode, useEffect, useState } from 'react';
-import { BLOCK, HIDDEN, POINTS_ALL, POINTS_NONE, TEXT_RED_600, TEXT_SMALL } from '../../../contants/classnames/classnames';
-// Corrected import path
+import { BLOCK, HIDDEN, POINTS_ALL, POINTS_NONE, TEXT_RED_600 } from '../../../../contants/classnames/classnames';
+
 
 type FormModelProps = {
     children?: ReactNode;
@@ -24,6 +24,7 @@ type FormModelProps = {
 };
 
 const FormModel: React.FC<FormModelProps> = (props) => {
+    
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'all',
         criteriaMode: 'all',
@@ -85,11 +86,16 @@ const FormModel: React.FC<FormModelProps> = (props) => {
     return (
         <form className={props.classname} onSubmit={handleSubmit(submitForm)}>
             {props.fields &&
-                props.fields.map((field, index) => (
-                    <div key={index}>
+                props.fields.map((field) => (
+
+                    <div key={field.id}>
+
                         {field.controller ? (
+
                             <div className='my-3'>{field.controller}</div>
+
                         ) : (
+
                             <>
                                 <InputModel
                                     type={field.type}
@@ -107,25 +113,34 @@ const FormModel: React.FC<FormModelProps> = (props) => {
                                     altIcon={field.altIcon}
                                     imageIcon={field.imageIcon}
                                 />
+
                                 {errors[field.name] && (
                                     <TextModel
-                                        addons={`${TEXT_SMALL}`}
+                                        addons={`text-sm`}
                                         color={TEXT_RED_600}
                                         content={errors[field.name]?.message}
                                     />
                                 )}
+
                             </>
                         )}
+                        
                     </div>
+
                 ))}
+
             {errorOnSubmit && (
                 <TextModel addons="mt-3" color={TEXT_RED_600} content={props.submitError} />
             )}
+
             {props.children}
+
             {props.buttonText && (
                 <Button classname={`${props.buttonClassname} ${buttonDisabled}`} text={props.buttonText} />
             )}
+
             <TextModel addons={showText} content={'Carregando...'} />
+
         </form>
     );
 };

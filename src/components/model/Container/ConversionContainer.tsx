@@ -3,7 +3,6 @@ import Button from "../Button/Button";
 import MiniContainer from "./MiniContainer";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../ProgressBar/ProgressBar";
-import { MARGIN_X_AUTO, RELATIVE, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 
 type ConversionConfig = {
@@ -14,7 +13,6 @@ type ConversionConfig = {
     activeIndex: number;
     onSubmit?: () => void;
     buttonControl?: string
-    hideButton?:boolean;
     
     
 }
@@ -25,13 +23,11 @@ const ConversionContainer:React.FC<ConversionConfig> = ({
     activeIndex,
     onSubmit,
     buttonControl,
-    hideButton
     }) => {
 
     const navigate = useNavigate();
 
     const [buttonClassname, setButtonClassname] = useState(buttonControl);
-    const [buttonHidded, setButtonHidded] = useState(hideButton);
     
 
     useEffect(() => {
@@ -64,10 +60,10 @@ const ConversionContainer:React.FC<ConversionConfig> = ({
 
     return (
         
-        <MiniContainer className={RELATIVE}>    
+        <MiniContainer className={'relative'}>    
 
 
-            <div className={`md:px-24 ${WIDTH_FULL} ${MARGIN_X_AUTO}`}>
+            <div className={`md:px-24 w-full mx-auto`}>
                 <ProgressBar activeIndex={activeIndex} IsSecondVisible = {false} />
             </div>
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { FLEX, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_CENTER } from '../../contants/classnames/classnames';
 import { useNavigate } from 'react-router-dom';
-import { TO_HOME } from '../../contants/Paths/paths';
-import { USER_LOGGED } from '../../contants/sessionStorageKeys/sessionStorageKeys';
+import { GAP_DEFAULT } from '../../../contants/classnames/classnames';
+import { USER_LOGGED } from '../../../contants/sessionStorageKeys/sessionStorageKeys';
+import { TO_HOME } from '../../../contants/Paths/paths';
 
 
 const Logo: React.FC = () => {
@@ -12,7 +12,7 @@ const Logo: React.FC = () => {
 
   return (
     
-    <div className={`${FLEX} ${JUSTIFY_CENTER} ${ITEMS_CENTER} ${GAP_DEFAULT}`} 
+    <div className={`flex justify-center items-center ${GAP_DEFAULT}`} 
       onClick={() => userLogged ? navigate(TO_HOME) : ''}
       >
         <img src='/logo.svg' alt='Logo of BRLA' className='w-8' />

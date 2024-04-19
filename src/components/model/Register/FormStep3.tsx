@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Field } from "../../types/Field/Field";
-import { usePasswordValidation } from "../../service/PasswordService/usePasswordValidation";
 import FormModel from "../Form/FormModel/FormModel";
 import { z } from "zod";
-import { FormActions, useForm } from "../../context/FormContext";
-import { FLEX, FLEX_COL, GAP_4, GAP_DEFAULT, ITEMS_CENTER, MARGIN_Y_3, TEXT_GRAY_500, TEXT_RED_600, TEXT_SMALL } from "../../contants/classnames/classnames";
+import { FormActions, useForm } from "../../../context/Register/FormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { REGISTER_4 } from "../../contants/Paths/paths";
+import { usePasswordValidation } from "../../../hooks/Password/usePasswordValidation";
+import { Field } from "../Input/InputModel";
+import { REGISTER_4 } from "../../../contants/Paths/paths";
+import { TEXT_GRAY_500, TEXT_RED_600 } from "../../../contants/classnames/classnames";
 
 
-const FromStep3: React.FC = () => {
+const FormStep3: React.FC = () => {
     const {errors, handlePasswordChange, handleConfirmPasswordChange } = usePasswordValidation();
     const [passwordChanged, setPasswordChanged] = useState(false);
     const [confirmPasswordChanged, setConfirmPasswordChanged] = useState(false);
@@ -57,13 +57,13 @@ const FromStep3: React.FC = () => {
 
             {(passwordChanged || confirmPasswordChanged) && (
 
-                <div className={`${FLEX} ${GAP_4} ${MARGIN_Y_3} ${FLEX_COL}`}>
+                <div className={`flex gap-4 my-3 flex-col`}>
 
                     {errors.map((error, index) => (
 
-                        <div key={index} className={`${FLEX} ${ITEMS_CENTER} ${GAP_DEFAULT}`}>
+                        <div key={index} className={`flex items-center gap-default`}>
                             <FontAwesomeIcon icon={faX} className={TEXT_RED_600} />
-                            <p className={`${TEXT_GRAY_500} ${TEXT_SMALL}`}>{error}</p>
+                            <p className={`${TEXT_GRAY_500} text-sm`}>{error}</p>
                         </div>
 
                     ))}
@@ -76,4 +76,4 @@ const FromStep3: React.FC = () => {
     );
 };
 
-export default FromStep3;
+export default FormStep3;

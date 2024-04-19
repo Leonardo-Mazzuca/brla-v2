@@ -1,10 +1,6 @@
-import ButtonProps from "../../types/Button/ButtonProps";
-
-
-
+import { ButtonProps } from "./Button";
 
 const IconButton: React.FC<ButtonProps> = ({text, onClick, classname}) => {
-
 
 
     const buttonClassname: string = 
@@ -17,12 +13,15 @@ const IconButton: React.FC<ButtonProps> = ({text, onClick, classname}) => {
     transition-colors duration-300 ease-in-out dark:hover:bg-gray-400 
     hover:from-slate-100 hover:via-slate-200 hover:to-slate-300 py-4 px-6 ${classname ?? ''}`;
 
-    return <button onClick={onClick} className={buttonClassname}>
+    return (
+        
+    <button onClick={onClick} className={buttonClassname}>
 
-
-        {text}
+           {text}
         
     </button>
+
+    );
 }
 
 export default IconButton;

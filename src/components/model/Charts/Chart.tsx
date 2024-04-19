@@ -1,12 +1,22 @@
 
 import React, { useEffect } from 'react';
 import ApexCharts from 'apexcharts';
-import ChartProps from '../../types/Chart/ChartProps';
 import { faDownLong, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FLEX, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, ROUNDED_DEFAULT, TEXT_CENTER, TEXT_GREEN_500, TEXT_RED_600 } from '../../contants/classnames/classnames';
+import { GAP_DEFAULT, ROUNDED_DEFAULT, TEXT_GREEN_500, TEXT_RED_600 } from '../../../contants/classnames/classnames';
 
+export interface ChartProps {
 
+  id: string;
+  values: number[];
+  date: string[];
+  flag: string;
+  heading: string
+  subHeading: string
+  textHeading: string;
+  pctChange: string
+
+}
 
 const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,textHeading,pctChange}) => {
 
@@ -234,13 +244,13 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
             <div>
 
               <div>
-                <h2 className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
+                <h2 className={`flex ${GAP_DEFAULT} items-center`}>
                   <img src={flag} className='w-5' alt='country flag'/>
                   {heading}
                 </h2>
               </div>
 
-              <div className={`${FLEX} ${JUSTIFY_BETWEEN} w-full`}>
+              <div className={`flex justify-between w-full`}>
 
                 <div >
                     <h5 className="leading-none text-xl md:text-2xl font-bold text-gray-900 dark:text-white pb-2">
@@ -257,9 +267,9 @@ const Chart: React.FC<ChartProps> = ({id,values,date,flag,heading,subHeading,tex
 
                 <div className={`text-lg md:text-xl font-semibold
 
-                ${parseFloat(pctChange) < 0 ? TEXT_RED_600 : TEXT_GREEN_500} ${TEXT_CENTER}`}>
+                ${parseFloat(pctChange) < 0 ? TEXT_RED_600 : TEXT_GREEN_500} text-center`}>
 
-                <div className={`${FLEX} ${GAP_DEFAULT} ${ITEMS_CENTER}`}>
+                <div className={`flex gap-default items-center`}>
                   {pctChange}%
                   {parseFloat(pctChange) < 0 ? <FontAwesomeIcon 
                   icon={faDownLong} /> :

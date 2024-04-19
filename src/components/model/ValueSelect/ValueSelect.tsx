@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import CurrencyDropdown from "../CurrencyDropdown/CurrencyDropdown";
 import TextModel from "../Text/Text";
-import { formatNumberToString } from "../../service/Formatters/FormatNumber/formatNumber";
-import { useBalance } from "../../context/BalanceContext";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InputMoney from "../Input/InputMoney";
-import { BG_GRAY_100, BG_GRAY_200, BORDER_NONE, FLEX, FLEX_COL, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, ROUNDED_DEFAULT, TEXT_BLACK, TEXT_GRAY_400, TEXT_START, WIDTH_AUTO, WIDTH_FULL } from "../../contants/classnames/classnames";
+import { BG_GRAY_100, BG_GRAY_200, GAP_DEFAULT, ROUNDED_DEFAULT, TEXT_BLACK, TEXT_GRAY_400 } from "../../../contants/classnames/classnames";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { useBalance } from "../../../context/Balance/BalanceContext";
+import { formatNumberToString } from "../../../functions/Formatters/FormatNumber/formatNumber";
 
 type ValueSelectConfig = {
     
@@ -22,6 +22,7 @@ type ValueSelectConfig = {
     handleMaxButtonClick?: () => void;
  
 }; 
+
 const ValueSelect: React.FC<ValueSelectConfig> = ({
     topIcon,
     topText,
@@ -61,28 +62,29 @@ const ValueSelect: React.FC<ValueSelectConfig> = ({
 
     return (
 
-        <div className={`${TEXT_START}  mt-3`} data-type={dataType}>
+        <div className={`text-start mt-3`} data-type={dataType}>
 
-            <div className={`${FLEX} ${JUSTIFY_BETWEEN} w-full ${ITEMS_CENTER} mb-3 ${GAP_DEFAULT}`}>
+            <div className={`flex justify-between w-full items-center mb-3 ${GAP_DEFAULT}`}>
 
-                <div className={`${FLEX} ${ITEMS_CENTER} ${GAP_DEFAULT}`}>
+                <div className={`flex items-center ${GAP_DEFAULT}`}>
                     {topIcon && <FontAwesomeIcon icon={topIcon} />}
                     <TextModel color={TEXT_BLACK} content={topText} />
                 </div>
 
             </div>
 
-            <div className={`p-3 ${BG_GRAY_100} ${FLEX} ${ITEMS_CENTER} ${JUSTIFY_BETWEEN} ${ROUNDED_DEFAULT} ${FLEX_COL} md:flex-row`}>
-                <div className={`${FLEX} ${GAP_DEFAULT} ${WIDTH_FULL} ${FLEX_COL}`}>
+            <div className={`p-3 ${BG_GRAY_100} flex items-center justify-between
+             ${ROUNDED_DEFAULT} flex-col md:flex-row`}>
+                <div className={`flex ${GAP_DEFAULT} w-full flex-col`}>
 
                     <CurrencyDropdown index={index} coin={coin} onCurrencyChange={onCurrencyChange} />
                     <TextModel color={TEXT_GRAY_400} addons="mt-2" content={`Disponível ${formattedAvailableValue}`} />
 
                 </div>
 
-                <div className={`${FLEX} ${JUSTIFY_BETWEEN} ${WIDTH_FULL} md:flex-col ${ITEMS_CENTER} md:items-end`}>
+                <div className={`flex jutify-between e-full md:flex-col items-center md:items-end`}>
                     <InputMoney value={inputValue} onChange={onChange} />
-                    <button onClick={handleMaxButtonClick} className={`${BORDER_NONE} py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
+                    <button onClick={handleMaxButtonClick} className={`border-transparent py-1 mt-2 px-5 rounded-lg ${BG_GRAY_200}`}>max</button>
                 </div>
                 
             </div>

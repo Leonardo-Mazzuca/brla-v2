@@ -1,12 +1,33 @@
 
 import TextModel from '../Text/Text';
-import { Field } from '../../types/Field/Field';
-import React from 'react';
+import React, { InputHTMLAttributes, ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BUTTON_PADDING, DEFAULT_ICON_SIZE, DEFAULT_TEXT_SIZE, FLAG_ICON_SIZE, FONT_NORMAL } from '../../contants/classnames/classnames';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { BUTTON_PADDING, DEFAULT_TEXT_SIZE } from '../../../contants/classnames/classnames';
 
+
+
+export interface Field extends InputHTMLAttributes<HTMLInputElement> {
+
+    type: string;
+    placeholder?: string;
+    name: string;
+    minLength?: number;
+    maxLength?: number;
+    label?: string;
+    value?:string;
+    icon? : IconProp;
+    imageIcon? : string ;
+    altIcon?:string;
+    addClassName?:string;
+    controller?:ReactNode;
+    register?: UseFormRegister<FieldValues>;
+
+};
 
 const InputModel: React.FC<Field> = ({ 
+
     placeholder, 
     type, 
     register, 
@@ -14,14 +35,12 @@ const InputModel: React.FC<Field> = ({
     minLength, 
     maxLength, 
     label, 
-    onChange,
-    onInput,
     value,
     icon,
     addClassName,
-    onClick,
     imageIcon,
     altIcon,
+    ...rest
 
 }) => {
 
@@ -50,23 +69,23 @@ const InputModel: React.FC<Field> = ({
 
       
             <input
+
                 {...(register && register(name))}
-                onClick={onClick}
                 placeholder={placeholder}
                 type={type}
                 minLength={minLength}
                 maxLength={maxLength}
                 name={name}
                 value={value}
-                onInput={onInput}
-                onChange={onChange}
+                {...rest}
                 className={`block w-full p-4 
                 border-transparent rounded-lg 
                 bg-gray-50 focus:primary-green focus:border-primary-green dark:bg-gray-700 
                 dark:placeholder-gray-400 dark:text-white dark:focus:primary-green
-                dark:focus:border-primary-green ${FONT_NORMAL} placeholder:${DEFAULT_TEXT_SIZE}
+                dark:focus:border-primary-green font-normal placeholder:${DEFAULT_TEXT_SIZE}
                 ${BUTTON_PADDING} text-gray-400 ${icon && 'ps-12'}
                 mt-2 ${DEFAULT_TEXT_SIZE} outline-0 ${addClassName}`}
+                
             />
         </div>
     );

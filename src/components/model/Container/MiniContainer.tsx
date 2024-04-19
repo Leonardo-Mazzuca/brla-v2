@@ -1,6 +1,4 @@
-import { FLEX, FLEX_COL, ITEMS_CENTER } from "../../contants/classnames/classnames";
-import ContainerModel from "../../types/ContainerModel/ContainerModel";
-
+import { ContainerModel } from "./ContainerDefault";
 
 
 const MiniContainer: React.FC<ContainerModel> = ({children}) => {
@@ -8,7 +6,7 @@ const MiniContainer: React.FC<ContainerModel> = ({children}) => {
 
     return (
 
-        <section className={`${FLEX} gap-3 ${ITEMS_CENTER} ${FLEX_COL}`}>
+        <section className={`flex gap-3 items-center flex-col`}>
 
                 <div className={`flex gap-3 flex-col w-full max-w-3xl`}>
                     {children}

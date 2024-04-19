@@ -3,13 +3,16 @@ import Button from "../Button/Button";
 import TextModel from "../Text/Text";
 
 import { useNavigate } from "react-router-dom";
-import { useForm } from "../../context/FormContext";
-import { validateUserController } from "../../controller/ValidateUserController/validateUserController";
-import { registerController } from "../../controller/RegisterController/RegisterController";
+import { useForm } from "../../../context/Register/FormContext";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_CENTER, MARGIN_Y_3, TEXT_CENTER, TEXT_GRAY_500 } from "../../contants/classnames/classnames";
-import { DEFAULT_PATH } from "../../contants/Paths/paths";
+
+import { validateUserController } from "../../../controller/ValidateUserController/validateUserController";
+import { DEFAULT_PATH } from "../../../contants/Paths/paths";
+import { registerController } from "../../../controller/RegisterController/RegisterController";
+import { GAP_DEFAULT, TEXT_GRAY_500 } from "../../../contants/classnames/classnames";
+
 
 const inputItems = ["code1", "code2", "code3", "code4", "code5", "code6"];
 
@@ -23,6 +26,7 @@ const FormStep4: React.FC = () => {
   const [error, setError] = useState("");
 
   const handleRegister = () => {
+
     try {
       registerController(state);
     } catch (e) {
@@ -86,8 +90,8 @@ const FormStep4: React.FC = () => {
   }
 
   return (
-    <section className={`${FLEX} ${FLEX_COL} ${JUSTIFY_CENTER} ${ITEMS_CENTER} ${GAP_DEFAULT} ${TEXT_CENTER}`}>
-      <div className={MARGIN_Y_3}>
+    <section className={`flex flex-col justify-center items-center ${GAP_DEFAULT} text-center`}>
+      <div className={'my-3'}>
         <TextModel
           color={TEXT_GRAY_500}
           content="Por favor, informe o código que enviamos para o seu e-mail. Não esqueça de verificar o spam."
@@ -95,7 +99,7 @@ const FormStep4: React.FC = () => {
       </div>
 
       <form ref={formRef} onSubmit={handleSubmit}>
-        <div className={`${FLEX} ${JUSTIFY_CENTER} ${FLEX_WRAP} ${GAP_DEFAULT} ${ITEMS_CENTER} ${MARGIN_Y_3}`}>
+        <div className={`flex justify-center flex-wrap ${GAP_DEFAULT} items-center my-3`}>
           {inputItems.map((item, index) => (
             <input
               key={index}

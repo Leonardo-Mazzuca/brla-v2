@@ -1,6 +1,5 @@
-
-import { FLEX, FLEX_COL, FORM_WIDTH, ITEMS_CENTER, JUSTIFY_CENTER, LARGE_PADDING, MEDIUM_PADDING, MIN_FORM_HEIGHT } from "../../contants/classnames/classnames";
-import ContainerModel from "../../types/ContainerModel/ContainerModel";
+import { FORM_WIDTH, MIN_FORM_HEIGHT } from "../../../contants/classnames/classnames";
+import { ContainerModel } from "./ContainerDefault";
 
 
 
@@ -12,8 +11,8 @@ const ContainerForm: React.FC<ContainerModel> = ({children}) => {
 
             <section 
             
-            className={`${FLEX} ${JUSTIFY_CENTER} ${ITEMS_CENTER}
-             ${FLEX_COL} ${MIN_FORM_HEIGHT} ${MEDIUM_PADDING} md:${LARGE_PADDING}`}>
+            className={`flex justify-center items-center
+             flex-col ${MIN_FORM_HEIGHT} p-5 md:p-8`}>
 
                     <div className={`${FORM_WIDTH}`}>
                         {children}

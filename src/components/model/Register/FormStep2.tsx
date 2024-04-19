@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Field } from "../../types/Field/Field";
+
 import FormModel from "../Form/FormModel/FormModel";
 import { z } from "zod";
-import { FormActions, useForm as useFormContext } from "../../context/FormContext";
-import { addressService } from "../../service/AddressService/addressService";
-import { FLEX, FLEX_COL, GAP_DEFAULT } from "../../contants/classnames/classnames";
-import { formatCep } from "../../service/Formatters/FormatCep/formatCep";
-import { REGISTER_3 } from "../../contants/Paths/paths";
+import { FormActions, useForm as useFormContext } from "../../../context/Register/FormContext";
+import { addressService } from "../../../service/AddressService/addressService";
+
+import { Field } from "../Input/InputModel";
+import { REGISTER_3 } from "../../../contants/Paths/paths";
+import { GAP_DEFAULT } from "../../../contants/classnames/classnames";
+import { formatCep } from "../../../functions/Formatters/FormatCep/formatCep";
 
 const FormStep2: React.FC = () => {
 
@@ -90,8 +92,8 @@ const FormStep2: React.FC = () => {
   const schema = z.object({
     cep: z
       .string()
-      .min(1, "Cep não pode ficar vazio!"),
-      //.refine((cep) => handleCepValue(cep), { message: error }),
+      .min(1, "Cep não pode ficar vazio!")
+      .refine((cep) => handleCepValue(cep), { message: error }),
 
       city: z.string().refine(() => city !== '' ,{message: 'Cidade é obrigatório'}),
       state: z.string().refine(() => state !== '', {message: 'Estado é obrigatório'}),
@@ -127,7 +129,7 @@ const FormStep2: React.FC = () => {
 
     <FormModel
       schema={schema}
-      classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:${FLEX} sm:${FLEX_COL}`}
+      classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:flex sm:flex-col`}
       location={REGISTER_3}
       buttonText="próximo"
       fields={fields}

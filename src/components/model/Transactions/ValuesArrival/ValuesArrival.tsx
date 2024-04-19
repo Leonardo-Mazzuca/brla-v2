@@ -1,14 +1,14 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { TransactionsActions, useValuesFilter } from "../../../context/TransactionsContext";
+import { TransactionsActions, useValuesFilter } from "../../../../context/Transactions/TransactionsContext";
 import { TransactionMap } from "./transactionsMap";
 import Loading from "../../Loading/Loading";
 import TextModel from "../../Text/Text";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { LOG_SIZE } from "../../../contants/divisionValues/divisionValues";
-import { TO_HOME } from "../../../contants/Paths/paths";
-import { valuesListingController } from "../../../controller/ValuesListingController/valuesListingController";
+import { TO_HOME } from "../../../../contants/Paths/paths";
+import { valuesListingController } from "../../../../controller/ValuesListingController";
+import { LOG_SIZE } from "../../../../contants/divisionValues/divisionValues";
 
 
 const ValuesArrival: React.FC = () => {

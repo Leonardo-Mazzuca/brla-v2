@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import CurrencyFlags from "./CurrencyFlags";
-import { getCurrencyIMG } from "../../service/CurrencyService/getCurrencyIMG";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { RELATIVE, TEXT_LEFT } from "../../contants/classnames/classnames";
+import { getCurrencyIMG } from "../../../service/CurrencyService/getCurrencyIMG";
+
 
 type CurrencyConfig = {
   coin: string;
@@ -51,7 +52,7 @@ const CurrencyDropdown: React.FC<CurrencyConfig> = ({ coin, onCurrencyChange, in
   }, [dropdownRef]);
 
   return (
-    <div ref={dropdownRef} className={`${RELATIVE} w-full inline-block ${TEXT_LEFT}`} data-index={index} data-dropdown={dropdownOpen ? 'open' : 'closed'}>
+    <div ref={dropdownRef} className={`relative w-full inline-block text-left`} data-index={index} data-dropdown={dropdownOpen ? 'open' : 'closed'}>
 
       <button
         className="flex w-auto justify-start rounded-md border-transparent shadow-sm px-4 py-4 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 text-lg items-center"

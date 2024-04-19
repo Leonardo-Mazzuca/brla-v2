@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Heading from "../../Heading/Heading";
 import TextModel from "../../Text/Text";
-import TransactionProps from "../../../types/Transactions/TransactionsProps";
+import TransactionProps from "../../../../@types/Transactions/TransactionsProps";
 
 
 

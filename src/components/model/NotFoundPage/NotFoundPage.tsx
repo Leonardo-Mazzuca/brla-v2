@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import Heading from "../Heading/Heading";
 import TextModel from "../Text/Text";
-import { DEFAULT_PATH } from "../../contants/Paths/paths";
+import { DEFAULT_PATH } from "../../../contants/Paths/paths";
 
 
 

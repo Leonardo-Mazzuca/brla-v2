@@ -4,8 +4,9 @@ import TextModel from "../../Text/Text";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FLEX, FLEX_COL, FLEX_WRAP, GAP_DEFAULT, ITEMS_CENTER, JUSTIFY_BETWEEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_800, WIDTH_AUTO, WIDTH_FULL } from "../../../contants/classnames/classnames";
-import { TO_CONVERT_1, TO_DEPOSIT, TO_TRANSFERS_1 } from "../../../contants/Paths/paths";
+import { TO_CONVERT_1, TO_DEPOSIT, TO_TRANSFERS_1 } from "../../../../contants/Paths/paths";
+import { GAP_DEFAULT, POINTS_ALL, POINTS_NONE, TEXT_GRAY_800 } from "../../../../contants/classnames/classnames";
+
 
 interface TransactionItemProps {
     content: string;
@@ -13,8 +14,6 @@ interface TransactionItemProps {
     link: string;
     classname: string;
 }
-
-
 
 
 const TransactionButtons: React.FC = () => {
@@ -25,7 +24,7 @@ const TransactionButtons: React.FC = () => {
     useEffect(()=> {
 
         setTimeout(()=> {
-            setButtonClassname(POINTS_ALL)
+            setButtonClassname(POINTS_ALL);
         },8000);
 
 
@@ -43,16 +42,16 @@ const TransactionButtons: React.FC = () => {
 
     return (
         <section 
-        className={`${FLEX} ${ITEMS_CENTER}
-        gap-12 ${FLEX_WRAP} lg:w-auto ${WIDTH_FULL} ${JUSTIFY_BETWEEN}`}>
+        className={`flex items-center
+        gap-12 flex-wrap lg:w-auto w-full justify-between`}>
         
 
              {transactionItems.map((item,index)=> {
 
                 return (
-                <div className={`${FLEX} ${FLEX_COL} ${ITEMS_CENTER} ${GAP_DEFAULT}`} key={index}>
+                <div className={`flex flex-col items-center ${GAP_DEFAULT}`} key={index}>
 
-                    <IconButton classname={`${WIDTH_FULL} md:w-auto ${item.classname}`} text = {item.icon}
+                    <IconButton classname={`w-full md:w-auto ${item.classname}`} text = {item.icon}
                      onClick={() => navigate(item.link)} />
 
                     <TextModel color={TEXT_GRAY_800} content = {item.content} />

@@ -7,7 +7,7 @@ import TextModel from "../Text/Text";
 import ContainerService from "./ContainerService";
 import MiniContainer from "./MiniContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 
@@ -27,6 +27,15 @@ const DepositsContainer: React.FC<DepositsConfig> = ({heading,subHeading,descrip
 
 
     const navigate = useNavigate();
+
+    const buttonElement = (
+        
+        <>
+        Concluir
+       <FontAwesomeIcon className="mx-2" icon={faArrowRight}/>
+        </>
+
+    )
 
     return (
 
@@ -72,16 +81,10 @@ const DepositsContainer: React.FC<DepositsConfig> = ({heading,subHeading,descrip
                         
                     <Button 
 
-                        onClick={() => navigate('/home')}
-                        text = {
+                    onClick={() => navigate('/home')}
+                    text = {buttonElement} 
 
-                        <>
-                        Concluir
-                        <i className="mx-2 fa-solid fa-arrow-right"></i>
-                        </>
-
-                        } />
-
+                    />
                         
                     </div>
     

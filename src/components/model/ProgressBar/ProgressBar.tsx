@@ -1,6 +1,5 @@
 import { faCheck, faMoneyBill, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FLEX, ITEMS_CENTER, WIDTH_FULL } from "../../contants/classnames/classnames";
 
 
 
@@ -21,7 +20,7 @@ const ProgressBar: React.FC<ProgressBarConfig> = ({IsSecondVisible,activeIndex})
 
     return(
 
-            <ol className={`${FLEX} ${ITEMS_CENTER} ${WIDTH_FULL} mb-3`}>
+            <ol className={`flex items-center w-full mb-3`}>
 
                 <li className="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-black after:border-4 after:inline-block dark:after:border-black">
 

@@ -1,11 +1,13 @@
 import { faArrowUpFromBracket, faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { TransactionsActions, useValuesFilter } from "../../../context/TransactionsContext";
-import exportData from "../../../service/ExportData/exportData";
-import formatDate from "../../../service/Formatters/FormatDate/formatDate";
-import { Field } from "../../../types/Field/Field";
-import InputModel from "../../Input/InputModel";
-import { BUTTON_PADDING, DEFAULT_TEXT_SIZE, FLEX, FLEX_COL, FLEX_ROW, FONT_SEMIBOLD, GAP_DEFAULT, JUSTIFY_BETWEEN, MARGIN_X_AUTO, ROUNDED_DEFAULT, TEXT_GRAY_500, WIDTH_FULL } from "../../../contants/classnames/classnames";
+import { TransactionsActions, useValuesFilter } from "../../../../context/Transactions/TransactionsContext";
+
+import InputModel, { Field } from "../../Input/InputModel";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import exportData from "../../../../functions/ExportData/exportData";
+import { BUTTON_PADDING, DEFAULT_TEXT_SIZE, GAP_DEFAULT, ROUNDED_DEFAULT, TEXT_GRAY_500 } from "../../../../contants/classnames/classnames";
+import formatDate from "../../../../functions/Formatters/FormatDate/formatDate";
 
 const TransactionsManagement: React.FC = () => {
     
@@ -37,7 +39,7 @@ const TransactionsManagement: React.FC = () => {
 
     return (
         
-        <section className={`${FLEX} ${JUSTIFY_BETWEEN} ${GAP_DEFAULT} md:${FLEX_ROW} ${FLEX_COL}`}>
+        <section className={`flex justify-between ${GAP_DEFAULT} md:flex-row flex-col`}>
             
             {inputConfig.map((item, index) => {
                 return (
@@ -54,10 +56,10 @@ const TransactionsManagement: React.FC = () => {
                 );
             })}
 
-            <button className={`${MARGIN_X_AUTO} shadow-lg bg-transparent
-              text-start ps-6 block ${FONT_SEMIBOLD} placeholder:${DEFAULT_TEXT_SIZE} ${DEFAULT_TEXT_SIZE}
-             ${TEXT_GRAY_500} ${WIDTH_FULL}
-             ${ROUNDED_DEFAULT} transition duration-300 ease-in-out hover:bg-black hover:text-white ${BUTTON_PADDING}`}
+            <button className={`mx-auto shadow-lg bg-transparent
+              text-start ps-6 block font-semibold placeholder:${DEFAULT_TEXT_SIZE} ${DEFAULT_TEXT_SIZE}
+             ${TEXT_GRAY_500} w-full ${ROUNDED_DEFAULT} 
+             transition duration-300 ease-in-out hover:bg-black hover:text-white ${BUTTON_PADDING}`}
 
                 onClick={state.data.length > 0 ? () => exportData(state) : ()=> {}}
                 >
