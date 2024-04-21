@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CurrencyActions, useCurrency } from "../../../../../context/Currency/CurrencyContext";
 import { ZodSchema, z } from "zod";
-import { Field } from "../../../Input/InputModel";
+import { Field } from "../../../Input/InputModel/InputModel";
 import { BLOCK, HIDDEN, POINTS_ALL, POINTS_NONE, TEXT_GRAY_400 } from "../../../../../contants/classnames/classnames";
 import { useWebSocket } from "../../../../../context/WebSocket/WebSocketContext";
 import { useNavigate } from "react-router-dom";

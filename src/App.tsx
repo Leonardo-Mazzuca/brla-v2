@@ -5,17 +5,16 @@ import AppProvider from "./context";
 
 function App() {
 
-
   return (
 
-    <section className="mn-w-screen min-h-screen">
+    <main className="mn-w-screen min-h-screen">
 
         <AppProvider>
           <AppRoutes />
         </AppProvider>
       
 
-    </section>
+    </main>
 
   );
 }

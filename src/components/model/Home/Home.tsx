@@ -42,7 +42,6 @@ const HomeModel = () => {
 
       <Home.Transactions />
       
-
       <Home.Charts data={chartData} />
 
     </Home.Root>

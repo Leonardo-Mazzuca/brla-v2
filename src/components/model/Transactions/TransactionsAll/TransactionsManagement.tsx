@@ -1,7 +1,7 @@
 import { faArrowUpFromBracket, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { TransactionsActions, useValuesFilter } from "../../../../context/Transactions/TransactionsContext";
 
-import InputModel, { Field } from "../../Input/InputModel";
+import InputModel, { Field } from "../../Input/InputModel/InputModel";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

@@ -1,7 +1,7 @@
 
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import { BUTTON_PADDING, DEFAULT_TEXT_SIZE, ROUNDED_DEFAULT } from "../../../contants/classnames/classnames";
-
+import {twMerge} from 'tailwind-merge';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
@@ -21,12 +21,12 @@ const Button: React.FC<ButtonProps> = ({
     text: Text, background = 'bg-heading-blue', type, textColor, hover,classname
     ,onClick, disabled, ...rest}) => { 
 
-
-    const className = `${background} ${textColor ?? 'text-white'} 
-    ${BUTTON_PADDING} ${ROUNDED_DEFAULT} w-full ${DEFAULT_TEXT_SIZE}
-    ${hover ? `hover:${hover}` : 'hover:bg-gray-500'}
-    ${classname ?? ''}
-    col-span-2 my-2`;
+    const className = twMerge(
+        `${background} ${textColor ?? 'text-white'} 
+        ${BUTTON_PADDING} ${ROUNDED_DEFAULT} w-full ${DEFAULT_TEXT_SIZE}
+        ${hover ? `hover:${hover}` : 'hover:bg-gray-500'}
+        col-span-2 my-2`, classname
+    )
 
     return (
 

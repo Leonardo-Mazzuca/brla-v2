@@ -34,16 +34,21 @@ const FormWrapper: React.FC<FormWrapperProps> =
            
             <Logo />
             
-        
             <section className={`flex flex-col
              ${SHADOW_XL} justify-center ${FORM_PADDING} ${GAP_DEFAULT} ${ROUNDED_DEFAULT}`}>
 
                 {backButton}
+
                 <h3 className={`${HEADING_BLUE_800} text-xl font-bold ${headingCenter && 'text-center'}`}>
                     {heading}
                 </h3>
 
-                {children}
+                <div>
+
+                    {children}
+                    
+                </div>
+
                 
             </section>
 

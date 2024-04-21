@@ -5,7 +5,7 @@ import RegisterDataView from "./view/RegisterView/FormStep1View";
 import RegisterAdressView from "./view/RegisterView/FormStep2View";
 import ConfirmEmailView from "./view/RegisterView/FormStep3View";
 import CreatePassView from "./view/RegisterView/FormStep4View";
-import HomeView from "./view/HomeView/HomeView";
+
 import TransactionsView from "./view/TransactionsView/TransactionsView";
 import DepositView from "./view/DepositView/DepositView";
 import PixView from "./view/DepositView/PixView";
@@ -16,6 +16,7 @@ import TransferStep3View from "./view/TransferView/TransferStep3VIew";
 import ConversionStep1View from "./view/ConversionView/ConversionStep1View";
 import ConversionStep2View from "./view/ConversionView/ConversionStep2View";
 import { NotFoundView } from "./view/NotFoundView/NotFoundView";
+import HomeView from "./view/HomeView/HomeView";
 
 
 const AppRoutes = () => {

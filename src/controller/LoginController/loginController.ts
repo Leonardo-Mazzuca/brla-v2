@@ -7,6 +7,9 @@ export async function loginController(email: string, password: string) {
 
     const body = { email, password };
     
+
+    console.log(body);
+    
     try {
 
       const request = await http.post('/login', body, {

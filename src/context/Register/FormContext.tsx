@@ -35,8 +35,6 @@ export type FormState = {
         startDate: string,
         regnum: string
 
-    
-
 }
 
 type Action = {
@@ -88,7 +86,6 @@ enum FormActions {
     setPJ,
     setPF,
     setRegnum,
-    setStep1,
     setStep2,
     setStep3,
     setStep4,
@@ -100,9 +97,8 @@ enum FormActions {
 
 
 const formReducer = (state: FormState, action: Action) => {
+    
     switch (action.type) {
-
-
 
         case FormActions.setPF:
             return {
@@ -116,10 +112,9 @@ const formReducer = (state: FormState, action: Action) => {
                 cpf: action.payload.cpf,
                 birthDate: action.payload.birthDate,
              
-                
-
 
             };
+
         case FormActions.setPJ:
             return {
 
@@ -149,8 +144,7 @@ const formReducer = (state: FormState, action: Action) => {
                     regnum: action.payload.cpf,
                     birthDate: action.payload.birthDate,
                  
-                    
-    
+                
     
                 };      
 
@@ -208,7 +202,7 @@ const FormProvider = ({children}: ProviderProps) => {
 }
 
 
-const useForm = () => {
+const useRegister = () => {
 
     const context = useContext(FormContext);
 
@@ -220,5 +214,5 @@ const useForm = () => {
     
 }
 
-export {useForm, FormActions, FormProvider, }
+export {useRegister, FormActions, FormProvider, }
 

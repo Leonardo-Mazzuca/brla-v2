@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import FormModel from "../Form/FormModel/FormModel";
+import FormModel from "../../Form/FormModel/FormModel";
 import { z } from "zod";
-import { FormActions, useForm } from "../../../context/Register/FormContext";
+import { FormActions, useRegister } from "../../../../context/Register/FormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { usePasswordValidation } from "../../../hooks/Password/usePasswordValidation";
-import { Field } from "../Input/InputModel";
-import { REGISTER_4 } from "../../../contants/Paths/paths";
-import { TEXT_GRAY_500, TEXT_RED_600 } from "../../../contants/classnames/classnames";
+import { usePasswordValidation } from "../../../../hooks/Password/usePasswordValidation";
+import { Field } from "../../Input/InputModel/InputModel";
+import { REGISTER_4 } from "../../../../contants/Paths/paths";
+import { TEXT_GRAY_500, TEXT_RED_600 } from "../../../../contants/classnames/classnames";
+import { Form } from "../../Form/FormWrapper";
 
 
 const FormStep3: React.FC = () => {
     const {errors, handlePasswordChange, handleConfirmPasswordChange } = usePasswordValidation();
     const [passwordChanged, setPasswordChanged] = useState(false);
     const [confirmPasswordChanged, setConfirmPasswordChanged] = useState(false);
-    const { dispatch } = useForm();
+    const { dispatch } = useRegister();
 
     const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         handlePasswordChange(e);
@@ -51,28 +52,44 @@ const FormStep3: React.FC = () => {
     type Step3Data = z.infer<typeof schema>;
 
     return (
+        
 
-        <FormModel schema={schema} location={REGISTER_4} buttonText="Next"
-         fields={fields} onSubmit={handleSubmit}>
 
-            {(passwordChanged || confirmPasswordChanged) && (
+        <Form.Container>
 
-                <div className={`flex gap-4 my-3 flex-col`}>
 
-                    {errors.map((error, index) => (
+                <Form.Wrapper>
 
-                        <div key={index} className={`flex items-center gap-default`}>
-                            <FontAwesomeIcon icon={faX} className={TEXT_RED_600} />
-                            <p className={`${TEXT_GRAY_500} text-sm`}>{error}</p>
-                        </div>
+                    <Form.Heading content="Create your password using our check list" />
 
-                    ))}
+                    <FormModel schema={schema} location={REGISTER_4} buttonText="Next"
+                    fields={fields} onSubmit={handleSubmit}>
 
-                </div>
+                        {(passwordChanged || confirmPasswordChanged) && (
 
-            )}
+                            <div className={`flex gap-4 my-3 flex-col`}>
 
-        </FormModel>
+                                {errors.map((error, index) => (
+
+                                    <div key={index} className={`flex items-center gap-default`}>
+                                        <FontAwesomeIcon icon={faX} className={TEXT_RED_600} />
+                                        <p className={`${TEXT_GRAY_500} text-sm`}>{error}</p>
+                                    </div>
+
+                                ))}
+
+                            </div>
+
+                        )}
+
+                    </FormModel>
+
+
+
+                </Form.Wrapper>
+
+        </Form.Container>
+
     );
 };
 

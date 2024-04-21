@@ -1,5 +1,5 @@
 import FormWrapper from "../../components/model/Form/FormWrapper/FormWrapper";
-import FormLogin from "../../components/model/Login/FormLogin";
+import FormLogin from "../../components/model/Login/Login";
 
 
 const LoginView: React.FC = () => {
@@ -7,11 +7,11 @@ const LoginView: React.FC = () => {
 
     return (
 
-        <FormWrapper heading="Entre na sua conta">
+
 
             <FormLogin />
 
-        </FormWrapper>
+     
 
     );
 }

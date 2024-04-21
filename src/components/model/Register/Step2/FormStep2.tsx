@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-import FormModel from "../Form/FormModel/FormModel";
+import FormModel from "../../Form/FormModel/FormModel";
 import { z } from "zod";
-import { FormActions, useForm as useFormContext } from "../../../context/Register/FormContext";
-import { addressService } from "../../../service/AddressService/addressService";
+import { FormActions, useRegister } from "../../../../context/Register/FormContext";
+import { addressService } from "../../../../service/AddressService/addressService";
 
-import { Field } from "../Input/InputModel";
-import { REGISTER_3 } from "../../../contants/Paths/paths";
-import { GAP_DEFAULT } from "../../../contants/classnames/classnames";
-import { formatCep } from "../../../functions/Formatters/FormatCep/formatCep";
+import { Field } from "../../Input/InputModel/InputModel";
+import { REGISTER_1, REGISTER_3 } from "../../../../contants/Paths/paths";
+import { GAP_DEFAULT } from "../../../../contants/classnames/classnames";
+import { formatCep } from "../../../../functions/Formatters/FormatCep/formatCep";
+import { Form } from "../../Form/FormWrapper";
+import { FormLink } from "../../Form/FormWrapper/components/FormLink";
 
 const FormStep2: React.FC = () => {
 
+  const {state:registerState} = useRegister();
   const [error, setError] = useState("");
   const [cep, setCep] = useState('');
   const [city, setCity] = useState('');
@@ -20,13 +23,13 @@ const FormStep2: React.FC = () => {
   const [number, setNumber] = useState('');
   const [complement, setComplement] = useState('');
 
-  const { dispatch } = useFormContext();
+  const { dispatch } = useRegister();
 
   useEffect(()=> {
 
-    console.log(state);
+    console.log(registerState);
     
-  },[])
+  },[registerState])
 
   async function handleCepValue(cep: string) {
 
@@ -120,21 +123,36 @@ const FormStep2: React.FC = () => {
 
         dispatch({
           type: FormActions.setStep2,
-          payload: { cep, city, state, street, number, district, complement },
+          payload: { cep, city, state, street, number, district, complement},
         });
  
       };
 
   return (
 
-    <FormModel
-      schema={schema}
-      classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:flex sm:flex-col`}
-      location={REGISTER_3}
-      buttonText="próximo"
-      fields={fields}
-      onSubmit={handleSubmit}
-    />
+
+
+    <Form.Container>
+
+      <Form.Wrapper>
+
+            <FormLink path={REGISTER_1}/>
+
+            <Form.Heading content="Endereço" />
+
+            <FormModel
+              schema={schema}
+              classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:flex sm:flex-col`}
+              location={REGISTER_3}
+              buttonText="próximo"
+              fields={fields}
+              onSubmit={handleSubmit}
+            />
+
+      </Form.Wrapper>
+
+
+    </Form.Container>
 
   );
 };

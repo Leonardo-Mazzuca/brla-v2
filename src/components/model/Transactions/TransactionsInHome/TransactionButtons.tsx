@@ -12,29 +12,18 @@ interface TransactionItemProps {
     content: string;
     icon: ReactNode;
     link: string;
-    classname: string;
+    classname?: string;
 }
 
 
 const TransactionButtons: React.FC = () => {
 
-    const [buttonClassname, setButtonClassname] = useState(POINTS_NONE);
-
-
-    useEffect(()=> {
-
-        setTimeout(()=> {
-            setButtonClassname(POINTS_ALL);
-        },8000);
-
-
-    },[buttonClassname]);
 
     const transactionItems: TransactionItemProps[] = [
 
-        {content: 'Depositar', icon: <FontAwesomeIcon icon={faPlus}/>, link: TO_DEPOSIT, classname: buttonClassname},
-        {content: 'Transferir', icon: <FontAwesomeIcon icon={faArrowUp}/>, link: TO_TRANSFERS_1, classname: buttonClassname},
-        {content: 'Converter', icon: <FontAwesomeIcon icon={faArrowRightArrowLeft}/>, link: TO_CONVERT_1, classname: buttonClassname},
+        {content: 'Depositar', icon: <FontAwesomeIcon icon={faPlus}/>, link: TO_DEPOSIT},
+        {content: 'Transferir', icon: <FontAwesomeIcon icon={faArrowUp}/>, link: TO_TRANSFERS_1,},
+        {content: 'Converter', icon: <FontAwesomeIcon icon={faArrowRightArrowLeft}/>, link: TO_CONVERT_1,},
     
     ]
 

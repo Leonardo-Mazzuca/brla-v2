@@ -2,7 +2,7 @@ import React from "react";
 import CurrencyDropdown from "../CurrencyDropdown/CurrencyDropdown";
 import TextModel from "../Text/Text";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import InputMoney from "../Input/InputMoney";
+import InputMoney from "../Input/InputMoney/InputMoney";
 import { BG_GRAY_100, BG_GRAY_200, GAP_DEFAULT, ROUNDED_DEFAULT, TEXT_BLACK, TEXT_GRAY_400 } from "../../../contants/classnames/classnames";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useBalance } from "../../../context/Balance/BalanceContext";

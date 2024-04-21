@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Button from "../Button/Button";
 import Heading from "../Heading/Heading";
-import CopyToClipBoard from "../Input/CopyToClipboard";
+import CopyToClipBoard from "../Input/CopyToClipBoard/CopyToClipboard";
 import LinkModel from "../Link/Link";
 import TextModel from "../Text/Text";
 import ContainerService from "./ContainerService";

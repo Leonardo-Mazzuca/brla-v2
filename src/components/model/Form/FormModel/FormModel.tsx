@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import Button from '../../Button/Button';
-import InputModel, { Field } from '../../Input/InputModel';
+import InputModel, { Field } from '../../Input/InputModel/InputModel';
 
 import { useNavigate } from 'react-router-dom';
 import { Schema } from 'zod';
