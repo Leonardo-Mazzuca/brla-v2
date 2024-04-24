@@ -6,7 +6,7 @@ import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
 
 import { InputDate } from "../../../../Input/InputDate/InputDate";
 import { useCnpj } from "../Register1Form/hooks/useCnpj";
-import { RegisterFieldProps } from "../../@types/RegisterFieldsProps";
+import { RegisterFieldProps } from "../../../@types/RegisterFieldsProps";
 import { isRegnum } from "../Register1Form/functions/isRegnum";
 
 

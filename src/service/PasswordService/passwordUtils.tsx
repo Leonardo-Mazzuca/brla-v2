@@ -4,7 +4,7 @@
 export const validatePassword = (password: string, confirmPassword: string): string[] => {
     const errors: string[] = [];
 
-
+    
     if(password === '') {
         errors.push("Password can't be empty!");
     }

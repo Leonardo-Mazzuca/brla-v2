@@ -14,6 +14,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../../Button/Button";
 import TextModel from "../../Text/Text";
 import { useNavigate } from "react-router-dom";
+import { ErrorsPassword } from "./components/ErrorsPassword/ErrorsPassword";
+import { PasswordProps } from "./@types/PasswordProps";
+import { Register3Fields } from "./components/Register3Form/Register3Fields";
 
 
 
@@ -34,7 +37,6 @@ const FormStep3: React.FC = () => {
         confirmPassword: z.string().min(1,"Confirm Password can't be empty!").refine(pass => customErrors.length === 0,{message: " "})
      });
 
-    type PasswordProps = z.infer<typeof schema>;
 
     const {register,handleSubmit,formState:{errors}} = useForm<PasswordProps>({
         resolver: zodResolver(schema),
@@ -71,7 +73,8 @@ const FormStep3: React.FC = () => {
 
         console.log(state);
         
-    },[state])
+    },[state]);
+
 
     const fields: Field[] = [
         { label: "Password", type: "password", placeholder: "*********", name: "password", onChange: handlePasswordInputChange, register: register },
@@ -92,48 +95,13 @@ const FormStep3: React.FC = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                    {fields.map((item, index)=> {
-
-                        return (
-
-                            <div key={index}>
-                                <InputModel  {...item}/>
-
-                                {errors[item.name as keyof PasswordProps] &&
-
-                                <TextModel
-                                   addons={`text-sm`}
-                                   color={TEXT_RED_600}
-                                   content={errors[item.name as keyof PasswordProps]?.message}
-                               />
-                                
-                                }
-                                
-                            </div>
-                        )
-
-                    })}
-
+                    <Register3Fields errors={errors} fields={fields} />
                     
-                    {(passwordChanged || confirmPasswordChanged) && (
+                    {(passwordChanged || confirmPasswordChanged) && 
+                     <ErrorsPassword  errors={customErrors}/>
+                    }
 
-                        <div className={`flex gap-4 my-3 flex-col`}>
-
-                            {customErrors.map((error:any, index:number) => (
-
-                                <div key={index} className={`flex items-center gap-default`}>
-                                    <FontAwesomeIcon icon={faX} className={TEXT_RED_600} />
-                                    <p className={`${TEXT_GRAY_500} text-sm`}>{error}</p>
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                        )}
-
-
-                        <Button text = {'Próximo'} />
+                    <Button text = {'Próximo'} />
 
                     </form>
                     

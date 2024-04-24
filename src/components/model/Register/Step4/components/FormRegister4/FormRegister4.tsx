@@ -74,6 +74,7 @@ export const FormRegister4 = () => {
         const email = state.email;
     
         try {
+
           const status = await validateUserController(email, token);
     
           if (status.error) {
@@ -88,6 +89,7 @@ export const FormRegister4 = () => {
         } catch (e) {
           console.error(e);
         }
+        
       }
 
     useEffect(()=> {

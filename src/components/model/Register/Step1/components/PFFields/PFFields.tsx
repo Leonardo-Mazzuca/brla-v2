@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
 import InputModel, { Field } from "../../../../Input/InputModel/InputModel";
 import TextModel from "../../../../Text/Text";
-import { RegisterFieldProps } from "../../@types/RegisterFieldsProps";
+import { RegisterFieldProps } from "../../../@types/RegisterFieldsProps";
 import { Register1State, useRegisterForStep1 } from "../../context/Register1Context";
 import { countries } from "../../../../../../contants/Countries/countries";
 import Select from 'react-select';
