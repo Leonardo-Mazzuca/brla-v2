@@ -2,7 +2,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { z } from "zod";
 import  { Field } from "../../../../Input/InputModel/InputModel";
 import { faEnvelope, faPen, faPerson, faPhone } from "@fortawesome/free-solid-svg-icons";
-import {  ReactNode, useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../../../../Button/Button";
 import { PersonTypeCheckBox } from "../PersonTypeCheckbox/PersonTypeCheckbox";
 import { Register1State, useRegisterForStep1 } from "../../context/Register1Context";
@@ -18,9 +18,10 @@ import { useNavigate } from "react-router-dom";
 import { isRegnum } from "./functions/isRegnum";
 import TextModel from "../../../../Text/Text";
 import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { useDocumentType } from "./hooks/useDocumentType";
+import { REGISTER_2 } from "../../../../../../contants/Paths/paths";
+import { countries } from "../../../../../../contants/Countries/countries";
 
 
 
@@ -28,20 +29,15 @@ import { useDocumentType } from "./hooks/useDocumentType";
 export const Register1Form = () => {
 
 
-
     const {state} = useRegisterForStep1();
-
     const {t, i18n} = useTranslation();
     const {handleCnpjValidation} = useCnpj();
-    const {cpf, handleCpfChange,setCpf, handleCpfValidation} = useCpf();
+    const {cpf, handleCpfChange, handleCpfValidation} = useCpf();
     const {handlePhoneChange,phone, handlePhoneValidation} = usePhone();
     const {submitEvents,RegisterCases} = useSubmit();  
     const [regnumPhone, setRegnumPhone] = useState('');
-    const {docType, handleDocTypeChange} = useDocumentType();
-
 
     const navigate = useNavigate();
-
 
     const register1Schema = z.object({
 
@@ -134,6 +130,26 @@ export const Register1Form = () => {
 
       { 
 
+        type: "text",
+        placeholder: t("Nome completo"), 
+        name: "fullname", icon: faPen, 
+        register: register
+      
+      },
+
+      ...(!isRegnum(state.country) ? [
+        { 
+
+        type: "text",
+        placeholder: "CPF (111.111.111-11)", 
+        name: "cpf", icon: faPerson, 
+        value: cpf, 
+        onChange: handleCpfChange,
+        register: register
+       
+      },
+      { 
+
         type: "tel",
         placeholder: t("Celular (11 11111-1111)"), 
         name: "phone", icon: faPhone, 
@@ -143,43 +159,15 @@ export const Register1Form = () => {
        
       
       },
-
-      { 
-
-        type: "text",
-        placeholder: t("Nome completo"), 
-        name: "fullname", icon: faPen, 
-        register: register
-      
-      },
-
-      ...(!isRegnum(state.country) ? [{ 
-
-        type: "text",
-        placeholder: "CPF (111.111.111-11)", 
-        name: "cpf", icon: faPerson, 
-        value: cpf, 
-        onChange: handleCpfChange,
-        register: register
-       
-      }] : []),
-
-      ...(isRegnum(state.country) ? 
-      [{ 
-          type: "text",
-          placeholder: "Document type", 
-          name: "dataRegnum.documentType", 
-          icon: faPerson, 
-          value: docType,
-          onChange: handleDocTypeChange,
-          register: register
-      }]
-      : [])
+    
+    ] : []),
      
     ];
 
 
     const onSubmit = (data:Register1State) => {
+      
+      console.log(data);
       
       const cases = {
 
@@ -203,51 +191,21 @@ export const Register1Form = () => {
 
       } else if(cases.actions.submitForRegnum) {
 
+        console.log(data);
+        
         submitEvents(data,RegisterCases.submitForRegnum)
 
       }
-
-      console.log(data);
       
-      // navigate(REGISTER_2);
+      navigate(REGISTER_2);
 
       
     }
 
-    useEffect(() => {
-
-      const handleKeyDown = (event: KeyboardEvent) => {
-          if (event.key === 'Enter') {
-              const inputs = document.querySelectorAll('input');
-              inputs.forEach((input: HTMLInputElement) => {
-                  input.blur();
-              });
-              event.preventDefault();
-              handleSubmit(onSubmit)();
-          }
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-          document.removeEventListener('keydown', handleKeyDown);
-      };
-
-  }, []);
-
-
-    useEffect(()=> {
-
-      if(isRegnum(state.country)){
-        setCpf('');
-      }
-
-    },[cpf,state.country,setCpf]);
 
     return (
 
         <form onSubmit={handleSubmit(onSubmit)}>
-
           
             <PFFields
 
@@ -268,6 +226,7 @@ export const Register1Form = () => {
                           name={"dataRegnum.regnumPhone"}
                           rules={{ required: true }}
                           render={({ field }) => (
+
                           <PhoneInput
                           placeholder={t('phone')}
                           value={regnumPhone}
@@ -314,6 +273,7 @@ export const Register1Form = () => {
              />}
 
             <Button
+              
               text = {t('Próximo')}
             />
 

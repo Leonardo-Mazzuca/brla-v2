@@ -72,7 +72,7 @@ const FormStep2: React.FC = () => {
 
   });
 
-  const {handleSubmit, register, formState:{errors},watch} = useForm<Address>({
+  const {handleSubmit, register, formState:{errors}} = useForm<Address>({
 
     resolver: zodResolver(adressSchema),
 

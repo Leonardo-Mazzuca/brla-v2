@@ -71,7 +71,7 @@ export const useSubmit = () => {
 
     const submitAsRegnum = ({...data}:Register1State) => {
 
-
+        
         dispatch({
 
             type:FormActions.setRegnum,

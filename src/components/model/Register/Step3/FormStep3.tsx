@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../../Button/Button";
 import TextModel from "../../Text/Text";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -26,6 +27,7 @@ const FormStep3: React.FC = () => {
 
     const [confirmPasswordChanged, setConfirmPasswordChanged] = useState(false);
 
+    const navigate = useNavigate();
 
     const schema = z.object({ 
         password: z.string().min(1,"Password can't be empty!").refine(pass => customErrors.length === 0, {message: " "}), 
@@ -52,14 +54,16 @@ const FormStep3: React.FC = () => {
         setConfirmPasswordChanged(true);
     };
 
-    const obSubmit = (data: PasswordProps) => {
-
+    const onSubmit = (data: PasswordProps) => {
+        
         const { password, confirmPassword } = data;
 
         dispatch({
             type: FormActions.setStep3,
             payload: { password, confirmPassword },
         });
+
+        navigate(REGISTER_4);
 
     };
 
@@ -86,16 +90,14 @@ const FormStep3: React.FC = () => {
                     <Form.Heading content="Create your password using our check list" />
 
 
-                    <form onSubmit={handleSubmit(obSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
 
-                    {fields.map((item)=> {
+                    {fields.map((item, index)=> {
 
                         return (
 
-                            <div key={item.id}>
+                            <div key={index}>
                                 <InputModel  {...item}/>
-
-
 
                                 {errors[item.name as keyof PasswordProps] &&
 
@@ -131,10 +133,10 @@ const FormStep3: React.FC = () => {
                         )}
 
 
+                        <Button text = {'Próximo'} />
 
                     </form>
                     
-                    <Button text = {'Próximo'} />
 
 
                 </Form.Wrapper>

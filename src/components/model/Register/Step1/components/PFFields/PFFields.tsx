@@ -3,12 +3,14 @@ import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
 import InputModel, { Field } from "../../../../Input/InputModel/InputModel";
 import TextModel from "../../../../Text/Text";
 import { RegisterFieldProps } from "../../@types/RegisterFieldsProps";
-import { Register1State } from "../../context/Register1Context";
+import { Register1State, useRegisterForStep1 } from "../../context/Register1Context";
 import { countries } from "../../../../../../contants/Countries/countries";
 import Select from 'react-select';
 import { InputDate } from "../../../../Input/InputDate/InputDate";
 import { useTranslation } from "react-i18next";
 import { useCountry } from "../Register1Form/hooks/useCountry";
+import { isRegnum } from "../Register1Form/functions/isRegnum";
+import { useDocumentType } from "../Register1Form/hooks/useDocumentType";
 
 
 
@@ -22,8 +24,9 @@ export const PFFields = ({fields,register, errors, control}:PFFieldsProps) => {
 
 
     const {setCountry} = useCountry();
+    const {state} = useRegisterForStep1();
     const {t, i18n} = useTranslation();
-
+    const {docType, handleDocTypeChange} = useDocumentType();
     
     return (<>
 
@@ -51,9 +54,43 @@ export const PFFields = ({fields,register, errors, control}:PFFieldsProps) => {
             
           </div>
 
+
         );
 
+   
+
       })} 
+
+          {isRegnum(state.country) && (
+
+              <div>
+
+                
+              <InputModel 
+
+                  name="dataRegnum.documentType"
+                  placeholder="Document type"
+                  type="text"
+                  onChange={handleDocTypeChange}
+                  value={docType}
+                  register={register}
+
+                  />
+
+                  {errors.dataRegnum?.documentType && (
+
+                  <TextModel
+                      addons={`text-sm`}
+                      color={TEXT_RED_600}
+                      content={errors.dataRegnum?.documentType?.message}
+                  />
+                  )}
+
+
+              </div>
+              
+
+          )}
 
       <div className="flex flex-col my-3">
 

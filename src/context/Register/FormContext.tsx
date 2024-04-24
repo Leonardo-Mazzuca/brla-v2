@@ -134,6 +134,7 @@ const formReducer = (state: FormState, action: Action) => {
 
 
             case FormActions.setRegnum:
+                
                 return {
     
                     ...state,
@@ -142,7 +143,7 @@ const formReducer = (state: FormState, action: Action) => {
                     phone: action.payload.phone,
                     taxIdType: action.payload.taxIdType,
                     country: action.payload.country,
-                    regnum: action.payload.cpf,
+                    regnum: action.payload.regnum,
                     birthDate: action.payload.birthDate,
                  
                 
@@ -153,7 +154,6 @@ const formReducer = (state: FormState, action: Action) => {
             return {
                 ...state,
                 address: {
-                    country: action.payload.country,
                     cep: action.payload.cep,
                     city: action.payload.city,
                     state: action.payload.state,

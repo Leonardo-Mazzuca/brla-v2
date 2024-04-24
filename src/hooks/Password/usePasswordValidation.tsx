@@ -31,9 +31,12 @@ export const usePasswordValidation = () => {
         validatePasswordFields(password, newPassword);
     };
 
-    return { customErrors, 
+    return { 
+        customErrors, 
         handlePasswordChange, 
-        handleConfirmPasswordChange 
+        handleConfirmPasswordChange,
+        password,
+        confirmPassword 
     };
 
 }

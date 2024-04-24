@@ -90,6 +90,12 @@ export const FormRegister4 = () => {
         }
       }
 
+    useEffect(()=> {
+
+      console.log(state);
+      
+    },[state]);
+
     return (
 
         <form ref={formRef} onSubmit={handleSubmit}>

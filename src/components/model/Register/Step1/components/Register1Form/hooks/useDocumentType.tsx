@@ -9,7 +9,7 @@ export const useDocumentType = () => {
 
 
     const handleDocTypeChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-
+        
         setDocType(e.target.value);
 
     }

@@ -97,7 +97,8 @@ export const AuthForm = () => {
         
     async function onSubmit(data: any) {
 
-
+        console.log(data);
+        
         if(error) {
             setError('');
         }
@@ -138,6 +139,7 @@ export const AuthForm = () => {
  
     } 
 
+
     return (
 
         <>
@@ -176,7 +178,6 @@ export const AuthForm = () => {
                 )} 
 
                 <Button
-
                 classname={buttonClassname}
                 text = 'login'
 
