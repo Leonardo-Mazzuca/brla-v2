@@ -1,18 +1,4 @@
 
-import { z } from "zod";
-import { FormActions, useRegister } from "../../../../context/Register/FormContext";
-import { faBuilding, faEnvelope, faIdCard, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { Field } from "../../Input/InputModel/InputModel";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-
-
-import { formatValueInCnpj } from "../../../../functions/Formatters/formatValueInCnpj";
-import { formatValueInPhoneNumber } from "../../../../functions/Formatters/FormatPhoneNumber/formatValueInPhoneNumber";
-import formatDate from "../../../../functions/Formatters/FormatDate/formatDate";
-import { formatValueInCpf } from "../../../../functions/Formatters/formatValueInCpf";
-import { validityRawPhoneNumber } from "../../../../functions/TaxId/PhoneNumber/verifyPhoneNumber";
 import { Form } from "../../Form/FormWrapper";
 import { FormFooter } from "./components/FormFooter/FormFooter";
 import { Register1Form } from "./components/Register1Form/Register1Form";

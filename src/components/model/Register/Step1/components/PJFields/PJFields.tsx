@@ -1,5 +1,5 @@
 
-import { Register1State, dataPJ } from "../../context/Register1Context";
+import { Register1State, dataPJ, useRegisterForStep1 } from "../../context/Register1Context";
 import InputModel from "../../../../Input/InputModel/InputModel";
 import TextModel from "../../../../Text/Text";
 import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
@@ -7,6 +7,7 @@ import { TEXT_RED_600 } from "../../../../../../contants/classnames/classnames";
 import { InputDate } from "../../../../Input/InputDate/InputDate";
 import { useCnpj } from "../Register1Form/hooks/useCnpj";
 import { RegisterFieldProps } from "../../@types/RegisterFieldsProps";
+import { isRegnum } from "../Register1Form/functions/isRegnum";
 
 
 export interface PJFieldsProps extends RegisterFieldProps<Register1State> {
@@ -18,7 +19,7 @@ export interface PJFieldsProps extends RegisterFieldProps<Register1State> {
 export const PJFields = ({ fields, register, errors, control }: PJFieldsProps) => {
 
     const {cnpj, handleCnpjChange} = useCnpj();
-
+    const {state} = useRegisterForStep1();
 
     return (
 
@@ -27,8 +28,12 @@ export const PJFields = ({ fields, register, errors, control }: PJFieldsProps) =
                 return (
 
                     <div key={index}>
-                        <div className="flex flex-col">
 
+                        {!isRegnum(state.country) && 
+                        
+                        
+                        <div className="flex flex-col">
+                        
                             <InputModel
 
                                 id={'cnpj'}
@@ -50,6 +55,8 @@ export const PJFields = ({ fields, register, errors, control }: PJFieldsProps) =
                             }
                             
                         </div>
+                        
+                        }
 
                         <div className="my-3 flex flex-col">
 

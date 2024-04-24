@@ -14,7 +14,6 @@ export type Address = {
   number: string,
   district: string,
   complement: string
-  country: string;
 
 }
 
@@ -34,6 +33,8 @@ export type FormState = {
         companyName: string,
         startDate: string,
         regnum: string
+        country: string,
+
 
 }
 
@@ -67,9 +68,9 @@ const initialData: FormState = {
           number: '',
           district: '',
           complement: '',
-          country: '',
+       
         },
-    
+       country: '',
        cnpj: '',
        companyName: '',
        startDate: '',
@@ -145,7 +146,6 @@ const formReducer = (state: FormState, action: Action) => {
                     birthDate: action.payload.birthDate,
                  
                 
-    
                 };      
 
 

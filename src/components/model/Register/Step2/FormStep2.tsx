@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-
-import FormModel from "../../Form/FormModel/FormModel";
 import { z } from "zod";
-import { FormActions, useRegister } from "../../../../context/Register/FormContext";
-import { addressService } from "../../../../service/AddressService/addressService";
+import { Address, FormActions, useRegister } from "../../../../context/Register/FormContext";
+import { addressService } from "./service/addressService";
 
-import { Field } from "../../Input/InputModel/InputModel";
+import InputModel, { Field } from "../../Input/InputModel/InputModel";
 import { REGISTER_1, REGISTER_3 } from "../../../../contants/Paths/paths";
-import { GAP_DEFAULT } from "../../../../contants/classnames/classnames";
+import { GAP_DEFAULT, TEXT_RED_600 } from "../../../../contants/classnames/classnames";
 import { formatCep } from "../../../../functions/Formatters/FormatCep/formatCep";
 import { Form } from "../../Form/FormWrapper";
 import { FormLink } from "../../Form/FormWrapper/components/FormLink";
+import { useForm } from "react-hook-form";
+import TextModel from "../../Text/Text";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Button from "../../Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const FormStep2: React.FC = () => {
 
@@ -24,17 +27,20 @@ const FormStep2: React.FC = () => {
   const [complement, setComplement] = useState('');
 
   const { dispatch } = useRegister();
+  const navigate = useNavigate();
 
   useEffect(()=> {
 
     console.log(registerState);
     
-  },[registerState])
 
+  },[registerState])
+  
   async function handleCepValue(cep: string) {
 
     const response = await addressService(cep.replace(/\D/g, ''));
 
+    
     if (!response) {
 
       setError("Insira um cep válido!");
@@ -51,6 +57,30 @@ const FormStep2: React.FC = () => {
     }
     
   }
+
+  const adressSchema = z.object({
+    cep: z
+      .string()
+      .min(1, "Cep não pode ficar vazio!")
+      .refine((cep) => handleCepValue(cep), { message: error }),
+
+      city: z.string().refine(() => city !== '' ,{message: 'Cidade é obrigatório'}),
+      state: z.string().refine(() => state !== '', {message: 'Estado é obrigatório'}),
+      street: z.string().refine(() => street !== '',{message: 'Bairro é obrigatório'}),
+      complement: z.string().min(1, "Complemento não pode ser vazio!"),
+      number: z.string().refine(()=> number!=='',{message: 'Número é obrigatório'}),
+
+  });
+
+  const {handleSubmit, register, formState:{errors},watch} = useForm<Address>({
+
+    resolver: zodResolver(adressSchema),
+
+    criteriaMode: 'all',
+    mode: 'onBlur',
+		reValidateMode: 'onChange',
+
+  });
 
   const handleCity = (e:React.ChangeEvent<HTMLInputElement>) => {
 
@@ -92,41 +122,63 @@ const FormStep2: React.FC = () => {
 
   }
   
-  const schema = z.object({
-    cep: z
-      .string()
-      .min(1, "Cep não pode ficar vazio!")
-      .refine((cep) => handleCepValue(cep), { message: error }),
 
-      city: z.string().refine(() => city !== '' ,{message: 'Cidade é obrigatório'}),
-      state: z.string().refine(() => state !== '', {message: 'Estado é obrigatório'}),
-      street: z.string().refine(() => street !== '',{message: 'Bairro é obrigatório'}),
-      complement: z.string().min(1, "Complemento não pode ser vazio!"),
-      number: z.string().refine(()=> number!=='',{message: 'Número é obrigatório'}),
-
-  });
 
   const fields: Field[] = [
-    { type: "text", placeholder: "CEP", name: "cep", onChange: handleCep, value: cep },
-    { type: "text", placeholder: "Cidade", name: "city", onChange: handleCity, value: city },
-    { type: "text", placeholder: "Estado", name: "state", onChange: handleState, value: state },
-    { type: "text", placeholder: "Bairro", name: "street", onChange: handleStreet, value: street },
-    { type: "text", placeholder: "Complemento", name: "complement", onChange: handleComplement, value: complement },
-    { type: "text", placeholder: "Número", name: "number", onChange: handleNumber, value: number },
+    { type: "text", placeholder: "CEP", name: "cep", onChange: handleCep, value: cep, register:register },
+    { type: "text", placeholder: "Cidade", name: "city", onChange: handleCity, value: city,register:register  },
+    { type: "text", placeholder: "Estado", name: "state", onChange: handleState, value: state,register:register },
+    { type: "text", placeholder: "Bairro", name: "street", onChange: handleStreet, value: street,register:register },
+    { type: "text", placeholder: "Complemento", name: "complement", onChange: handleComplement, value: complement,register:register },
+    { type: "text", placeholder: "Número", name: "number", onChange: handleNumber, value: number,register:register },
   ];
 
- 
 
-    const handleSubmit = () => {
+    const district = "District";
 
-        const district = "District";
+    const onSubmit = () => {
 
-        dispatch({
-          type: FormActions.setStep2,
-          payload: { cep, city, state, street, number, district, complement},
-        });
- 
-      };
+      
+
+      dispatch({
+        type: FormActions.setStep2,
+        payload: {cep, city, state, street, number, district, complement},
+      });
+
+      navigate(REGISTER_3)
+
+
+  };
+
+  useEffect(() => {
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+
+        if (event.key === 'Enter') {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach((input: HTMLInputElement) => {
+                input.blur();
+            });
+
+            event.preventDefault();
+            handleSubmit(onSubmit)();
+            
+            dispatch({
+              type: FormActions.setStep2,
+              payload: {cep, city, state, street, number, district, complement},
+            });
+
+        }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+    };
+
+}, [dispatch,cep,city,state,street,number,district,complement]);
+
 
   return (
 
@@ -140,14 +192,42 @@ const FormStep2: React.FC = () => {
 
             <Form.Heading content="Endereço" />
 
-            <FormModel
-              schema={schema}
-              classname={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:flex sm:flex-col`}
-              location={REGISTER_3}
-              buttonText="próximo"
-              fields={fields}
-              onSubmit={handleSubmit}
-            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+
+              <section className={`md:grid md:grid-cols-2 ${GAP_DEFAULT} sm:flex sm:flex-col`}>
+
+                  {fields.map((item,index)=> {
+
+                    return (
+
+                      <div key={index}>
+                        <InputModel
+                        {...item}
+                        />
+
+                      {errors[item.name as keyof Address] && (
+
+                        <TextModel
+                            addons={`text-sm`}
+                            color={TEXT_RED_600}
+                            content={errors[item.name as keyof Address]?.message}
+                        />
+
+                        )}
+
+
+                      </div>
+                    )
+
+                  })}
+
+                  <Button 
+                  text = {"Próximo"}
+                  />
+
+              </section>
+
+            </form>
 
       </Form.Wrapper>
 

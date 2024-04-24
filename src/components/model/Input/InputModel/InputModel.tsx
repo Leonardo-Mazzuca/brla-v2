@@ -2,7 +2,7 @@
 import TextModel from '../../Text/Text';
 import React, { InputHTMLAttributes, ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { Control, FieldValues, UseFormRegister } from 'react-hook-form';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { BUTTON_PADDING, DEFAULT_TEXT_SIZE } from '../../../../contants/classnames/classnames';
 
@@ -23,6 +23,7 @@ export interface Field extends InputHTMLAttributes<HTMLInputElement> {
     addClassName?:string;
     controller?:ReactNode;
     register?: UseFormRegister<any>;
+    control?: Control<any, any, any>;
 
 };
 

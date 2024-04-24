@@ -9,6 +9,11 @@ export type dataPJ = {
     cnpj: string;
 
 }
+
+export type DataRegnum = {
+    documentType: string;
+    regnumPhone:string;
+}
  
 export type Register1State = {
 
@@ -20,6 +25,7 @@ export type Register1State = {
     birthDate: string;
     cpf: string;
     dataPJ: dataPJ[] | null;
+    dataRegnum: DataRegnum | null
 
 }
 
@@ -52,10 +58,11 @@ const initialData : Register1State = {
     phone: '',
     isPJ: false,
     email: '',
-    country: '',
+    country: 'Brasil',
     birthDate: '',
     cpf: '',
     dataPJ: null,
+    dataRegnum: null
 
 }
 

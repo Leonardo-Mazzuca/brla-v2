@@ -4,9 +4,10 @@ import { validatePassword } from "../../service/PasswordService/passwordUtils";
 
 
 export const usePasswordValidation = () => {
+
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errors, setErrors] = useState<string[]>([]);
+    const [customErrors, setErrors] = useState<string[]>([]);
 
 
     const validatePasswordFields = (password: string, confirmPassword: string) => {
@@ -30,6 +31,9 @@ export const usePasswordValidation = () => {
         validatePasswordFields(password, newPassword);
     };
 
-    return { errors, handlePasswordChange, handleConfirmPasswordChange };
+    return { customErrors, 
+        handlePasswordChange, 
+        handleConfirmPasswordChange 
+    };
 
 }

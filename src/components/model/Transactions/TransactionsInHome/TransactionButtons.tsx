@@ -1,11 +1,11 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode} from "react";
 import IconButton from "../../Button/IconButton";
 import TextModel from "../../Text/Text";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TO_CONVERT_1, TO_DEPOSIT, TO_TRANSFERS_1 } from "../../../../contants/Paths/paths";
-import { GAP_DEFAULT, POINTS_ALL, POINTS_NONE, TEXT_GRAY_800 } from "../../../../contants/classnames/classnames";
+import { GAP_DEFAULT, TEXT_GRAY_800 } from "../../../../contants/classnames/classnames";
 
 
 interface TransactionItemProps {
