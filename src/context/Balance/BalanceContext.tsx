@@ -14,7 +14,6 @@ export type BalanceState = {
     
 }
 
-
 type Action = {
     type: BalanceActions;
     payload: any;

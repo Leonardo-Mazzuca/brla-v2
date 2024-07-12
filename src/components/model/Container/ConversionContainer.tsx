@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import MiniContainer from "./MiniContainer";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import { TO_CONVERT_2 } from "../../../contants/Paths/paths";
 
 
 type ConversionConfig = {
@@ -40,10 +41,6 @@ const ConversionContainer:React.FC<ConversionConfig> = ({
             onSubmit();
         }
 
-        if(location) {
-
-            navigate(location);
-        }
     
     }
 

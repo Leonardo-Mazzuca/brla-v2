@@ -1,7 +1,6 @@
-import { http } from "../ConectAPI/conectApi";
+import { http } from "../../../../../controller/ConectAPI/conectApi";
 
-export async function validateUserController (email: string, token: string) {
-
+export async function validateUser (email: string, token: string) {
 
     const body = {email, token};
     

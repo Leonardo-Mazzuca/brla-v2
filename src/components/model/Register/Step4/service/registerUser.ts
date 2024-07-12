@@ -1,15 +1,14 @@
 
-import { FormState } from "../../context/Register/FormContext";
-import { http } from "../ConectAPI/conectApi";
+import { FormState } from "../../../../../context/Register/FormContext";
+import { http } from "../../../../../controller/ConectAPI/conectApi";
 
 
 
-export async function registerController  (data:FormState) {
+export async function registerUser (data:FormState) {
 
 
     const body = { ...data };
 
-  
     try {
 
       const response = await http.post('/create', body);

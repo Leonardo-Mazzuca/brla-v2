@@ -3,16 +3,16 @@ import Button from "../../../../Button/Button"
 import TextModel from "../../../../Text/Text"
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerController } from "../../../../../../controller/RegisterController/RegisterController";
+import { registerUser } from "../../service/registerUser";
 import { useRegister } from "../../../../../../context/Register/FormContext";
 import { DEFAULT_PATH } from "../../../../../../contants/Paths/paths";
-import { validateUserController } from "../../../../../../controller/ValidateUserController/validateUserController";
+import { validateUser } from "../../service/validateUser";
 import { GAP_DEFAULT } from "../../../../../../contants/classnames/classnames";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
 
-
 const inputItems = ["code1", "code2", "code3", "code4", "code5", "code6"];
+
 
 export const FormRegister4 = () => {
 
@@ -28,11 +28,15 @@ export const FormRegister4 = () => {
     const handleRegister = async () => {
 
         try {
-          await registerController(state);
+
+          await registerUser(state);
+
         } catch (e) {
           console.error(e);
         }
+
       };
+
     
       useEffect(() => {
     
@@ -45,19 +49,23 @@ export const FormRegister4 = () => {
         index: number,
         event: React.KeyboardEvent<HTMLInputElement>
       ) => {
+
         const { value } = event.currentTarget;
         if (value.length === 1 && index < inputItems.length - 1) {
           inputRefs.current[index + 1]?.focus();
         } else if (value.length === 0 && index > 0) {
           inputRefs.current[index - 1]?.focus();
         }
+
       };
     
       const handleChange = (name: string, value: string) => {
+
         setFormData((prevState) => ({
           ...prevState,
           [name]: value,
         }));
+
       };
     
       const handleInput = () => {
@@ -65,6 +73,7 @@ export const FormRegister4 = () => {
       };
     
       async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+
         event.preventDefault();
     
         const { code1, code2, code3, code4, code5, code6 } = formData;
@@ -75,7 +84,7 @@ export const FormRegister4 = () => {
     
         try {
 
-          const status = await validateUserController(email, token);
+          const status = await validateUser(email, token);
     
           if (status.error) {
             formRef.current?.reset();
@@ -89,7 +98,7 @@ export const FormRegister4 = () => {
         } catch (e) {
           console.error(e);
         }
-        
+
       }
 
     useEffect(()=> {
@@ -101,7 +110,9 @@ export const FormRegister4 = () => {
     return (
 
         <form ref={formRef} onSubmit={handleSubmit}>
+
         <div className={`flex justify-center flex-wrap ${GAP_DEFAULT} items-center my-3`}>
+          
           {inputItems.map((item, index) => (
             <input
               key={index}
@@ -128,9 +139,11 @@ export const FormRegister4 = () => {
               onInput={handleInput}
             />
           ))}
+
         </div>
 
         {error && (
+
           <TextModel
             addons="mt-3 text-center"
             content={
@@ -139,6 +152,7 @@ export const FormRegister4 = () => {
               </>
             }
           />
+
         )}
 
         <Button text="Confirmar código" />
@@ -151,6 +165,7 @@ export const FormRegister4 = () => {
           textColor="text-gray-500"
           hover="underline hover:text-gray-400"
         />
+
       </form>
     )
 

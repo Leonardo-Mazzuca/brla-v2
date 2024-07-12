@@ -20,6 +20,7 @@ import { sendCoinToWebSocket } from "../../../../../service/CurrencyService/send
 import { TO_CONVERT_2, TO_HOME } from "../../../../../contants/Paths/paths";
 import { TO_WEBSOCKET } from "../../../../../contants/divisionValues/divisionValues";
 import { isForWebSocketOnSwap } from "../../../../../service/WebSocketService/Conversion/isForWebSocket";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -115,7 +116,8 @@ const ConversionStep1: React.FC = () => {
     }, [inputValue,webSocketState.webSocket,isValuable,
          outputValue, state.sendCurrency, state.receiveCurrency]);
 
-
+    const navigate = useNavigate();
+    
     const handleSubmit = async () => {
 
         if ((isUsdToBrla(state)) || isBrlaToUsd(state)) {   
@@ -157,6 +159,8 @@ const ConversionStep1: React.FC = () => {
             payload: {receiveValue: outputValue}
         });
 
+        navigate(TO_CONVERT_2);
+
     }
 
     return (
@@ -166,7 +170,6 @@ const ConversionStep1: React.FC = () => {
             <ConversionContainer 
                 onSubmit={handleSubmit}
                 activeIndex={0}
-                location={TO_CONVERT_2}
                 buttonComponent={<span>Próximo <FontAwesomeIcon icon={faArrowRight} /></span>}
                 buttonControl={buttonClassname}
             >

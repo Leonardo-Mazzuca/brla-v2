@@ -11,8 +11,7 @@ function App() {
 
         <AppProvider>
           <AppRoutes />
-        </AppProvider>
-      
+        </AppProvider>  
 
     </main>
 

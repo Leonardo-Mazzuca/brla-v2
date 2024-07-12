@@ -19,7 +19,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button: React.FC<ButtonProps> = ({ 
 
     text: Text, background = 'bg-heading-blue', type, textColor, hover,classname
-    ,onClick, disabled, ...rest}) => { 
+    , disabled, ...rest}) => { 
 
     const className = twMerge(
         `${background} ${textColor ?? 'text-white'} 
